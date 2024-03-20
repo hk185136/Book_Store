@@ -1,0 +1,7 @@
+.cart{
+    display: flex;
+    height: 100vh;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
