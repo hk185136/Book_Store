@@ -1,0 +1,28 @@
+.modal-container{
+    position: fixed;
+    top: 0; right: 0; left: 0; bottom: 0;
+    background-color: rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.modal{
+    display: flex;
+    flex-direction: column;
+    padding: 30px 30px;
+    border-radius: 5px;
+    box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.04);
+    background-color: aliceblue;
+
+    /* z-index: 1000; */
+}
+.close-button{
+    width: 30px;
+    cursor: pointer;
+    transition: 20ms;
+    align-self: flex-end;
+    margin-bottom: 30px;
+}
+.close-button:hover{
+    transform: scale(1.05);
+}

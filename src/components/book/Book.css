@@ -1,0 +1,46 @@
+.book-img-container{
+    width: 200px;
+}
+.book-img{
+    width: 100%
+}
+.book-card{
+    display: flex;
+    width: 450px;
+    background-color: aliceblue;
+    justify-content: space-between;
+    padding-right: 50px;
+    padding-left: 20px;
+    max-width: 500px;
+    align-items: center;
+}
+.book-details{
+    font-size: larger;
+}
+.book-name{
+    font-size: xx-large;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.author-name{
+    font-style: italic;
+}
+.price{
+    color: green;
+    font-size: x-large;
+}
+.buy-button{
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: large;
+    border-radius: 5px;
+}
+.cart-img{
+    /* margin-top: 40px; */
+    margin-left: 40px;
+    width: 35px;
+    cursor: pointer;
+    transition: 20ms;
+}
+.cart-img:hover{
+    transform: scale(1.05);
+}

@@ -1,0 +1,32 @@
+.sidebar{
+    position: fixed;
+    top: 90px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    padding: 20px 20px;
+    max-width: 350px;
+    background-color: rgb(151, 133, 99);
+    color: whitesmoke;
+    font-size: x-large;
+
+}
+.grid-filter{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    row-gap: 3px;
+}
+.heading-filter{
+    margin: 0;
+    font-family: cursive;
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
+.checkbox{
+    cursor: pointer;
+    transition: 25ms;
+}
+.checkbox:hover{
+    transform: scale(1.2);
+}
