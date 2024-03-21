@@ -11,21 +11,18 @@ function Register() {
         if(password!==confirmPassword){
           throw Error("password and confirm password do not match.");
         }
+
         const body = {
           username : Name,
           password : password,
           role : type
         }
-        const response = await axios.post('http://localhost:8082/register',body);
-        if(response === "CREATED"){
-          navigate('/');
-        }
-        else{
-          alert(response);
-        }
+        const response = await axios.post('http://localhost:8080/signup',body);
+        navigate('/');
+
       }
       catch(e){
-        alert(e.message);
+        alert(e.data.message);
       }
         
     }

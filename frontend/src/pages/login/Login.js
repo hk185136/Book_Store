@@ -4,9 +4,20 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 function Login() {
     const navigate = useNavigate();
-    function handleSubmit(e){
-        e.preventDefault();
-        navigate('/home');
+    async function handleSubmit(e){
+        try{
+          e.preventDefault();
+  
+          const body = {
+            username : Name,
+            password : password,
+          }
+          const response = await axios.post('http://localhost:8080/signin',body);
+          navigate('/home');
+        }
+        catch(e){
+          alert(e.data.message);
+        }
     }
     const [Name,setName] = useState('');
     const [password,setPassword] = useState('');
