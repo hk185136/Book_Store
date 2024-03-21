@@ -13,6 +13,8 @@
     padding-left: 20px;
     max-width: 500px;
     align-items: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 .book-details{
     font-size: larger;

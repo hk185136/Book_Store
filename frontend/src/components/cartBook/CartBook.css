@@ -1,0 +1,20 @@
+.quantity{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: larger;
+    display: flex;
+    align-items: center;
+}
+.qty-controller{
+    font-size: larger;
+    padding: 10px 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+
+}
+.subtotal{
+    display: inline-block;
+    font-size: x-large;
+    font-family: cursive;
+}

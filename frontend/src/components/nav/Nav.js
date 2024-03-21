@@ -20,7 +20,7 @@ function Nav() {
         <div className='right-component'>
             <img src="/add-icon.png" alt="" className='nav-img' onClick={()=>setIsOpen(true)}/>
             <Link to={'/cart'}><img src="/shopping-cart.png" alt="" className='nav-img'/></Link>
-            <img src="/profile.png" alt="" className='nav-img' />
+            <Link to={'/profile'}><img src="/profile.png" alt="" className='nav-img' /></Link>
             <Link to={'/'}><img src="/logout.png" alt="" className='nav-img' /></Link> 
         </div>
         {(isOpen) &&

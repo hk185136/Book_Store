@@ -1,12 +1,33 @@
 import React from 'react'
 import {useState} from 'react';
 import {Link,Navigate, useNavigate} from 'react-router-dom';
+import axios from 'axios';
 
 function Register() {
     const navigate = useNavigate()
-    function handleSubmit(e){
+    async function handleSubmit(e){
+      try{
         e.preventDefault();
-        navigate('/');
+        if(password!==confirmPassword){
+          throw Error("password and confirm password do not match.");
+        }
+        const body = {
+          username : Name,
+          password : password,
+          role : type
+        }
+        const response = await axios.post('http://localhost:8082/register',body);
+        if(response === "CREATED"){
+          navigate('/');
+        }
+        else{
+          alert(response);
+        }
+      }
+      catch(e){
+        alert(e.message);
+      }
+        
     }
     const [Name,setName] = useState('');
     const [password,setPassword] = useState('');

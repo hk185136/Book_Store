@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-
+import './CartBook.css'
 function CartBook(props) {
     const [qty,setQty] = useState(1);
   return (
@@ -11,13 +11,18 @@ function CartBook(props) {
             <p className='book-name'>{props.name}</p>
             <p className='author-name'>By author : {props.author}</p>
             <p className='price'>&#8377;{props.price}</p>
-            <label htmlFor="">Qty</label>
-            <select name="" id="" value={qty} onChange={(e)=>setQty(e.target.value)}>
-                <option value={1}>1</option>
-                <option value={2}>2</option>
-                <option value={3}>3</option>
-            </select>
-            <p>Sub total : {props.price*qty}</p>
+            <div className='quantity'>
+            <p>Qty : </p>
+            <button className='qty-controller' onClick={()=>{
+                if(qty>0)
+                    setQty(prev=>prev-1);
+                }}>
+                    -</button>
+            {qty}
+            <button className='qty-controller' onClick={()=>setQty(prev=>prev+1)}>+</button>
+            </div>
+            
+            <p className='subtotal'>Sub total : <span style={{color : 'green'}}>&#8377;{props.price*qty}</span></p>
         </div>
         
     </div>
