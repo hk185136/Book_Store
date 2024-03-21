@@ -17,10 +17,10 @@ public class AuthUser {
 	private String username;
 	private String password;
 	private String role;
-	public String getIdString() {
+	public String getId() {
 		return id;
 	}
-	public void setIdString(String id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public String getUsername() {
