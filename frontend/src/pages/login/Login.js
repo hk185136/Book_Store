@@ -12,12 +12,15 @@ function Login() {
             username : Name,
             password : password,
           }
-          const response = await axios.post('http://localhost:8080/signin',body);
-          navigate('/home');
-        }
-        catch(e){
-          alert(e.data.message);
-        }
+          const response = await axios.post('http://localhost:8080/api/auth/signin',body);
+          if(response.status===200)
+            navigate('/home');
+          else
+            alert(response.data.message);
+      }
+      catch(e){
+        alert(e.message);
+      }
     }
     const [Name,setName] = useState('');
     const [password,setPassword] = useState('');

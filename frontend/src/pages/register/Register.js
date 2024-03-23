@@ -17,12 +17,14 @@ function Register() {
           password : password,
           role : type
         }
-        const response = await axios.post('http://localhost:8080/signup',body);
-        navigate('/');
-
+        const response = await axios.post('http://localhost:8080/api/auth/signup',body);
+        if(response.status===200)
+          navigate('/');
+        else
+          alert(response.data.message);
       }
       catch(e){
-        alert(e.data.message);
+        alert(e.message);
       }
         
     }
