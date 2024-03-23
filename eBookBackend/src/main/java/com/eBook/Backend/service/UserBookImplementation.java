@@ -23,4 +23,45 @@ public class UserBookImplementation {
 	public List<Book> getAllBooks(){
 		return bookRepository.findAll();
 	}
+	
+	public Optional<List<Book>> getBookByTitle(String bTitle) 
+	{
+		Optional<List<Book>> books=bookRepository.findByTitle(bTitle);
+		return books;
+	}
+	
+	
+	public Optional<List<Book>> getBookByAuthor(String author) 
+	{
+		Optional<List<Book>> books=bookRepository.findByAuthor(author);
+		return books;
+	}
+	
+	public Optional<List<Book>> getBooksByGenre(String genre)
+	{
+		Optional<List<Book>> books=bookRepository.findByGenre(genre);
+				return books;
+	}
+	
+	public Optional<List<Book>> getBooksByPrice(double price)
+	{
+		Optional<List<Book>> books=bookRepository.findByPrice(price);
+				return books;
+	}
+	
+	
+	public Optional<List<Book>> getBooksByPriceLessorEqual(double price){
+		
+		Optional<List<Book>> books=bookRepository.findByPriceLessThanEqual(price);
+		return books;
+	}
+	
+public Optional<List<Book>> getBooksByPriceBetween(double p1,double p2){
+		
+		Optional<List<Book>> books=bookRepository.findByPriceBetween(p1,p2);
+		return books;
+	}
+	
+	
+	
 }
