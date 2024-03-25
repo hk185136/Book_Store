@@ -28,11 +28,13 @@
     padding-left: 20px;
     padding-right: 20px;
     justify-content: space-between;
+    z-index: 1000;
 }
 #site-name{
-    font-size: xx-large;
+    /* font-size: xx-large; */
     font-family: cursive;
     color: white;
+    text-decoration: none;
 }
 #search-by{
     padding: 10px 10px;

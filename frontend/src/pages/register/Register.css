@@ -1,0 +1,8 @@
+.status{
+    margin-bottom: 15px;
+    color: rgb(231, 104, 104);
+}
+.tick{
+    color: green;
+    font-weight: bold;
+}

@@ -1,11 +1,98 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Book from '../book/Book';
 import './Books.css'
-function Books() {
+import Sidebar from '../sidebar/Sidebar';
+import axios from 'axios';
+function Books({books,setBooks}) {
+  const [genre,setGenre] = useState('');
+  const [priceRange,setPriceRange] = useState({
+    min:0,
+    max:20000
+  })
+  useEffect(()=>{
+   
+    async function filter(){
+    
+      try{
+        if(genre==''){
+          const res = await axios.get(`http://localhost:8080/api/user/books/`);
+
+          if(res.status==200){
+            const res2 = await axios.get(`http://localhost:8080/api/user/books/pricerange/${priceRange.min}/${priceRange.max}`);
+            const arr1 = res.data;
+            const arr2 = res2.data;
+            const newBooks = arr1.filter(book1=>{
+              return arr2.some(book2=>{
+                return book1.id==book2.id;
+              })
+            })
+            setBooks(newBooks);
+          }
+        }
+        else{
+          const res = await axios.get(`http://localhost:8080/api/user/books/genre/${genre}`);
+
+          if(res.status==200){
+            const res2 = await axios.get(`http://localhost:8080/api/user/books/pricerange/${priceRange.min}/${priceRange.max}`);
+            const arr1 = res.data;
+            const arr2 = res2.data;
+            const newBooks = arr1.filter(book1=>{
+              return arr2.some(book2=>{
+                return book1.id==book2.id;
+              })
+            })
+            setBooks(newBooks);
+          }
+        }
+      }
+      catch(e){
+        alert(e.message)
+      }
+    }
+    filter();
+  },[genre,priceRange])
+  
+  async function deleteBook(book1){
+    try{
+      console.log(book1.id)
+      const url = 'http://localhost:8080/api/admin/books/' + book1.id;
+      const res = await axios.delete(url);
+      if(res.status == 200){
+        const newBooks = books.filter((book)=>book1.id!=book.id);
+        setBooks(newBooks);
+      }
+    }
+    catch(e){
+      alert(e.message);
+    }
+  }
+  async function editBook(id,book1){
+    try{
+      const url = 'http://localhost:8080/api/admin/books/' + id;
+      const res = await axios.put(url,book1);
+      console.log(res);
+      if(res.status == 200){
+        const newBooks = books.map((book)=>(book.id===id)?book1:book);
+        setBooks(newBooks)
+      }
+    }
+    catch(e){
+      alert(e.message);
+    }
+  }
   return (
-    <div className='books'>
-        <Book image='https://cdn.carnegielearning.com/assets/teaser-images/alg1-se-v3.png' name='Mathematics' author='hemanth' price = {1000}/>
-    </div>
+    <>
+    <Sidebar setGenre = {setGenre} priceRange = {priceRange} setPriceRange = {setPriceRange}/>
+
+      
+    (<div className='books'>
+    <button className='reset' >Reset filter</button>
+      {
+        books.map((book)=><Book key={book.id} book = {book} deleteBook = {deleteBook} editBook = {editBook}/>)
+      }
+    </div>)
+    </>
+    
   )
 }
 

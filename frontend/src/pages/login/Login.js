@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import './Login.css';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { userContext } from '../../UserContext';
 function Login() {
     const navigate = useNavigate();
+    const [user,setUser] = useContext(userContext);
     async function handleSubmit(e){
         try{
           e.preventDefault();
@@ -13,14 +15,15 @@ function Login() {
             password : password,
           }
           const response = await axios.post('http://localhost:8080/api/auth/signin',body);
-          if(response.status===200)
+          if(response.status===200){
+            console.log(response.data);
+            setUser(response.data);
             navigate('/home');
-          else
-            alert(response.data.message);
-      }
-      catch(e){
-        alert(e.message);
-      }
+          }
+        }
+        catch(e){
+          alert(e.message);
+        }
     }
     const [Name,setName] = useState('');
     const [password,setPassword] = useState('');
