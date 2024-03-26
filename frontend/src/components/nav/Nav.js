@@ -14,7 +14,8 @@ function Nav({books,setBooks}) {
         url : '',
         author : '',
         genre : '',
-        price : ''
+        price : '',
+        availableQuantity : 1
     }
     const [newBook,setNewBook] = useState(initialState);
     async function handleAdd(e){
@@ -32,9 +33,17 @@ function Nav({books,setBooks}) {
     async function handleSearch(){
         if(search.length>0){
         try{
-            const res = await axios.get(`http://localhost:8080/api/user/books/title/${search}`);
-            if(res.status == 200){
-                setBooks(res.data)
+            if(searchBy=='book'){
+                const res = await axios.get(`http://localhost:8080/api/user/books/title/${search}`);
+                if(res.status == 200){
+                    setBooks(res.data)
+                }
+            }
+            else{
+                const res = await axios.get(`http://localhost:8080/api/user/books/author/${search}`);
+                if(res.status == 200){
+                    setBooks(res.data)
+                }
             }
             
         }
@@ -61,7 +70,7 @@ function Nav({books,setBooks}) {
             {(user.role === 'admin') && <img src="/add-icon.png" alt="" className='nav-img' onClick={()=>setIsOpen(true)}/>}
             {(user.role === 'customer') && <Link to={'/home/cart'}><img src="/shopping-cart.png" alt="" className='nav-img'/></Link>}
             <Link to={'/home/profile'}><img src="/profile.png" alt="" className='nav-img' /></Link>
-            <Link to={'/'}><img src="/logout.png" alt="" className='nav-img' onClick={()=>setUser(null)} /></Link> 
+            <Link to={'/'}><img src="/logout.png" alt="" className='nav-img' onClick={()=>{setUser(null);localStorage.removeItem('user')}} /></Link> 
         </div>
         {(isOpen) &&
             <Modal setIsOpen = {setIsOpen}>
@@ -76,6 +85,8 @@ function Nav({books,setBooks}) {
                     <input type="text" name='url' className='add-book-input' value={newBook.url} onChange={(e)=>setNewBook({...newBook,url : e.target.value})}/>
                     <label htmlFor="">Price</label>
                     <input type="text" name='price' className='add-book-input' value={newBook.price} onChange={(e)=>setNewBook({...newBook,price : e.target.value})}/>
+                    <label htmlFor="">Quantity</label>
+                    <input type="text" name='quantity' className='add-book-input' value={newBook.availableQuantity} onChange={(e)=>setNewBook({...newBook,availableQuantity : e.target.value})}/>
                     <button type='submit' className='add-book-button' onClick={(e)=>handleAdd(e)}> Add </button>
                 </form>
             </Modal>

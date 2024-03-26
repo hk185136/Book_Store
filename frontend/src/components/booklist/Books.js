@@ -26,6 +26,7 @@ function Books({books,setBooks}) {
                 return book1.id==book2.id;
               })
             })
+            console.log(newBooks)
             setBooks(newBooks);
           }
         }
@@ -41,6 +42,7 @@ function Books({books,setBooks}) {
                 return book1.id==book2.id;
               })
             })
+            console.log(newBooks)
             setBooks(newBooks);
           }
         }
@@ -84,12 +86,15 @@ function Books({books,setBooks}) {
     <>
     <Sidebar setGenre = {setGenre} priceRange = {priceRange} setPriceRange = {setPriceRange}/>
 
-      
+    
     (<div className='books'>
-    {/* <button className='reset' >Reset filter</button> */}
+      <button className='reset' onClick={()=>window.location.reload()}>Reset filter</button>
+      <div className='books-grid'>
       {
-        books.map((book)=><Book key={book.id} book = {book} deleteBook = {deleteBook} editBook = {editBook}/>)
-      }
+          books.map((book)=><Book key={book.id} book = {book} deleteBook = {deleteBook} editBook = {editBook}/>)
+        }
+      </div>
+     
     </div>)
     </>
     

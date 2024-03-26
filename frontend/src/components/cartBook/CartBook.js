@@ -2,6 +2,15 @@ import React, { useState } from 'react'
 import './CartBook.css'
 function CartBook(props) {
     const [qty,setQty] = useState(1);
+    async function increment(){
+         setQty(prev=>prev+1)
+        //api call
+       
+    }
+    async function decrement(){
+        setQty(prev=>prev-1)  
+        //api call
+    }
   return (
     <div className='book-card'>
         <div className='book-img-container'>
@@ -15,11 +24,11 @@ function CartBook(props) {
             <p>Qty : </p>
             <button className='qty-controller' onClick={()=>{
                 if(qty>0)
-                    setQty(prev=>prev-1);
+                    decrement();
                 }}>
                     -</button>
             {qty}
-            <button className='qty-controller' onClick={()=>setQty(prev=>prev+1)}>+</button>
+            <button className='qty-controller' onClick={()=>increment()}>+</button>
             </div>
             
             <p className='subtotal'>Sub total : <span style={{color : 'green'}}>&#8377;{props.price*qty}</span></p>

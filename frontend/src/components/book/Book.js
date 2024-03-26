@@ -15,7 +15,8 @@ function Book({book,deleteBook,editBook}) {
     function togglePopup(e){
       setShowPopup(true);
     }
-    function handleAddToCart(){
+    async function handleAddToCart(){
+      //Post api call
       setIsAdded(true);
       setShowPopup(false);
     }
@@ -51,7 +52,7 @@ function Book({book,deleteBook,editBook}) {
             </>}
             {(showPopup)&& (
               <div className='qty-popup' style={{left : 150,top : 130}}>
-              <p>Avaialable copies : </p>
+              <p>Avaialable copies : {book.availableQuantity}</p>
               <div className='quantity' style={{marginTop : 0,marginBottom : 0}}>
                 <p>Qty : </p>
                 <button className='qty-controller' onClick={()=>{
@@ -60,7 +61,12 @@ function Book({book,deleteBook,editBook}) {
                     }}>
                         -</button>
                 {quantity}
-                <button className='qty-controller' onClick={()=>setQuantity(prev=>prev+1)}>+</button>
+                <button className='qty-controller' onClick={()=>{
+                  if(quantity<book.availableQuantity){
+                    setQuantity(prev=>prev+1)
+                  }
+                  
+                  }}>+</button>
             </div>
               <button onClick={handleAddToCart} className='add'>Add</button>
             </div>
@@ -82,6 +88,8 @@ function Book({book,deleteBook,editBook}) {
                     <input type="text" name='url' className='add-book-input' value={newBook.url} onChange={(e)=>setNewBook({...newBook,url : e.target.value})}/>
                     <label htmlFor="">Price</label>
                     <input type="text" name='price' className='add-book-input' value={newBook.price} onChange={(e)=>setNewBook({...newBook,price : e.target.value})}/>
+                    <label htmlFor="">Quantity</label>
+                    <input type="text" name='quantity' className='add-book-input' value={newBook.availableQuantity} onChange={(e)=>setNewBook({...newBook,availableQuantity : e.target.value})}/>
                     <button type='submit' className='add-book-button' onClick={(e)=>{e.preventDefault();
                       editBook(book.id,newBook)}}> Update </button>
                 </form>
