@@ -46,7 +46,7 @@ public class AdminBookController {
 	}
 	
 	@DeleteMapping("{id}")
-	public ResponseEntity deleteBook(@PathVariable("id") String bookId, @RequestBody Book book)
+	public ResponseEntity deleteBook(@PathVariable("id") String bookId)
 	{
 		adminBookImplementation.deleteBook(bookId);
 		return ResponseEntity.status(HttpStatus.OK).body("Book was deleted successfully");
