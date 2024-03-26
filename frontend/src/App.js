@@ -13,8 +13,9 @@ import axios from 'axios';
 function App() {
   const [books,setBooks] = useState([]);
   const [user,setUser] = useContext(userContext);
+  const [cartItems,setCartItems] = useState([]);
   if(!user){
-    setUser(localStorage.getItem('user'));
+    setUser(JSON.parse(localStorage.getItem('user')));
   }
 
   useEffect(()=>{
@@ -28,7 +29,22 @@ function App() {
         alert(e.message);
       }
     }
+    async function getCartItems(){
+      try{
+        const res = await axios.put('http://localhost:8080/api/user/cart/',{username : JSON.parse(localStorage.getItem('user')).name});
+        if(res.status==200){
+          console.log('useeffect runing')
+          console.log(res.data)
+          setCartItems(res.data);
+        }
+      }
+      catch(e){
+        alert(e.message);
+      }
+      
+    }
     getAllBooks();
+    getCartItems();
   },[])
   useEffect(()=>{
     console.log(user);
@@ -47,8 +63,8 @@ function App() {
             <Route path='/register' element={<Register/>}></Route>
             <Route element={<PrivateRoute/>}>
               <Route path="/home" element={<Home books = {books} setBooks = {setBooks} />}>
-                <Route path='/home' element={<Books books = {books} setBooks = {setBooks}  />}/>
-                <Route path="/home/cart" element={<Cart/>}/>
+                <Route path='/home' element={<Books books = {books} setBooks = {setBooks} cartItems = {cartItems} setCartItems = {setCartItems}  />}/>
+                <Route path="/home/cart" element={<Cart cartItems = {cartItems} setCartItems = {setCartItems}  />}/>
                 <Route path="/home/profile" element={<Profile/>}/>
               </Route>
               

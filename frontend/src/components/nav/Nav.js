@@ -3,9 +3,8 @@ import './Nav.css';
 import {Link} from 'react-router-dom'
 import Modal from '../modal/Modal';
 import { userContext } from '../../UserContext';
-import axios from 'axios'
-function Nav({books,setBooks}) {
-    const [searchBy,setSearchBy] = useState('book');
+import axios from 'axios';
+function Nav({books,setBooks}) {    const [searchBy,setSearchBy] = useState('book');
     const [isOpen,setIsOpen] = useState(false);
     const [search,setSearch] = useState('');
     const [user,setUser] = useContext(userContext);
@@ -58,7 +57,7 @@ function Nav({books,setBooks}) {
         <Link to={'/home'} id='site-name'><h1>Book Store</h1></Link>
         <div className='search-container'>
             <input type="text" placeholder='Search ...' className='search-bar' value={search} onChange={(e)=>setSearch(e.target.value)}/>
-            <span><img className='search-button' src='search.png' onClick={handleSearch}></img></span>
+            <span><img className='search-button' src='/search.png' onClick={handleSearch}></img></span>
             <p className='search-by-text'>Search by : </p>
             <select name="" id="search-by" value={searchBy} onChange={(e)=>setSearchBy(e.target.value)}>
                 <option value="book">book</option>

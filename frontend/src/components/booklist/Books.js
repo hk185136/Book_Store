@@ -3,7 +3,7 @@ import Book from '../book/Book';
 import './Books.css'
 import Sidebar from '../sidebar/Sidebar';
 import axios from 'axios';
-function Books({books,setBooks}) {
+function Books({books,setBooks,cartItems,setCartItems}) {
   const [genre,setGenre] = useState('');
   const [priceRange,setPriceRange] = useState({
     min:0,
@@ -53,7 +53,22 @@ function Books({books,setBooks}) {
     }
     filter();
   },[genre,priceRange])
-  
+  function isInCart(id) {
+    for(let cartItem of cartItems){
+      if(cartItem.book.id == id){
+        return true;
+      }
+    }
+    return false;
+  }
+  function findInCart(id) {
+    for(let cartItem of cartItems){
+      if(cartItem.book.id == id){
+        return cartItem.id;
+      }
+    }
+    return undefined;
+  }
   async function deleteBook(book1){
     try{
       console.log(book1.id)
@@ -71,6 +86,8 @@ function Books({books,setBooks}) {
   async function editBook(id,book1){
     try{
       const url = 'http://localhost:8080/api/admin/books/' + id;
+      console.log("pointed")
+      console.log(book1)
       const res = await axios.put(url,book1);
       console.log(res);
       if(res.status == 200){
@@ -91,7 +108,7 @@ function Books({books,setBooks}) {
       <button className='reset' onClick={()=>window.location.reload()}>Reset filter</button>
       <div className='books-grid'>
       {
-          books.map((book)=><Book key={book.id} book = {book} deleteBook = {deleteBook} editBook = {editBook}/>)
+          books.map((book)=><Book key={book.id} isInCart = {isInCart(book.id)} cartId = {findInCart(book.id)} book = {book} deleteBook = {deleteBook} editBook = {editBook} cartItems = {cartItems} setCartItems = {setCartItems}/>)
         }
       </div>
      

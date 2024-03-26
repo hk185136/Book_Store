@@ -1,18 +1,25 @@
 import React from 'react'
 import CartBook from '../cartBook/CartBook'
-import './CartBooks.css'
+import './CartBooks.css';
+import axios from 'axios';
 function CartBooks({cartItems,setCartItems}) {
   async function deleteItem(id){
-    //api call
-    //setCartItems
+    try{
+      const res = await axios.delete('http://localhost:8080/api/user/cart/' + id);
+      const newCartItems = cartItems.filter((item)=>item.id!==id);
+      setCartItems(newCartItems);
+    }
+    catch(e){
+      alert(e.message);
+    }
   }
 
   return (
     <div className='card-grid'>
       {
-        // cartItems.map((cartItem) => <CartBook cartItem = {cartItem} deleteItem = {deleteItem} />)
+        cartItems.map((cartItem) => <CartBook cartItem = {cartItem} deleteItem = {deleteItem} />)
       }
-      <CartBook image='https://cdn.carnegielearning.com/assets/teaser-images/alg1-se-v3.png' name='Mathematics' author='hemanth' price = {1000}/>
+     
     </div>
   )
 }

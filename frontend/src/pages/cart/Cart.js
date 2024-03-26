@@ -3,17 +3,9 @@ import React, { useContext, useEffect, useState } from 'react'
 import CartBooks from '../../components/cartBooks/CartBooks';
 import './Cart.css';
 import { userContext } from '../../UserContext';
-function Cart() {
-  const [cartItems,setCartItems] = useState([]);
+import axios from 'axios';
+function Cart({cartItems,setCartItems}) {
   const [user,setUser] = useContext(userContext);
-  useEffect(()=>{
-    async function getCartItems(){
-        console.log(user);
-        //API call
-        //setCartItems(res.data);
-    }
-    getCartItems()
-  },[])
   return (
       <div className='cart'>
         

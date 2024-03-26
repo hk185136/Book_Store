@@ -2,8 +2,9 @@ import React, { useContext, useState } from 'react'
 import './Book.css';
 import { userContext } from '../../UserContext';
 import Modal from '../modal/Modal';
-function Book({book,deleteBook,editBook}) {
-    const [isAdded,setIsAdded] = useState(false);
+import axios from 'axios';
+function Book({isInCart,cartId,book,deleteBook,editBook,cartItems,setCartItems}) {
+    const [isAdded,setIsAdded] = useState(isInCart);
     const [user,setUser] = useContext(userContext);
     const [isOpen,setIsOpen] = useState(false);
     const [newBook,setNewBook] = useState(book);
@@ -16,9 +17,33 @@ function Book({book,deleteBook,editBook}) {
       setShowPopup(true);
     }
     async function handleAddToCart(){
-      //Post api call
-      setIsAdded(true);
-      setShowPopup(false);
+      const res = await axios.post('http://localhost:8080/api/user/cart/',{
+        book : book,
+        user : {username : user.name},
+        quantity : quantity
+      })
+      if(res.status == 200){
+        console.log(res.data);
+        setCartItems([...cartItems,res.data])
+        setIsAdded(true);
+        setShowPopup(false);
+      }
+      
+    }
+    async function handleRemoveFromCart(){
+      try{
+        const res = await axios.delete('http://localhost:8080/api/user/cart/' + cartId);
+        const newCartItems = cartItems.filter((item)=>item.id!==cartId);
+        setCartItems(newCartItems);
+        if(res.status == 200){
+          setIsAdded(false);
+        }
+      }
+      catch(e){
+        alert(e.message);
+      }
+     
+      
     }
     function assignStyle(title){
       if(title.length<10){
@@ -46,7 +71,7 @@ function Book({book,deleteBook,editBook}) {
              <button className='buy-button'>Buy</button>
             {(isAdded)?(<img  onClick={(e)=>
               {
-                setIsAdded(false);
+                handleRemoveFromCart();
               }
               } className='cart-img' src="/remove-from-cart.svg" alt="" />):(<img  onClick={(e)=>{togglePopup(e)}} className='cart-img' src="/add-to-cart.png" alt="" />)}
             </>}

@@ -31,7 +31,7 @@ public class CartController {
 	@Autowired
 	private CartServiceImpl cartServiceImpl;
 	
-	@GetMapping
+	@PutMapping
 	public ResponseEntity<Set<Item>> getAllItems(@RequestBody AuthUser user)
 	{
 		return ResponseEntity.ok(cartServiceImpl.getAllItems(user));
