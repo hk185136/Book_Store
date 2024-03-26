@@ -7,13 +7,34 @@ function Book({book,deleteBook,editBook}) {
     const [user,setUser] = useContext(userContext);
     const [isOpen,setIsOpen] = useState(false);
     const [newBook,setNewBook] = useState(book);
+    const [showPopup,setShowPopup] = useState(false);
+    const [quantity,setQuantity] = useState(0);
+    const largeTitle = {fontSize : 'large'}
+    const mediumTitle = {fontSize : 'larger'}
+    const smallTitle = {fontSize : 'xx-large'}
+    function togglePopup(e){
+      setShowPopup(true);
+    }
+    function handleAddToCart(){
+      setIsAdded(true);
+      setShowPopup(false);
+    }
+    function assignStyle(title){
+      if(title.length<10){
+        return smallTitle;
+      }
+      else if(title.length<20){
+        return mediumTitle;
+      }
+      return largeTitle;
+    }
   return (
     <div className='book-card'>
         <div className='book-img-container'>
             <img src={book.url} alt="No cover image" className='book-img'/>
         </div>
         <div className='book-details'>
-            <p className='book-name'>{book.title}</p>
+            <p className='book-name' style={assignStyle(book.title)}>{book.title}</p>
             <p className='author-name'>By author : {book.author}</p>
             <p className='price'>&#8377;{book.price}</p>
             {(user.role === 'admin')?(<>
@@ -22,8 +43,30 @@ function Book({book,deleteBook,editBook}) {
             </>)
             : <>
              <button className='buy-button'>Buy</button>
-            {(isAdded)?(<img  onClick={()=>setIsAdded(false)} className='cart-img' src="/remove-from-cart.svg" alt="" />):(<img  onClick={()=>setIsAdded(true)} className='cart-img' src="/add-to-cart.png" alt="" />)}
+            {(isAdded)?(<img  onClick={(e)=>
+              {
+                setIsAdded(false);
+              }
+              } className='cart-img' src="/remove-from-cart.svg" alt="" />):(<img  onClick={(e)=>{togglePopup(e)}} className='cart-img' src="/add-to-cart.png" alt="" />)}
             </>}
+            {(showPopup)&& (
+              <div className='qty-popup' style={{left : 150,top : 130}}>
+              <p>Avaialable copies : </p>
+              <div className='quantity' style={{marginTop : 0,marginBottom : 0}}>
+                <p>Qty : </p>
+                <button className='qty-controller' onClick={()=>{
+                    if(quantity>0)
+                        setQuantity(prev=>prev-1);
+                    }}>
+                        -</button>
+                {quantity}
+                <button className='qty-controller' onClick={()=>setQuantity(prev=>prev+1)}>+</button>
+            </div>
+              <button onClick={handleAddToCart} className='add'>Add</button>
+            </div>
+            )}
+            
+           
            
         </div>
         {(isOpen)&&
@@ -43,6 +86,7 @@ function Book({book,deleteBook,editBook}) {
                       editBook(book.id,newBook)}}> Update </button>
                 </form>
             </Modal>
+
 }
     </div>
   )

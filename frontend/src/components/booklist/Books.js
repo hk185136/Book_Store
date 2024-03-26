@@ -86,7 +86,7 @@ function Books({books,setBooks}) {
 
       
     (<div className='books'>
-    <button className='reset' >Reset filter</button>
+    {/* <button className='reset' >Reset filter</button> */}
       {
         books.map((book)=><Book key={book.id} book = {book} deleteBook = {deleteBook} editBook = {editBook}/>)
       }

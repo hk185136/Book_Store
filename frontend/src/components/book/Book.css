@@ -1,5 +1,5 @@
 .book-img-container{
-    width: 200px;
+    min-width: 200px;
     height: 300px;
     background-color: antiquewhite;
     margin-right: 50px;
@@ -11,7 +11,7 @@
 }
 .book-card{
     display: flex;
-    width: 600px;
+    max-width: 450px;
     background-color: aliceblue;
     padding-right: 50px;
     padding-left: 20px;
@@ -22,10 +22,12 @@
 }
 .book-details{
     font-size: larger;
+    position: relative;
 }
 .book-name{
-    font-size: xx-large;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-bottom: 8px;
+    font-weight: bold;
 }
 .author-name{
     font-style: italic;
@@ -52,4 +54,21 @@
 }
 .cart-img:hover,.delete:hover{
     transform: scale(1.05);
+}
+.qty-popup{
+    position: absolute;
+    z-index: 1000;
+    background-color: rgb(71, 71, 116);
+    color: white;
+    border-radius: 4px;
+    padding: 20px 20px;
+    font-size: 15px;
+    display: flex;
+    flex-direction: column;
+}
+.add{
+    /* margin-top: 10px; */
+    width: 50px;
+    padding: 10px 10px;
+    border-radius: 5px;
 }
