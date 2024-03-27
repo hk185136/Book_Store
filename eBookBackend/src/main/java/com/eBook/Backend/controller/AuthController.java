@@ -12,7 +12,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -86,6 +88,19 @@ public class AuthController {
             ErrorRes errorResponse = new ErrorRes(HttpStatus.BAD_REQUEST, e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
+	}
+	
+	
+	@PutMapping("/editUser/{id}")
+	public ResponseEntity<AuthUser> editUser(@PathVariable("id")String userId, @RequestBody AuthUser user)
+	{
+		user.setId(userId);
+	    AuthUser storedUser = userRepository.findById(userId).get();
+	    storedUser.setPno(user.getPno());
+	    storedUser.setAddress(user.getAddress());
+	    
+	    AuthUser updatedUser =userRepository.save(storedUser);
+	    return ResponseEntity.ok(updatedUser);
 	}
 	
 	

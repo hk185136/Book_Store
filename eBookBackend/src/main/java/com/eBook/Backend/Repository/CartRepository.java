@@ -13,5 +13,6 @@ import java.util.Optional;
 
 public interface CartRepository extends MongoRepository<Item, String>{
 	List<Item> findByUser(AuthUser user);
-	
+	List<Item> findByStatus(String status);
+	List <Item> findByStatusAndUser(String status,AuthUser user);
 }

@@ -67,7 +67,7 @@ function Nav({books,setBooks}) {    const [searchBy,setSearchBy] = useState('boo
        
         <div className='right-component'>
             {(user.role === 'admin') && <img src="/add-icon.png" alt="" className='nav-img' onClick={()=>setIsOpen(true)}/>}
-            {(user.role === 'customer') && <Link to={'/home/cart'}><img src="/shopping-cart.png" alt="" className='nav-img'/></Link>}
+            {(user.role === 'customer'|| user.role==="user") && <Link to={'/home/cart'}><img src="/shopping-cart.png" alt="" className='nav-img'/></Link>}
             <Link to={'/home/profile'}><img src="/profile.png" alt="" className='nav-img' /></Link>
             <Link to={'/'}><img src="/logout.png" alt="" className='nav-img' onClick={()=>{setUser(null);localStorage.removeItem('user')}} /></Link> 
         </div>

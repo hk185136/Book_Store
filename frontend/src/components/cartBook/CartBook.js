@@ -25,7 +25,7 @@ function CartBook({cartItem,deleteItem}) {
   return (
     <div className='book-card'>
         <div className='book-img-container'>
-            <img src={cartItem.book.image} alt="No image" className='book-img'/>
+            <img src={cartItem.book.url} alt="No image" className='book-img'/>
         </div>
         <div className='book-details'>
             <p className='book-name'>{cartItem.book.title}</p>

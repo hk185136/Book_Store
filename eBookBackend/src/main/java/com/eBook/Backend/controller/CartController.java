@@ -1,5 +1,7 @@
 package com.eBook.Backend.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -25,23 +27,41 @@ import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/user/cart/")
+@RequestMapping("/api/item/")
 @CrossOrigin(origins = "*")
 public class CartController {
 	@Autowired
 	private CartServiceImpl cartServiceImpl;
 	
-	@PutMapping
-	public ResponseEntity<Set<Item>> getAllItems(@RequestBody AuthUser user)
+	
+	
+	@PostMapping("/addToCart")
+	public ResponseEntity<Item> addItemToCart(@RequestBody Item item)
 	{
-		return ResponseEntity.ok(cartServiceImpl.getAllItems(user));
+		item.setStatus("added to cart");
+		return ResponseEntity.ok(cartServiceImpl.addItemToCart(item));
 	}
 	
-	
-	@PostMapping
-	public ResponseEntity<Item> addItem(@RequestBody Item item)
+	@PostMapping("/addToOrder")
+	public ResponseEntity<Item> addItemToOrders(@RequestBody Item item)
 	{
-		return ResponseEntity.ok(cartServiceImpl.addItem(item));
+		item.setStatus("pending");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		item.setDate(dateFormat.format(new Date()));
+		return ResponseEntity.ok(cartServiceImpl.addItemToOrders(item));
+	}
+	
+	@PutMapping("/updateStatus/{status}")
+	public ResponseEntity<String> updateItemStatus(@RequestBody Item item, @PathVariable("status")String newStatus)
+	{
+		item.setStatus(newStatus);
+		return ResponseEntity.ok("status updated");
+	}
+	
+	@PutMapping("/searchByStatus/{status}")
+	public ResponseEntity<Set<Item>> searchByUserAndStatus(@RequestBody AuthUser user, @PathVariable("status") String status)
+	{
+		return ResponseEntity.ok(cartServiceImpl.findItemsByUserAndStatus(user, status));
 	}
 	
 	@PutMapping("{id}/increase")
@@ -59,10 +79,11 @@ public class CartController {
 	}
 	
 	@DeleteMapping("{id}")
-	public ResponseEntity<String> deleteItem(@PathVariable("id") String itemId)
+	public ResponseEntity<String> deleteItemFromCart(@PathVariable("id") String itemId)
 	{
 		cartServiceImpl.deleteItem(itemId);
 		return ResponseEntity.status(HttpStatus.OK).body("Deleted book succesfully");
 		
 	}
+	
 }

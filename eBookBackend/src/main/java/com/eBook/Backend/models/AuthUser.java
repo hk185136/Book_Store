@@ -17,6 +17,9 @@ public class AuthUser {
 	private String username;
 	private String password;
 	private String role;
+	private String pno;
+	private String address;
+	
 	public String getId() {
 		return id;
 	}
@@ -41,4 +44,17 @@ public class AuthUser {
 	public void setRole(String role) {
 		this.role = role;
 	}
+	public String getPno() {
+		return pno;
+	}
+	public void setPno(String pno) {
+		this.pno = pno;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	
 }
