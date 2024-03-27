@@ -73,7 +73,6 @@ public class UserBookController {
    return ResponseEntity.ok(book);
 }
 	
-
 	
 	
 }

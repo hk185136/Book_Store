@@ -25,6 +25,7 @@ public class AdminBookImplementation {
 		existingBook.setGenre(book.getGenre());
 		existingBook.setPrice(book.getPrice());
 		existingBook.setUrl(book.getUrl());
+		existingBook.setAvailableQuantity(book.getAvailableQuantity());
 		Book updatedBook = bookRespository.save(existingBook);
 		return updatedBook;
 	}

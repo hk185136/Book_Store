@@ -19,18 +19,7 @@ public class Book {
 	private String author;
 	private String genre;
 	private double price;
-	
 	private int availableQuantity;
-	
-	
-	public int getAvailableQuantity() {
-		return availableQuantity;
-	}
-
-	public void setAvailableQuantity(int availableQuantity) {
-		this.availableQuantity = availableQuantity;
-	}
-
 	public String getId() {
 		return id;
 	}
@@ -70,6 +59,17 @@ public class Book {
 	public void setId(String id) {
 		this.id = id;
 	}
+
+	public int getAvailableQuantity() {
+		return availableQuantity;
+	}
+
+	public void setAvailableQuantity(int availableQuantity) {
+		this.availableQuantity = availableQuantity;
+	}
+
+	
+	
 	
 
 }
