@@ -61,7 +61,7 @@ public class AuthController {
 			}
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
 			AuthUser save = userRepository.save(user);
-			LoginRes registerRes = new LoginRes(save.getUsername(),save.getRole(),"");
+			LoginRes registerRes = new LoginRes(save.getUsername(),save.getRole(),"",save.getAddress(), save.getPno());
 			return ResponseEntity.ok(registerRes);
 		} catch (Exception e) {
 			ErrorRes errorResponse = new ErrorRes(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -78,8 +78,10 @@ public class AuthController {
                     authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(),user.getPassword()));
 			String name=authentication.getName();
 			String role=userStored.get().getRole();
+			String address= userStored.get().getAddress();
+			String pno = userStored.get().getPno();
 			String token=jwtUtil.createToken(user);
-			LoginRes loginRes = new LoginRes(name, role , token);
+			LoginRes loginRes = new LoginRes(name, role , token, address, pno);
 			return ResponseEntity.ok(loginRes);
 		}catch (BadCredentialsException e){
             ErrorRes errorResponse = new ErrorRes(HttpStatus.BAD_REQUEST,"Invalid username or password");

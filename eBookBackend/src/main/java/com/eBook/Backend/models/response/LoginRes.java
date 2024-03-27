@@ -4,11 +4,15 @@ public class LoginRes {
 	 private String name;
 	 private String role;
 	 private String token;
+	 private String address;
+	 private String pno;
 	 
-	 public LoginRes(String name, String role, String token) {
+	 public LoginRes(String name, String role, String token, String address, String pno) {
 		 this.name = name;
 		 this.role=role;
 		 this.token = token;
+		 this.address=address;
+		 this.pno=pno;
 	 }
 	 public String getName() {
 		return name;
@@ -33,4 +37,19 @@ public class LoginRes {
 	    public void setToken(String token) {
 	        this.token = token;
 	    }
+		public String getAddress() {
+			return address;
+		}
+		public void setAddress(String address) {
+			this.address = address;
+		}
+		public String getPno() {
+			return pno;
+		}
+		public void setPno(String pno) {
+			this.pno = pno;
+		}
+	    
+	    
 }
+

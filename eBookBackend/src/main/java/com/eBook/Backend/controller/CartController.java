@@ -64,6 +64,17 @@ public class CartController {
 		return ResponseEntity.ok(cartServiceImpl.findItemsByUserAndStatus(user, status));
 	}
 	
+	@PutMapping("/getOrders")
+	public ResponseEntity<Set<Item>> getOrders(@RequestBody AuthUser user)
+	{
+		Set<Item>orders = cartServiceImpl.findItemsByUserAndStatus(user, "pending");
+		orders.addAll(cartServiceImpl.findItemsByUserAndStatus(user, "confirmed"));
+		orders.addAll(cartServiceImpl.findItemsByUserAndStatus(user, "delivered"));
+		orders.addAll(cartServiceImpl.findItemsByUserAndStatus(user, "cancelled"));
+		return ResponseEntity.ok(orders);
+	}
+	
+	
 	@PutMapping("{id}/increase")
 	public ResponseEntity<Item> increaseItem(@RequestBody Item item, @PathVariable("id") String itemId)
 	{
