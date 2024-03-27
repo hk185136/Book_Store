@@ -17,6 +17,7 @@ function Login() {
           const response = await axios.post('http://localhost:8080/api/auth/signin',body);
           if(response.status===200){
             console.log(response.data);
+            localStorage.setItem('user',JSON.stringify(response.data));
             setUser(response.data);
             navigate('/home');
           }

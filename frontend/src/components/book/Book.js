@@ -2,18 +2,65 @@ import React, { useContext, useState } from 'react'
 import './Book.css';
 import { userContext } from '../../UserContext';
 import Modal from '../modal/Modal';
-function Book({book,deleteBook,editBook}) {
-    const [isAdded,setIsAdded] = useState(false);
+import axios from 'axios';
+function Book({isInCart,cartId,book,deleteBook,editBook,cartItems,setCartItems}) {
+    const [isAdded,setIsAdded] = useState(isInCart);
     const [user,setUser] = useContext(userContext);
     const [isOpen,setIsOpen] = useState(false);
     const [newBook,setNewBook] = useState(book);
+    const [showPopup,setShowPopup] = useState(false);
+    const [quantity,setQuantity] = useState(0);
+    const largeTitle = {fontSize : 'large'}
+    const mediumTitle = {fontSize : 'larger'}
+    const smallTitle = {fontSize : 'xx-large'}
+    function togglePopup(e){
+      setShowPopup(true);
+    }
+    async function handleAddToCart(){
+      const res = await axios.post('http://localhost:8080/api/user/cart/',{
+        book : book,
+        user : {username : user.name},
+        quantity : quantity
+      })
+      if(res.status == 200){
+        console.log(res.data);
+        setCartItems([...cartItems,res.data])
+        setIsAdded(true);
+        setShowPopup(false);
+      }
+      
+    }
+    async function handleRemoveFromCart(){
+      try{
+        const res = await axios.delete('http://localhost:8080/api/user/cart/' + cartId);
+        const newCartItems = cartItems.filter((item)=>item.id!==cartId);
+        setCartItems(newCartItems);
+        if(res.status == 200){
+          setIsAdded(false);
+        }
+      }
+      catch(e){
+        alert(e.message);
+      }
+     
+      
+    }
+    function assignStyle(title){
+      if(title.length<10){
+        return smallTitle;
+      }
+      else if(title.length<20){
+        return mediumTitle;
+      }
+      return largeTitle;
+    }
   return (
     <div className='book-card'>
         <div className='book-img-container'>
             <img src={book.url} alt="No cover image" className='book-img'/>
         </div>
         <div className='book-details'>
-            <p className='book-name'>{book.title}</p>
+            <p className='book-name' style={assignStyle(book.title)}>{book.title}</p>
             <p className='author-name'>By author : {book.author}</p>
             <p className='price'>&#8377;{book.price}</p>
             {(user.role === 'admin')?(<>
@@ -22,8 +69,35 @@ function Book({book,deleteBook,editBook}) {
             </>)
             : <>
              <button className='buy-button'>Buy</button>
-            {(isAdded)?(<img  onClick={()=>setIsAdded(false)} className='cart-img' src="/remove-from-cart.svg" alt="" />):(<img  onClick={()=>setIsAdded(true)} className='cart-img' src="/add-to-cart.png" alt="" />)}
+            {(isAdded)?(<img  onClick={(e)=>
+              {
+                handleRemoveFromCart();
+              }
+              } className='cart-img' src="/remove-from-cart.svg" alt="" />):(<img  onClick={(e)=>{togglePopup(e)}} className='cart-img' src="/add-to-cart.png" alt="" />)}
             </>}
+            {(showPopup)&& (
+              <div className='qty-popup' style={{left : 150,top : 130}}>
+              <p>Avaialable copies : {book.availableQuantity}</p>
+              <div className='quantity' style={{marginTop : 0,marginBottom : 0}}>
+                <p>Qty : </p>
+                <button className='qty-controller' onClick={()=>{
+                    if(quantity>0)
+                        setQuantity(prev=>prev-1);
+                    }}>
+                        -</button>
+                {quantity}
+                <button className='qty-controller' onClick={()=>{
+                  if(quantity<book.availableQuantity){
+                    setQuantity(prev=>prev+1)
+                  }
+                  
+                  }}>+</button>
+            </div>
+              <button onClick={handleAddToCart} className='add'>Add</button>
+            </div>
+            )}
+            
+           
            
         </div>
         {(isOpen)&&
@@ -39,10 +113,13 @@ function Book({book,deleteBook,editBook}) {
                     <input type="text" name='url' className='add-book-input' value={newBook.url} onChange={(e)=>setNewBook({...newBook,url : e.target.value})}/>
                     <label htmlFor="">Price</label>
                     <input type="text" name='price' className='add-book-input' value={newBook.price} onChange={(e)=>setNewBook({...newBook,price : e.target.value})}/>
+                    <label htmlFor="">Quantity</label>
+                    <input type="text" name='quantity' className='add-book-input' value={newBook.availableQuantity} onChange={(e)=>setNewBook({...newBook,availableQuantity : e.target.value})}/>
                     <button type='submit' className='add-book-button' onClick={(e)=>{e.preventDefault();
                       editBook(book.id,newBook)}}> Update </button>
                 </form>
             </Modal>
+
 }
     </div>
   )

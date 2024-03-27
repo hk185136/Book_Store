@@ -9,7 +9,7 @@ import lombok.Data;
 
 @Data
 @Builder
-@Document
+@Document(collection = "Book")
 public class Book {
 	@Id
 	private String id;

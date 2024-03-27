@@ -7,23 +7,53 @@ import Cart from './pages/cart/Cart';
 import Profile from './pages/profile/Profile';
 import PrivateRoute from './PrivateRoute';
 import Books from './components/booklist/Books';
-import { useState ,useEffect} from 'react';
+import { useState ,useEffect, useContext} from 'react';
+import { userContext } from './UserContext';
 import axios from 'axios';
 function App() {
   const [books,setBooks] = useState([]);
- async function getAllBooks(){
-    try{
-      const res = await axios.get('http://localhost:8080/api/user/books/');
-      console.log(res.data);
-      setBooks(res.data);
-    }
-    catch(e){
-      alert(e.message);
-    }
+  const [user,setUser] = useContext(userContext);
+  const [cartItems,setCartItems] = useState([]);
+  if(!user){
+    setUser(JSON.parse(localStorage.getItem('user')));
   }
-  useEffect(async ()=>{
+
+  useEffect(()=>{
+    async function getAllBooks(){
+      try{
+        const res = await axios.get('http://localhost:8080/api/user/books/');
+        console.log(res.data);
+        setBooks(res.data);
+      }
+      catch(e){
+        alert(e.message);
+      }
+    }
+    async function getCartItems(){
+      try{
+        const res = await axios.put('http://localhost:8080/api/user/cart/',{username : JSON.parse(localStorage.getItem('user')).name});
+        if(res.status==200){
+          console.log('useeffect runing')
+          console.log(res.data)
+          setCartItems(res.data);
+        }
+      }
+      catch(e){
+        alert(e.message);
+      }
+      
+    }
     getAllBooks();
+    getCartItems();
   },[])
+  useEffect(()=>{
+    console.log(user);
+    console.log(localStorage.getItem('user'))
+    if(!user || !user.token){
+      console.log("enetered the useeffect if statement")
+      setUser(JSON.parse(localStorage.getItem('user')));
+    }
+  },[user])
 
   return (
     <div className="App">
@@ -33,8 +63,8 @@ function App() {
             <Route path='/register' element={<Register/>}></Route>
             <Route element={<PrivateRoute/>}>
               <Route path="/home" element={<Home books = {books} setBooks = {setBooks} />}>
-                <Route path='/home' element={<Books books = {books} setBooks = {setBooks}  getAllBooks={getAllBooks}/>}/>
-                <Route path="/home/cart" element={<Cart/>}/>
+                <Route path='/home' element={<Books books = {books} setBooks = {setBooks} cartItems = {cartItems} setCartItems = {setCartItems}  />}/>
+                <Route path="/home/cart" element={<Cart cartItems = {cartItems} setCartItems = {setCartItems}  />}/>
                 <Route path="/home/profile" element={<Profile/>}/>
               </Route>
               
