@@ -105,12 +105,16 @@ function Books({books,setBooks,cartItems,setCartItems}) {
 
     
     (<div className='books'>
-      <button className='reset' onClick={()=>window.location.reload()}>Reset filter</button>
-      <div className='books-grid'>
+    <div><button className='reset' onClick={()=>window.location.reload()}>Reset filter</button></div>
+
+      {books.length>0?(<>
+        <div className='books-grid'>
       {
           books.map((book)=><Book key={book.id} isInCart = {isInCart(book.id)} cartId = {findInCart(book.id)} book = {book} deleteBook = {deleteBook} editBook = {editBook} cartItems = {cartItems} setCartItems = {setCartItems}/>)
         }
       </div>
+      </>):(<img src='/no-search-found.png'></img>)}
+      
      
     </div>)
     </>

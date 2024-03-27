@@ -2,7 +2,7 @@ import React from 'react'
 import CartBook from '../cartBook/CartBook'
 import './CartBooks.css';
 import axios from 'axios';
-function CartBooks({cartItems,setCartItems}) {
+function CartBooks({cartItems,setCartItems,setTotal}) {
   async function deleteItem(id){
     try{
       const res = await axios.delete('http://localhost:8080/api/user/cart/' + id);
@@ -17,7 +17,7 @@ function CartBooks({cartItems,setCartItems}) {
   return (
     <div className='card-grid'>
       {
-        cartItems.map((cartItem) => <CartBook cartItem = {cartItem} deleteItem = {deleteItem} />)
+        cartItems.map((cartItem) => <CartBook cartItem = {cartItem} deleteItem = {deleteItem} setTotal = {setTotal}/>)
       }
      
     </div>

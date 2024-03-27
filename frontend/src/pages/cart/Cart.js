@@ -6,15 +6,28 @@ import { userContext } from '../../UserContext';
 import axios from 'axios';
 function Cart({cartItems,setCartItems}) {
   const [user,setUser] = useContext(userContext);
+  const [total,setTotal] = useState(getTotal());
+  console.log(cartItems)
+  function getTotal(){
+    let total = 0;
+    for(let cartItem of cartItems){
+      total += (cartItem.book.price*cartItem.quantity)
+    }
+    return total;
+  }
   return (
       <div className='cart'>
-        
-        <CartBooks cartItems = {cartItems} setCartItems = {setCartItems}/>
-        <div>
+        {(cartItems.length>0)?<>
+          <CartBooks cartItems = {cartItems} setCartItems = {setCartItems} setTotal = {setTotal}/>
+          <div>
           <h1>Order summary</h1>
-          <p>Total items : </p>
-          <p>Total cost : </p>
+          <p>Total items : {cartItems.length}</p>
+          <p>Total cost : {total}</p>
         </div>
+        </>:
+        <img src='/emptyCart.png'></img>}
+        
+        
       </div>
       
     

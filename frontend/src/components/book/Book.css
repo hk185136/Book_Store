@@ -57,7 +57,7 @@
 }
 .qty-popup{
     position: absolute;
-    z-index: 1000;
+    z-index: 10;
     background-color: rgb(71, 71, 116);
     color: white;
     border-radius: 4px;
@@ -65,10 +65,20 @@
     font-size: 15px;
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 20px 20px;
+    width: max-content;
 }
 .add{
     /* margin-top: 10px; */
     width: 50px;
     padding: 10px 10px;
     border-radius: 5px;
+}
+.closePopup{
+    align-self: flex-end;
+    cursor: pointer;
+    width: 20px;
+    margin-bottom: 10px;
 }

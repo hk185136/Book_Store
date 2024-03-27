@@ -9,12 +9,17 @@ function Book({isInCart,cartId,book,deleteBook,editBook,cartItems,setCartItems})
     const [isOpen,setIsOpen] = useState(false);
     const [newBook,setNewBook] = useState(book);
     const [showPopup,setShowPopup] = useState(false);
-    const [quantity,setQuantity] = useState(0);
+    const [quantity,setQuantity] = useState(1);
     const largeTitle = {fontSize : 'large'}
     const mediumTitle = {fontSize : 'larger'}
     const smallTitle = {fontSize : 'xx-large'}
     function togglePopup(e){
       setShowPopup(true);
+      if(book.availableQuantity===0){
+        setTimeout(()=>{
+          setShowPopup(false);
+        },1000)
+      }
     }
     async function handleAddToCart(){
       const res = await axios.post('http://localhost:8080/api/user/cart/',{
@@ -77,23 +82,33 @@ function Book({isInCart,cartId,book,deleteBook,editBook,cartItems,setCartItems})
             </>}
             {(showPopup)&& (
               <div className='qty-popup' style={{left : 150,top : 130}}>
-              <p>Avaialable copies : {book.availableQuantity}</p>
+                <img src="/close-icon.jpg" alt="" onClick={()=>setShowPopup(false) } className='closePopup'/>
+                {(book.availableQuantity==0)?(<p>No copies available</p>):
+                (<>
+                <p>Avaialable copies : {book.availableQuantity}</p>
               <div className='quantity' style={{marginTop : 0,marginBottom : 0}}>
-                <p>Qty : </p>
-                <button className='qty-controller' onClick={()=>{
-                    if(quantity>0)
+                <p style={{marginRight : 5}}>Qty : </p>
+                {(quantity>1) &&  <button className='qty-controller' onClick={()=>{
+                    if(quantity>1)
                         setQuantity(prev=>prev-1);
                     }}>
-                        -</button>
+                        -</button>}
+               
                 {quantity}
-                <button className='qty-controller' onClick={()=>{
+                {(quantity<book.availableQuantity) && <button className='qty-controller' onClick={()=>{
                   if(quantity<book.availableQuantity){
                     setQuantity(prev=>prev+1)
                   }
                   
-                  }}>+</button>
-            </div>
-              <button onClick={handleAddToCart} className='add'>Add</button>
+                  }}>+</button>}
+                
+                  
+                  </div>
+                  <button onClick={handleAddToCart} className='add'>Add</button>
+                </>)}
+              
+            
+              
             </div>
             )}
             
