@@ -1,5 +1,6 @@
 package com.eBook.Backend.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -12,6 +13,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -93,11 +95,10 @@ public class AuthController {
 	}
 	
 	
-	@PutMapping("/editUser/{id}")
-	public ResponseEntity<AuthUser> editUser(@PathVariable("id")String userId, @RequestBody AuthUser user)
+	@PutMapping("/editUser/{name}")
+	public ResponseEntity<AuthUser> editUser(@PathVariable("name")String userName, @RequestBody AuthUser user)
 	{
-		user.setId(userId);
-	    AuthUser storedUser = userRepository.findById(userId).get();
+	    AuthUser storedUser = userRepository.findByusername(userName).get();
 	    storedUser.setPno(user.getPno());
 	    storedUser.setAddress(user.getAddress());
 	    
@@ -105,5 +106,10 @@ public class AuthController {
 	    return ResponseEntity.ok(updatedUser);
 	}
 	
-	
+	@GetMapping("/getAllUsers")
+	public ResponseEntity<List<AuthUser>> getAllUsers()
+	{
+	    List<AuthUser>users = userRepository.findByRole("user");
+	    return ResponseEntity.ok(users);
+	}
 }

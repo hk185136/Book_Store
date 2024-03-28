@@ -14,5 +14,6 @@ import java.util.Optional;
 public interface CartRepository extends MongoRepository<Item, String>{
 	List<Item> findByUser(AuthUser user);
 	List<Item> findByStatus(String status);
-	List <Item> findByStatusAndUser(String status,AuthUser user);
+	@Query(value = "{'status':?0, 'user.username': ?1}")
+	List <Item> findByStatusAndUsername(String status,String username);
 }

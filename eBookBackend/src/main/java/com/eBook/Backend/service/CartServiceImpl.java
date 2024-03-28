@@ -47,12 +47,20 @@ public class CartServiceImpl {
 		CartRepository.deleteById(itemId);
 	}
 	
-	public Set<Item> findItemsByUserAndStatus(AuthUser user, String status)
+	public Set<Item> findItemsByStatusAndUsername(String status, String username)
 	{
-		List<Item>userItems =CartRepository.findByStatusAndUser(status, user);
+		List<Item>userItems =CartRepository.findByStatusAndUsername(status,username);
 		Set<Item> Items = new HashSet<>();
 		Items.addAll(userItems);
 		return Items;
+	}
+	
+	public Item updateItemStatus(Item item, String status)
+	{
+		Item storedItem  =  CartRepository.findById(item.getId()).get();
+		storedItem.setStatus(status);
+		CartRepository.save(storedItem);
+		return storedItem;
 	}
 	
 	

@@ -54,23 +54,23 @@ public class CartController {
 	@PutMapping("/updateStatus/{status}")
 	public ResponseEntity<String> updateItemStatus(@RequestBody Item item, @PathVariable("status")String newStatus)
 	{
-		item.setStatus(newStatus);
+		cartServiceImpl.updateItemStatus(item, newStatus);
 		return ResponseEntity.ok("status updated");
 	}
 	
 	@PutMapping("/searchByStatus/{status}")
 	public ResponseEntity<Set<Item>> searchByUserAndStatus(@RequestBody AuthUser user, @PathVariable("status") String status)
 	{
-		return ResponseEntity.ok(cartServiceImpl.findItemsByUserAndStatus(user, status));
+		return ResponseEntity.ok(cartServiceImpl.findItemsByStatusAndUsername(status, user.getUsername()));
 	}
 	
 	@PutMapping("/getOrders")
 	public ResponseEntity<Set<Item>> getOrders(@RequestBody AuthUser user)
 	{
-		Set<Item>orders = cartServiceImpl.findItemsByUserAndStatus(user, "pending");
-		orders.addAll(cartServiceImpl.findItemsByUserAndStatus(user, "confirmed"));
-		orders.addAll(cartServiceImpl.findItemsByUserAndStatus(user, "delivered"));
-		orders.addAll(cartServiceImpl.findItemsByUserAndStatus(user, "cancelled"));
+		Set<Item>orders = cartServiceImpl.findItemsByStatusAndUsername("pending",user.getUsername());
+		orders.addAll(cartServiceImpl.findItemsByStatusAndUsername("cancelled",user.getUsername()));
+		orders.addAll(cartServiceImpl.findItemsByStatusAndUsername("delivered",user.getUsername()));
+		orders.addAll(cartServiceImpl.findItemsByStatusAndUsername("confirmed",user.getUsername()));;
 		return ResponseEntity.ok(orders);
 	}
 	
