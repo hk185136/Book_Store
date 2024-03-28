@@ -19,7 +19,7 @@ function Cart({cartItems,setCartItems}) {
       <div className='cart'>
         {(cartItems.length>0)?<>
           <CartBooks cartItems = {cartItems} setCartItems = {setCartItems} setTotal = {setTotal}/>
-          <div>
+          <div className='order'>
           <h1>Order summary</h1>
           <p>Total items : {cartItems.length}</p>
           <p>Total cost : {total}</p>

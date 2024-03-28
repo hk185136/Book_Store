@@ -20,7 +20,9 @@ function Register() {
         const body = {
           username : Name,
           password : password,
-          role : type
+          role : type,
+          address : address,
+          pno : phno
         }
         const response = await axios.post('http://localhost:8080/api/auth/signup',body);
         if(response.status===200){
@@ -38,6 +40,8 @@ function Register() {
     const [isValidName,setIsValidName] = useState(false);
     const [isValidPassword,setIsValidPassword] = useState(false);
     const [confirmPassword,setConfirmPassword] = useState('');
+    const [address,setAddress] = useState('');
+    const [phno,setPhno] = useState('')
     const [type,setType] = useState('customer');
   return (
     <div className='container'>
@@ -73,6 +77,10 @@ function Register() {
             <div className='status'>{(isValidPassword)?(<p className='tick'>&#10003;</p>):(<p>* Password must have 8 or more letters</p>)}</div>
             <label htmlFor="">confirm password</label>
             <input type="password" className='form-input' value={confirmPassword} onChange={(e)=>setConfirmPassword(e.target.value)}/>
+            <label htmlFor="">Address</label>
+           <textarea name="" id="" cols="30" rows="10" value={address} onChange={(e)=>setAddress(e.target.value)}></textarea>
+           <label htmlFor="">phno</label>
+           <input type="text" value={phno} onChange={(e)=>setPhno(e.target.value)}/>
             <button type='submit' className='login-button' onClick={(e)=>handleSubmit(e)}>register</button>
         </form>
     </div>

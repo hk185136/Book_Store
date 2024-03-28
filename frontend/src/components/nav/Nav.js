@@ -66,6 +66,8 @@ function Nav({books,setBooks}) {    const [searchBy,setSearchBy] = useState('boo
         </div>
        
         <div className='right-component'>
+        {(user.role === 'customer') && <Link to={'/home/orders'} state={{username : user.name}} className='my-orders'>My orders</Link>}
+        {(user.role === 'admin') && <Link to={'/home/users'} className='my-orders'>Manage orders</Link>}
             {(user.role === 'admin') && <img src="/add-icon.png" alt="" className='nav-img' onClick={()=>setIsOpen(true)}/>}
             {(user.role === 'customer'|| user.role==="user") && <Link to={'/home/cart'}><img src="/shopping-cart.png" alt="" className='nav-img'/></Link>}
             <Link to={'/home/profile'}><img src="/profile.png" alt="" className='nav-img' /></Link>
@@ -86,7 +88,7 @@ function Nav({books,setBooks}) {    const [searchBy,setSearchBy] = useState('boo
                     <input type="text" name='price' className='add-book-input' value={newBook.price} onChange={(e)=>setNewBook({...newBook,price : e.target.value})}/>
                     <label htmlFor="">Quantity</label>
                     <input type="text" name='quantity' className='add-book-input' value={newBook.availableQuantity} onChange={(e)=>setNewBook({...newBook,availableQuantity : e.target.value})}/>
-                    <button type='submit' className='add-book-button' onClick={(e)=>handleAdd(e)}> Add </button>
+                    <button type='submit' className='add-book-button' onClick={(e)=>{handleAdd(e);setIsOpen(false)}}> Add </button>
                 </form>
             </Modal>
         }

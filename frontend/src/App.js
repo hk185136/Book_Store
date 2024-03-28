@@ -9,7 +9,9 @@ import PrivateRoute from './PrivateRoute';
 import Books from './components/booklist/Books';
 import { useState ,useEffect, useContext} from 'react';
 import { userContext } from './UserContext';
+import Orders from './pages/orders/Orders';
 import axios from 'axios';
+import Users from './pages/OrderManagement/Users';
 function App() {
   const [books,setBooks] = useState([]);
   const [user,setUser] = useContext(userContext);
@@ -31,7 +33,7 @@ function App() {
     }
     async function getCartItems(){
       try{
-        const res = await axios.put('http://localhost:8080/api/user/cart/',{username : JSON.parse(localStorage.getItem('user')).name});
+        const res = await axios.put('http://localhost:8080/api/item/searchByStatus/added to cart',{username : JSON.parse(localStorage.getItem('user')).name});
         if(res.status==200){
           console.log('useeffect runing')
           console.log(res.data)
@@ -66,6 +68,8 @@ function App() {
                 <Route path='/home' element={<Books books = {books} setBooks = {setBooks} cartItems = {cartItems} setCartItems = {setCartItems}  />}/>
                 <Route path="/home/cart" element={<Cart cartItems = {cartItems} setCartItems = {setCartItems}  />}/>
                 <Route path="/home/profile" element={<Profile/>}/>
+                <Route path='/home/orders' element={<Orders/>}/>
+                <Route path='/home/users' element={<Users/>}/>
               </Route>
               
             </Route>

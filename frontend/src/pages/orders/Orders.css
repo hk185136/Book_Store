@@ -1,0 +1,17 @@
+.orders{
+    margin-top: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 500px;
+    padding: 40px 40px;
+}
+.no-orders{
+    width: 700px;
+}
+.orders-grid{
+    align-items: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 30px;
+}

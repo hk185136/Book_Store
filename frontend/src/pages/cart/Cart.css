@@ -1,7 +1,12 @@
 .cart{
     display: flex;
-    height: 100vh;
+    /* height: 100vh; */
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
+    margin-top: 100px;
+}
+.order{
+    margin-top: 50px;
+    align-self: flex-start;
 }

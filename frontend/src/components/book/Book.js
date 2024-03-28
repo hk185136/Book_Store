@@ -3,6 +3,7 @@ import './Book.css';
 import { userContext } from '../../UserContext';
 import Modal from '../modal/Modal';
 import axios from 'axios';
+import OrderForm from '../OrderForm/OrderForm';
 function Book({isInCart,cartId,book,deleteBook,editBook,cartItems,setCartItems}) {
     const [isAdded,setIsAdded] = useState(isInCart);
     const [user,setUser] = useContext(userContext);
@@ -10,6 +11,7 @@ function Book({isInCart,cartId,book,deleteBook,editBook,cartItems,setCartItems})
     const [newBook,setNewBook] = useState(book);
     const [showPopup,setShowPopup] = useState(false);
     const [quantity,setQuantity] = useState(1);
+    const [orderOpen,setOrderOpen] = useState(false);
     const largeTitle = {fontSize : 'large'}
     const mediumTitle = {fontSize : 'larger'}
     const smallTitle = {fontSize : 'xx-large'}
@@ -21,14 +23,17 @@ function Book({isInCart,cartId,book,deleteBook,editBook,cartItems,setCartItems})
         },1000)
       }
     }
+    console.log(orderOpen);
+    async function handleBuy(){
+      setOrderOpen(true)
+    }
     async function handleAddToCart(){
-      const res = await axios.post('http://localhost:8080/api/user/cart/',{
+      const res = await axios.post('http://localhost:8080/api/item/addToCart',{
         book : book,
         user : {username : user.name},
         quantity : quantity
       })
       if(res.status == 200){
-        console.log(res.data);
         setCartItems([...cartItems,res.data])
         setIsAdded(true);
         setShowPopup(false);
@@ -37,7 +42,7 @@ function Book({isInCart,cartId,book,deleteBook,editBook,cartItems,setCartItems})
     }
     async function handleRemoveFromCart(){
       try{
-        const res = await axios.delete('http://localhost:8080/api/user/cart/' + cartId);
+        const res = await axios.delete('http://localhost:8080/api/item/' + cartId);
         const newCartItems = cartItems.filter((item)=>item.id!==cartId);
         setCartItems(newCartItems);
         if(res.status == 200){
@@ -68,18 +73,25 @@ function Book({isInCart,cartId,book,deleteBook,editBook,cartItems,setCartItems})
             <p className='book-name' style={assignStyle(book.title)}>{book.title}</p>
             <p className='author-name'>By author : {book.author}</p>
             <p className='price'>&#8377;{book.price}</p>
-            {(user.role === 'admin')?(<>
+            {(user.role === 'admin') && (<>
               <button className='edit-button' onClick={()=>setIsOpen(true)}>edit</button>
               <img className='delete' src="delete-button.png" alt="" onClick={()=>deleteBook(book)}/>
-            </>)
-            : <>
-             <button className='buy-button'>Buy</button>
+            </>)  }
+            {(user.role === 'customer') && (book.availableQuantity>0) &&
+            <>
+            {book.availableQuantity>0 && <>
+             <button className='buy-button' onClick={handleBuy}>Buy</button>
             {(isAdded)?(<img  onClick={(e)=>
               {
                 handleRemoveFromCart();
               }
-              } className='cart-img' src="/remove-from-cart.svg" alt="" />):(<img  onClick={(e)=>{togglePopup(e)}} className='cart-img' src="/add-to-cart.png" alt="" />)}
+              } className='cart-img' src="/remove-from-cart.svg" alt="" />):(<img  onClick={(e)=>{togglePopup(e)}} className='cart-img' src="/add-to-cart.png" alt="" />)}</>}
+
+            
             </>}
+            {
+              (user.role === 'customer') && book.availableQuantity===0 && <p style={{marginTop:20}}>No copies available</p>
+            }
             {(showPopup)&& (
               <div className='qty-popup' style={{left : 150,top : 130}}>
                 <img src="/close-icon.jpg" alt="" onClick={()=>setShowPopup(false) } className='closePopup'/>
@@ -131,11 +143,14 @@ function Book({isInCart,cartId,book,deleteBook,editBook,cartItems,setCartItems})
                     <label htmlFor="">Quantity</label>
                     <input type="text" name='quantity' className='add-book-input' value={newBook.availableQuantity} onChange={(e)=>setNewBook({...newBook,availableQuantity : e.target.value})}/>
                     <button type='submit' className='add-book-button' onClick={(e)=>{e.preventDefault();
+                    setIsOpen(false);
                       editBook(book.id,newBook)}}> Update </button>
                 </form>
             </Modal>
+            
 
 }
+{(orderOpen) && (<OrderForm setIsOpen={setOrderOpen} book = {book}/>)}
     </div>
   )
 }
