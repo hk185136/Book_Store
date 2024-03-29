@@ -9,7 +9,7 @@ import lombok.Data;
 
 @Data
 @Builder
-@Document
+@Document(collection = "User")
 public class AuthUser {
 	@Id
 	private String id;

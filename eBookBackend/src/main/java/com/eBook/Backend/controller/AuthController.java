@@ -109,7 +109,7 @@ public class AuthController {
 	@GetMapping("/getAllUsers")
 	public ResponseEntity<List<AuthUser>> getAllUsers()
 	{
-	    List<AuthUser>users = userRepository.findByRole("user");
+	    List<AuthUser>users = userRepository.findByRole("customer");
 	    return ResponseEntity.ok(users);
 	}
 }
