@@ -10,11 +10,19 @@ function Profile() {
   const [isOpen,setIsOpen] = useState(false);
   async function editProfile(e){
     e.preventDefault(); 
-    axios.put(`http://localhost:8080/editUser/${user.name}`,{
+    const user = {
       username:user.name,
       pno:pno,
       address:address
-    })
+    };
+    const res= axios.put(`http://localhost:8080/api/auth/editUser/${user.name}`,{
+      username:user.name,
+      pno:pno,
+      address:address
+    });
+    if(res.status === 200){
+
+    }
 
   }
   return (
