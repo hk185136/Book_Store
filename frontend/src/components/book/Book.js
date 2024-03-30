@@ -23,7 +23,7 @@ function Book({isInCart,cartId,book,deleteBook,editBook,cartItems,setCartItems})
         },1000)
       }
     }
-    console.log(orderOpen);
+    // console.log(orderOpen);
     async function handleBuy(){
       setOrderOpen(true)
     }

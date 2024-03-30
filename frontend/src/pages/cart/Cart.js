@@ -10,7 +10,8 @@ function Cart({cartItems,setCartItems}) {
   const [address,setAddress] = useState(user.address||'');
   const [total,setTotal] = useState(getTotal());
   const [isOpen,setIsOpen] = useState(false);
-  console.log(cartItems)
+  console.log("cart items in cart page  : ");
+  console.log(cartItems);
   function getTotal(){
     let total = 0;
     for(let cartItem of cartItems){
@@ -33,7 +34,7 @@ function Cart({cartItems,setCartItems}) {
         }
         const qty = (book.availableQuantity<cartItem.quantity)?book.availableQuantity:cartItem.quantity
         const user =  JSON.parse(localStorage.getItem('user'));
-        console.log(user)
+        // console.log(user)
         const body = {
           book : book,
           user : {
@@ -48,9 +49,9 @@ function Cart({cartItems,setCartItems}) {
           const newBook = book;
           newBook.availableQuantity = newBook.availableQuantity - qty;
           axios.put(`http://localhost:8080/api/admin/books/${book.id}`,newBook)
-          console.log('removing the cartitme : '+cartItem)
+          // console.log('removing the cartitme : '+cartItem)
           const res = await axios.delete(`http://localhost:8080/api/item/${cartItem.id}`);
-          console.log(res)
+          // console.log(res)
           setCartItems(prev => prev.filter((cartItem1) => cartItem1.id!==cartItem.id));
         }
       }

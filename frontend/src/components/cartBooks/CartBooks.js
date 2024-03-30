@@ -17,7 +17,7 @@ function CartBooks({cartItems,setCartItems,setTotal}) {
   return (
     <div className='card-grid'>
       {
-        cartItems.map((cartItem) => <CartBook cartItem = {cartItem} deleteItem = {deleteItem} setTotal = {setTotal}/>)
+        cartItems.map((cartItem) => <CartBook key={cartItem.id} cartItem = {cartItem} deleteItem = {deleteItem} setTotal = {setTotal}/>)
       }
      
     </div>

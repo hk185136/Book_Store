@@ -7,7 +7,7 @@ function CartBook({cartItem,deleteItem,setTotal}) {
     useEffect(()=>{
         async function getBook(){
             try{
-                console.log(cartItem.book.id);
+                // console.log(cartItem.book.id);
                 const res = await axios.get(`http://localhost:8080/api/user/books/${cartItem.book.id}`);
                 if(res.status == 200){
                     setAvailableQuantity(res.data.availableQuantity);

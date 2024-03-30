@@ -1,6 +1,7 @@
 package com.eBook.Backend.controller;
 
 import java.text.SimpleDateFormat;
+import com.eBook.Backend.service.OrderhistoryImplementation;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -21,7 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.eBook.Backend.models.AuthUser;
 import com.eBook.Backend.models.Item;
+import com.eBook.Backend.models.Orderhistory;
 import com.eBook.Backend.service.CartServiceImpl;
+import com.eBook.Backend.service.OrderhistoryImplementation;
 
 import lombok.AllArgsConstructor;
 
@@ -32,8 +35,8 @@ import lombok.AllArgsConstructor;
 public class CartController {
 	@Autowired
 	private CartServiceImpl cartServiceImpl;
-	
-	
+	@Autowired
+	private OrderhistoryImplementation orderhistoryImplementation;
 	
 	@PostMapping("/addToCart")
 	public ResponseEntity<Item> addItemToCart(@RequestBody Item item)
@@ -48,6 +51,10 @@ public class CartController {
 		item.setStatus("pending");
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		item.setDate(dateFormat.format(new Date()));
+		Orderhistory history = new Orderhistory();
+		history.setItem(item);
+		history.setDate(dateFormat.format(new Date()));
+		orderhistoryImplementation.addtoHistory(history);
 		return ResponseEntity.ok(cartServiceImpl.addItemToOrders(item));
 	}
 	
@@ -61,6 +68,12 @@ public class CartController {
 	public ResponseEntity<String> updateItemStatus(@RequestBody Item item, @PathVariable("status")String newStatus)
 	{
 		cartServiceImpl.updateItemStatus(item, newStatus);
+		item.setStatus(newStatus);
+		Orderhistory history = new Orderhistory();
+		history.setItem(item);
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		history.setDate(dateFormat.format(new Date())); 
+		orderhistoryImplementation.addtoHistory(history);
 		return ResponseEntity.ok("status updated");
 	}
 	

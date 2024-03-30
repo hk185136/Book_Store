@@ -26,7 +26,7 @@ function Books({books,setBooks,cartItems,setCartItems}) {
                 return book1.id==book2.id;
               })
             })
-            console.log(newBooks)
+            // console.log(newBooks)
             setBooks(newBooks);
           }
         }
@@ -42,7 +42,7 @@ function Books({books,setBooks,cartItems,setCartItems}) {
                 return book1.id==book2.id;
               })
             })
-            console.log(newBooks)
+            // console.log(newBooks)
             setBooks(newBooks);
           }
         }
@@ -71,7 +71,7 @@ function Books({books,setBooks,cartItems,setCartItems}) {
   }
   async function deleteBook(book1){
     try{
-      console.log(book1.id)
+      // console.log(book1.id)
       const url = 'http://localhost:8080/api/admin/books/' + book1.id;
       const res = await axios.delete(url);
       if(res.status == 200){
@@ -86,10 +86,10 @@ function Books({books,setBooks,cartItems,setCartItems}) {
   async function editBook(id,book1){
     try{
       const url = 'http://localhost:8080/api/admin/books/' + id;
-      console.log("pointed")
-      console.log(book1)
+      // console.log("pointed")
+      // console.log(book1)
       const res = await axios.put(url,book1);
-      console.log(res);
+      // console.log(res);
       if(res.status == 200){
         const newBooks = books.map((book)=>(book.id===id)?book1:book);
         setBooks(newBooks)

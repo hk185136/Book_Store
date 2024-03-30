@@ -26,20 +26,20 @@ public class UserBookImplementation {
 	
 	public Optional<List<Book>> getBookByTitle(String bTitle) 
 	{
-		Optional<List<Book>> books=bookRepository.findByTitle(bTitle);
+		Optional<List<Book>> books=bookRepository.findByTitleStartsWithIgnoreCase(bTitle);
 		return books;
 	}
 	
 	
 	public Optional<List<Book>> getBookByAuthor(String author) 
 	{
-		Optional<List<Book>> books=bookRepository.findByAuthor(author);
+		Optional<List<Book>> books=bookRepository.findByAuthorStartsWithIgnoreCase(author);
 		return books;
 	}
 	
 	public Optional<List<Book>> getBooksByGenre(String genre)
 	{
-		Optional<List<Book>> books=bookRepository.findByGenre(genre);
+		Optional<List<Book>> books=bookRepository.findByGenreIgnoreCase(genre);
 				return books;
 	}
 	

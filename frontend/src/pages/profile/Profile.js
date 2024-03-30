@@ -1,13 +1,23 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Orders from '../../pages/orders/Orders';
 import './Profile.css'
 import Modal from '../../components/modal/Modal';
 import axios from 'axios';
+import { getHistory } from '../../HIstory';
 function Profile() {
   const user=JSON.parse(localStorage.getItem('user'));
   const [pno,setPno] = useState(user.pno || '');
   const [address,setAddress] = useState(user.address || '');
   const [isOpen,setIsOpen] = useState(false);
+  const [history,setHistory] = useState([]);
+  useEffect(()=>{
+    async function get(){
+    const hist = await getHistory(user.name);
+    console.log(hist);
+    setHistory(hist);
+    }
+    get()
+  },[])
   async function editProfile(e){
     e.preventDefault(); 
     const user = {
@@ -15,13 +25,10 @@ function Profile() {
       pno:pno,
       address:address
     };
-    const res= axios.put(`http://localhost:8080/api/auth/editUser/${user.name}`,{
-      username:user.name,
-      pno:pno,
-      address:address
-    });
+    const res= axios.put(`http://localhost:8080/api/auth/editUser/${user.name}`,user);
     if(res.status === 200){
-
+      const prev = JSON.parse(localStorage.getItem('user'));
+      localStorage.setItem('user',{name : prev.name,address:address,pno:pno});
     }
 
   }
@@ -49,6 +56,9 @@ function Profile() {
         <button onClick={(e)=>editProfile(e)}>Edit profile</button>
         </form>
     </Modal>}
+    <div className='history'> 
+        {history.map((historyItem) => <p key={historyItem.id}>{historyItem.date} {historyItem.item.book.title}</p>)}
+    </div>
       
     </div>
     

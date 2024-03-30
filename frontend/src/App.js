@@ -16,15 +16,11 @@ function App() {
   const [books,setBooks] = useState([]);
   const [user,setUser] = useContext(userContext);
   const [cartItems,setCartItems] = useState([]);
-  if(!user){
-    setUser(JSON.parse(localStorage.getItem('user')));
-  }
-
   useEffect(()=>{
     async function getAllBooks(){
       try{
         const res = await axios.get('http://localhost:8080/api/user/books/');
-        console.log(res.data);
+        // console.log(res.data);
         setBooks(res.data);
       }
       catch(e){
@@ -33,9 +29,10 @@ function App() {
     }
     async function getCartItems(){
       try{
+        console.log("searching by the name : "+JSON.parse(localStorage.getItem('user')).name)
         const res = await axios.put('http://localhost:8080/api/item/searchByStatus/added to cart',{username : JSON.parse(localStorage.getItem('user')).name});
         if(res.status==200){
-          console.log('useeffect runing')
+          // console.log('useeffect runing')
           console.log(res.data)
           setCartItems(res.data);
         }
@@ -45,16 +42,11 @@ function App() {
       }
       
     }
-    getAllBooks();
-    getCartItems();
-  },[])
-  useEffect(()=>{
-    console.log(user);
-    console.log(localStorage.getItem('user'))
-    if(!user || !user.token){
-      console.log("enetered the useeffect if statement")
-      setUser(JSON.parse(localStorage.getItem('user')));
+    if(user && user.token && user.token!=''){
+      getAllBooks();
+      getCartItems();
     }
+ 
   },[user])
 
   return (
