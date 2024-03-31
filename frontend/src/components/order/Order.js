@@ -49,7 +49,7 @@ function Order({order,removeOrder}) {
                     <p className='subtotal'>Total : <span style={{color : 'green'}}>&#8377;{total}</span></p>
                     <div>
                      {(user.role === 'customer') && <>
-                      {status!=cancelled && <button className='order-card-button' onClick={()=>updateStatus(cancelled)}>Cancel</button>}
+                      {status!=cancelled && status!=delivered && <button className='order-card-button' onClick={()=>updateStatus(cancelled)}>Cancel</button>}
                       {(status===cancelled || status === delivered) && <button className='order-card-button' onClick={()=>removeOrder(order.id)}>Remove</button>}
                      </>}
                    
@@ -61,8 +61,8 @@ function Order({order,removeOrder}) {
             </div>
             <div className='order-adtl-info'>
                 <p>Delivering to   :  {order.user.address}</p>
-                {user.role === 'customer' && <p>Status : {status}</p>}
-                {user.role === 'admin' && <select name="" id="" value={status} onChange={(e)=>updateStatus(e.target.value)}>
+                {(user.role === 'customer' || order.status=='cancelled' || order.status=='delivered') && <p>Status : {status}</p>}
+                {user.role === 'admin' && order.status !=='cancelled' && order.status !== 'delivered' && <select name="" id="" value={status} onChange={(e)=>updateStatus(e.target.value)}>
                   <option value={pending}>{pending}</option>
                   <option value={confirmed}>{confirmed}</option>
                   <option value={cancelled}>{cancelled}</option>
