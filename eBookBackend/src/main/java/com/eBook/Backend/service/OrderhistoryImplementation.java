@@ -1,9 +1,11 @@
 package com.eBook.Backend.service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.coyote.http11.filters.VoidInputFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -31,6 +33,17 @@ public class OrderhistoryImplementation
 		Sort sort= Sort.by(Sort.Direction.DESC,"date");
 		List<Orderhistory> history =orderrepo.findByUsername(username,sort);
 		return history;
+	}
+	public void deleteById(String id) {
+		orderrepo.deleteById(id);
+	}
+	public void deleteAll(String username) {
+		List<String>ids = new ArrayList();
+		List<Orderhistory> items = orderrepo.findByUsername(username, null);
+		for(Orderhistory item : items) {
+			ids.add(item.getId());
+		}
+		orderrepo.deleteAllById(ids);;
 	}
 
 }

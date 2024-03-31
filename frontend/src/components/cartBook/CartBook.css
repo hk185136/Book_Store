@@ -18,3 +18,12 @@
     font-size: x-large;
     font-family: cursive;
 }
+.remove-from-cart-button{
+    background-color: rgb(155, 81, 81);
+    color: white;
+    font-size: large;
+    padding: 10px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+}

@@ -4,6 +4,8 @@ import './Books.css'
 import Sidebar from '../sidebar/Sidebar';
 import axios from 'axios';
 function Books({books,setBooks,cartItems,setCartItems}) {
+  console.log('re-rendered : ');
+  console.log(cartItems);
   const [genre,setGenre] = useState('');
   const [priceRange,setPriceRange] = useState({
     min:0,
@@ -54,6 +56,8 @@ function Books({books,setBooks,cartItems,setCartItems}) {
     filter();
   },[genre,priceRange])
   function isInCart(id) {
+    console.log('isInCart runnig');
+    console.log(cartItems)
     for(let cartItem of cartItems){
       if(cartItem.book.id == id){
         return true;

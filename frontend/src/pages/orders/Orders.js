@@ -3,13 +3,13 @@ import './Orders.css';
 import Order from '../../components/order/Order';
 import axios from 'axios';
 import { useLocation } from 'react-router';
-function Orders() {
+function Orders({username}) {
   const [orders,setOrders] = useState([]);
   const location  = useLocation();
-  const username = location.state.username;
+  const username1 = location.state?.username;
   useEffect(()=>{async function get(){
     try{
-      const res = await axios.put('http://localhost:8080/api/item/getOrders',{username : username})
+      const res = await axios.put('http://localhost:8080/api/item/getOrders',{username : username||username1})
       setOrders(res.data)
     }
     catch(e){
@@ -17,7 +17,7 @@ function Orders() {
     }
   }
   get()
-},[])
+},[username])
 async function removeOrder(id){
   try{
     const url = `http://localhost:8080/api/item/${id}`

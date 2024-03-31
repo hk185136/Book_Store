@@ -7,7 +7,8 @@
     align-items: left;
     padding: 20px 20px;
     max-width: 350px;
-    background-color: rgb(151, 133, 99);
+    background: linear-gradient(rgb(3, 86, 88) 0%, rgb(48, 146, 150) 100%);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
     color: whitesmoke;
     font-size: x-large;
 

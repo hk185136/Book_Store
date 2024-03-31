@@ -79,7 +79,7 @@ function CartBook({cartItem,deleteItem,setTotal}) {
            
             </>)}
             {qty>0 && availableQuantity>0 && <div><p className='subtotal'>Sub total : <span style={{color : 'green'}}>&#8377;{cartItem.book.price*((qty>availableQuantity)?availableQuantity:qty)}</span></p></div>}
-            <button onClick={()=>deleteItem(cartItem.id)}>Remove from cart</button>
+            <button className='remove-from-cart-button' onClick={()=>deleteItem(cartItem.id)}>Remove from cart</button>
         </div>
         
     </div>

@@ -33,7 +33,7 @@ function Order({order,removeOrder}) {
   }
   return (
     <div className='order'>
-        <div className='book-card'>
+        <div className='book-card' style={{boxShadow:'none',borderRadius:0,transition:'none',transform:'none'}}>
                 <div className='book-img-container'>
                     <img src={order.book.url} alt="No image" className='book-img'/>
                 </div>
@@ -49,8 +49,8 @@ function Order({order,removeOrder}) {
                     <p className='subtotal'>Total : <span style={{color : 'green'}}>&#8377;{total}</span></p>
                     <div>
                      {(user.role === 'customer') && <>
-                      {status!=cancelled && <button onClick={()=>updateStatus(cancelled)}>Cancel</button>}
-                      {(status===cancelled || status === delivered) && <button onClick={()=>removeOrder(order.id)}>Remove</button>}
+                      {status!=cancelled && <button className='order-card-button' onClick={()=>updateStatus(cancelled)}>Cancel</button>}
+                      {(status===cancelled || status === delivered) && <button className='order-card-button' onClick={()=>removeOrder(order.id)}>Remove</button>}
                      </>}
                    
                     </div>

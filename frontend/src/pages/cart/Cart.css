@@ -6,7 +6,37 @@
     align-items: center;
     margin-top: 100px;
 }
-.order{
+.order1{
     margin-top: 50px;
     align-self: flex-start;
+    font-size: larger;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    display: flex;
+    justify-content:space-around;
+    flex-direction: column;
+    background-color: blanchedalmond;
+    padding: 30px;
+    max-width : 300px;
+    border-radius: 5px;
+}
+.buy-button{
+    padding: 10px 10px;
+    font-size: larger;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    width: 100px;
+    transition: 20ms;
+}
+.buy-button:hover{
+    transform : scale(1.05)
+}
+.total-items{
+    font-size: larger;
+    margin-bottom: 20px;
+}
+.total-cost{
+    font-size: larger;
+    margin-bottom: 20px;
+}
+.order-summary{
+    font-family: sans-serif;
 }

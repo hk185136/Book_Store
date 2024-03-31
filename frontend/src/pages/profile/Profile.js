@@ -3,6 +3,7 @@ import Orders from '../../pages/orders/Orders';
 import './Profile.css'
 import Modal from '../../components/modal/Modal';
 import axios from 'axios';
+import HIstoryItem from '../../components/HistoryItem/HIstoryItem';
 import { getHistory } from '../../HIstory';
 function Profile() {
   const user=JSON.parse(localStorage.getItem('user'));
@@ -32,6 +33,25 @@ function Profile() {
     }
 
   }
+  function handleDelete(id){
+    try{
+      axios.delete('http://localhost:8080/api/user/orderhistory/'+id);
+      const newHistory = history.filter(item=>item.id!=id);
+      setHistory(newHistory);
+    }
+    catch(e){
+      alert(e.message);
+    }
+  }
+  function clearHistory(){
+    try{
+      axios.delete('http://localhost:8080/api/user/orderhistory/delete/'+user.name);
+      setHistory([])
+    }
+    catch(e){
+      alert(e.message);
+    }
+  }
   return (
     <div className='profile-page-container'>
       <div className='profile-page'>
@@ -44,20 +64,33 @@ function Profile() {
         <p>Delivery address</p>
         <p>-</p>
         <p>{(address.length>0)?address:"No address info"}</p>
-        <button onClick={()=>setIsOpen(true)}>Edit profile</button>
+        <button className='buy-button' style={{fontSize:'large'}} onClick={()=>setIsOpen(true)}>Edit</button>
       </div>
       {(isOpen) && <Modal setIsOpen = {setIsOpen}>
-        <form action="">
+        <form action="" style={{fontSize : 'larger'}}>
         <p>Phone No.</p>
         <input type="text" value={user.pno} onChange={(e)=>setPno(e.target.value)}/>
         <p>Delivery address</p>
         <textarea type="text" rows={3} value={user.address} onChange={(e)=>setAddress(e.target.value)}/>
         <br />
-        <button onClick={(e)=>editProfile(e)}>Edit profile</button>
+        <button className='buy-button' style={{fontSize:'large'}}  onClick={(e)=>editProfile(e)}>Edit profile</button>
         </form>
     </Modal>}
     <div className='history'> 
-        {history.map((historyItem) => <p key={historyItem.id}>{historyItem.date} {historyItem.item.book.title}</p>)}
+    
+    {history.length>0 && 
+    <>
+    <button className='clear-history' onClick={clearHistory}>Clear history</button>      <table className='table'>
+        <tr>
+          <th>Time</th>
+          <th>Activity</th>
+        </tr>
+        {history.map((historyItem) => <HIstoryItem key={historyItem.id} history = {historyItem} handleDelete={handleDelete}/>)}
+      </table>
+    </>
+    
+        }
+
     </div>
       
     </div>

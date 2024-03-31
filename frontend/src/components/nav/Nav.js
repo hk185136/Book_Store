@@ -88,7 +88,7 @@ function Nav({books,setBooks}) {    const [searchBy,setSearchBy] = useState('boo
                     <input type="text" name='price' className='add-book-input' value={newBook.price} onChange={(e)=>setNewBook({...newBook,price : e.target.value})}/>
                     <label htmlFor="">Quantity</label>
                     <input type="text" name='quantity' className='add-book-input' value={newBook.availableQuantity} onChange={(e)=>setNewBook({...newBook,availableQuantity : e.target.value})}/>
-                    <button type='submit' className='add-book-button' onClick={(e)=>{handleAdd(e);setIsOpen(false)}}> Add </button>
+                    <button type='submit' className='buy-button' onClick={(e)=>{handleAdd(e);setIsOpen(false)}}> Add </button>
                 </form>
             </Modal>
         }

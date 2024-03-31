@@ -29,11 +29,13 @@
     flex-direction: row;
     align-items: center;
     max-height: 90px;
-    background-color: rgb(151, 133, 99);
+    background: linear-gradient(to right,  rgb(219, 154, 69)  0%, burlywood 100%);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
     padding-left: 20px;
     padding-right: 20px;
     justify-content: space-between;
     z-index: 1000;
+    /* # rgb(151, 133, 99); */
 }
 #site-name{
     /* font-size: xx-large; */

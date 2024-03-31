@@ -58,7 +58,7 @@ function OrderForm({setIsOpen,book}) {
                 
                 }}>+</button>}
             </div>
-            <button onClick={(e)=>handleBuy(e)}>Buy</button>
+            <button className='buy-button' style={{margin:0}} onClick={(e)=>handleBuy(e)}>Buy</button>
         </form>
     </Modal>
   )

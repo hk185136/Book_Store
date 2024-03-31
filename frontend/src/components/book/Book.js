@@ -1,11 +1,13 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import './Book.css';
 import { userContext } from '../../UserContext';
 import Modal from '../modal/Modal';
 import axios from 'axios';
 import OrderForm from '../OrderForm/OrderForm';
 function Book({isInCart,cartId,book,deleteBook,editBook,cartItems,setCartItems}) {
+  console.log('is in cart : ' + isInCart)
     const [isAdded,setIsAdded] = useState(isInCart);
+    console.log('isAdded: ' + isAdded)
     const [user,setUser] = useContext(userContext);
     const [isOpen,setIsOpen] = useState(false);
     const [newBook,setNewBook] = useState(book);
@@ -15,6 +17,10 @@ function Book({isInCart,cartId,book,deleteBook,editBook,cartItems,setCartItems})
     const largeTitle = {fontSize : 'large'}
     const mediumTitle = {fontSize : 'larger'}
     const smallTitle = {fontSize : 'xx-large'}
+    useEffect(()=>{
+      console.log('use effect : '+isInCart);
+      setIsAdded(isInCart);
+    },[isInCart])
     function togglePopup(e){
       setShowPopup(true);
       if(book.availableQuantity===0){
@@ -142,7 +148,7 @@ function Book({isInCart,cartId,book,deleteBook,editBook,cartItems,setCartItems})
                     <input type="text" name='price' className='add-book-input' value={newBook.price} onChange={(e)=>setNewBook({...newBook,price : e.target.value})}/>
                     <label htmlFor="">Quantity</label>
                     <input type="text" name='quantity' className='add-book-input' value={newBook.availableQuantity} onChange={(e)=>setNewBook({...newBook,availableQuantity : e.target.value})}/>
-                    <button type='submit' className='add-book-button' onClick={(e)=>{e.preventDefault();
+                    <button type='submit' className='buy-button' onClick={(e)=>{e.preventDefault();
                     setIsOpen(false);
                       editBook(book.id,newBook)}}> Update </button>
                 </form>

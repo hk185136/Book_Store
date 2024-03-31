@@ -4,9 +4,31 @@
     /* align-items: center;
     justify-content: center; */
     width: 500px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
+    transition: 80ms;
+}
+.order:hover{
+    transform: scale(1.01);
 }
 .order-adtl-info{
     background-color: aliceblue;
     padding: 20px 20px;
+    font-size: larger;
+    font-style: italic;
+    background-color: rgb(205, 228, 249);
+}
+.order-card-button{
+    padding: 10px 10px;
+    background-color: rgb(205, 228, 249);
+    border: none;
+    color: rgb(34, 30, 30);
     font-size: large;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+    transition: 40ms;
+}
+.order-card-button:hover{
+    transform: scale(1.02);
 }

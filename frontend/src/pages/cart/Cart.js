@@ -65,11 +65,11 @@ function Cart({cartItems,setCartItems}) {
       <div className='cart'>
         {(cartItems.length>0)?<>
           <CartBooks cartItems = {cartItems} setCartItems = {setCartItems} setTotal = {setTotal}/>
-          <div className='order'>
-          <h1>Order summary</h1>
-          <p>Total items : {cartItems.length}</p>
-          <p>Total cost : {total}</p>
-          <button onClick={()=>setIsOpen(true)}>Buy</button>
+          <div className='order1'>
+            <h1 className='order-summary'>Order summary</h1>
+            <p className='total-items'>Total items : {cartItems.length}</p>
+            <p className='total-cost'>Total cost : <span style={{color : 'green'}}>&#8377;{total}</span></p>
+            <button className='buy-button' onClick={()=>setIsOpen(true)}>Buy</button>
         </div>
         </>:
         <img src='/emptyCart.png'></img>}
@@ -79,7 +79,7 @@ function Cart({cartItems,setCartItems}) {
             <label htmlFor="">Address</label>
             <textarea name="" id="" cols="30" rows="10" value={address} onChange={(e)=>setAddress(e.target.value)}></textarea>
             
-            <button onClick={(e)=>handleBuy(e)}>Buy</button>
+            <button className='buy-button' onClick={(e)=>handleBuy(e)}>Buy</button>
         </form>
 </Modal>}
         
