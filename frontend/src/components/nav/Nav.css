@@ -1,7 +1,7 @@
 .nav-img{
     width : 50px;
-    margin-left: 40px; 
-    margin-right: 25px; 
+    /* margin-left: 40px; 
+    margin-right: 25px;  */
     cursor: pointer;
     transition: 20ms;
     font-size: 50px;
@@ -13,7 +13,7 @@
 .search-bar{
     padding: 10px 10px;
     font-size: 20px;
-
+min-width: 0;
     border-radius: 5px;
     border: none;
     margin-right: -33px;
@@ -38,6 +38,8 @@
     justify-content: space-between;
     z-index: 1000;
     color: white;
+    padding-top: 10px;
+    padding-bottom: 10px;
     /* # rgb(151, 133, 99); */
 }
 #site-name{
@@ -68,9 +70,11 @@
     flex-direction: row;
 }
 .right-component{
+    width: 400px;
     display: flex;
     max-height: 90px;
     align-items: center;
+    justify-content: space-around;
 }
 .add-book-form{
     display: flex;

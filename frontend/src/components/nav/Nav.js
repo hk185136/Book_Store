@@ -8,6 +8,7 @@ import { IoCartOutline } from "react-icons/io5";
 import { CgProfile } from "react-icons/cg";
 import { CiLogout } from "react-icons/ci";
 import { BiBookAdd } from "react-icons/bi";
+import { IoLibrary } from "react-icons/io5";
 function Nav({books,setBooks}) {    const [searchBy,setSearchBy] = useState('book');
     const [isOpen,setIsOpen] = useState(false);
     const [search,setSearch] = useState('');
@@ -58,7 +59,12 @@ function Nav({books,setBooks}) {    const [searchBy,setSearchBy] = useState('boo
 
   return (
     <div className='nav'>
-        <Link to={'/home'} id='site-name'><h1>Book Store</h1></Link>
+        <div>
+        
+        <Link to={'/home'} id='site-name'><IoLibrary className='nav-img' /></Link>
+        </div>
+        
+       
         <div className='search-container'>
             <input type="text" placeholder='Search ...' className='search-bar' value={search} onChange={(e)=>setSearch(e.target.value)}/>
             <span><img className='search-button' src='/search.png' onClick={handleSearch}></img></span>
