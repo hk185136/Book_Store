@@ -11,6 +11,7 @@ function Orders({username}) {
   const [orders,setOrders] = useState([]);
   const [filteredOrders,setFilteredOrders] = useState([]);
   const [filterStatus,setFilterStatus] = useState('*');
+  const [isLoading,setIsLoading] = useState(true);
   const location  = useLocation();
   const username1 = location.state?.username;
   useEffect(()=>{async function get(){
@@ -18,6 +19,7 @@ function Orders({username}) {
       const res = await axios.put('http://localhost:8080/api/item/getOrders',{username : username||username1})
       setOrders(res.data);
       setFilteredOrders(res.data);
+      setIsLoading(false);
     }
     catch(e){
       alert(e.message);
@@ -68,7 +70,7 @@ async function removeOrder(id){
       </div>
       
       <div className='orders-grid'>
-      <>{filteredOrders.length===0 && <img className='no-orders' src='/emptyOrder.jpg'></img>}</>
+      <>{filteredOrders.length===0 && ((isLoading===false)?<img className='no-orders' src='/emptyOrder.jpg'></img> : <h1>Loading...</h1>)}</>
         {
           filteredOrders.map((order)=><Order key={order.id} order = {order} removeOrder = {removeOrder}/>)
         }

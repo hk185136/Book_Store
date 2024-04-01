@@ -6,7 +6,7 @@
     justify-content: center;
     min-height: 500px;
     padding: 40px 40px;
-    background-color: cadetblue;
+    /* background-color: cadetblue; */
 }
 .no-orders{
     width: 700px;
@@ -24,7 +24,7 @@
     min-width: 200px;
 }
 .reset-filters{
-    background-color: rgb(54, 150, 234);
+    background-color: rgb(80, 6, 80);
     color: white;
     border: none;
     cursor: pointer;
