@@ -1,6 +1,7 @@
 .orders{
     margin-top: 100px;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     min-height: 500px;
@@ -16,4 +17,30 @@
     grid-template-columns: 1fr 1fr;
     column-gap: 30px;
     row-gap: 30px;
+}
+.order-filters{
+    font-size: larger;
+    padding: 10px 10px;
+    min-width: 200px;
+}
+.reset-filters{
+    background-color: rgb(54, 150, 234);
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 11px 11px;
+    height: 100%;
+    transition: 50ms;
+
+}
+.reset-filters:hover{
+    transform: scale(1.01);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.2);
+}
+.orders-filter{
+    margin-bottom: 30px;
+    padding: 10px 10px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.2);
 }
