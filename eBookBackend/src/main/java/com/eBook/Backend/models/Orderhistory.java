@@ -8,7 +8,6 @@ import lombok.Data;
 
 @Data
 @Builder
-@Document(collection="orderHistory")
 public class Orderhistory {
 	
 	@Id

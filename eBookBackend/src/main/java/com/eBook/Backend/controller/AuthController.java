@@ -80,7 +80,7 @@ public class AuthController {
                     authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(),user.getPassword()));
 			String name=authentication.getName();
 			String role=userStored.get().getRole();
-			if(role.equals(roleFetched))
+			if(!role.equals(roleFetched))
 				throw new Exception("Invalid Role");
 			String address= userStored.get().getAddress();
 			String pno = userStored.get().getPno();
