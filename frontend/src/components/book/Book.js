@@ -77,7 +77,7 @@ function Book({isInCart,cartId,book,deleteBook,editBook,cartItems,setCartItems})
         </div>
         <div className='book-details'>
             <p className='book-name' style={assignStyle(book.title)}>{book.title}</p>
-            <p className='author-name'>By author : {book.author}</p>
+            <p className='author-name'>{book.author.length>0 && <>By author : {book.author}</>}</p>
             <p className='price'>&#8377;{book.price}</p>
             {(user.role === 'admin') && (<>
               <button className='edit-button' onClick={()=>setIsOpen(true)}>edit</button>

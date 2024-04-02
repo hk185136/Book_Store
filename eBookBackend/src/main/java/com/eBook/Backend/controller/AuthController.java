@@ -71,8 +71,8 @@ public class AuthController {
 		}
 	}
 	
-	@PostMapping("/signin")
-	public ResponseEntity loginUser(@RequestBody AuthUser user)
+@PostMapping("/signin/{role1}")
+	public ResponseEntity loginUser(@RequestBody AuthUser user,@PathVariable String role1)
 	{
 		try {
 			Optional<AuthUser> userStored = userRepository.findByusername(user.getUsername());
@@ -80,6 +80,9 @@ public class AuthController {
                     authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(),user.getPassword()));
 			String name=authentication.getName();
 			String role=userStored.get().getRole();
+			if(!role.equals(role1)) {
+				throw new Error("invalid role");
+			}
 			String address= userStored.get().getAddress();
 			String pno = userStored.get().getPno();
 			String token=jwtUtil.createToken(user);

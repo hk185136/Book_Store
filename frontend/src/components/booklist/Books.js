@@ -11,6 +11,7 @@ function Books({books,setBooks,cartItems,setCartItems}) {
     min:0,
     max:20000
   })
+  const [isLoading,setIsLoading] = useState(true);
   useEffect(()=>{
    
     async function filter(){
@@ -51,6 +52,9 @@ function Books({books,setBooks,cartItems,setCartItems}) {
       }
       catch(e){
         alert(e.message)
+      }
+      finally{
+        setIsLoading(false);
       }
     }
     filter();
@@ -117,7 +121,7 @@ function Books({books,setBooks,cartItems,setCartItems}) {
           books.map((book)=><Book key={book.id} isInCart = {isInCart(book.id)} cartId = {findInCart(book.id)} book = {book} deleteBook = {deleteBook} editBook = {editBook} cartItems = {cartItems} setCartItems = {setCartItems}/>)
         }
       </div>
-      </>):(<img src='/no-search-found.png'></img>)}
+      </>):((isLoading)? <h1>Loading ...</h1>:<img src='/no-search-found.png'></img>)}
       
      
     </div>)
