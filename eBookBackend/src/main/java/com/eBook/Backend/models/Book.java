@@ -9,7 +9,6 @@ import lombok.Data;
 
 @Data
 @Builder
-@Document(collection = "Book")
 public class Book {
 	@Id
 	private String id;
@@ -20,6 +19,18 @@ public class Book {
 	private String genre;
 	private double price;
 	private int availableQuantity;
+	
+	public Book(String id, String url, String title, String author, String genre, double price, int availableQuantity) {
+		super();
+		this.id = id;
+		this.url = url;
+		this.title = title;
+		this.author = author;
+		this.genre = genre;
+		this.price = price;
+		this.availableQuantity = availableQuantity;
+	}
+
 	public String getId() {
 		return id;
 	}

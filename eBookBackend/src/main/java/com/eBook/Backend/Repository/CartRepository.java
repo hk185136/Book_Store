@@ -16,4 +16,5 @@ public interface CartRepository extends MongoRepository<Item, String>{
 	List<Item> findByStatus(String status);
 	@Query(value = "{'status':?0, 'user.username': ?1}")
 	List <Item> findByStatusAndUsername(String status,String username);
+	List<Item> findByBookAndStatus(Book book, String status);
 }

@@ -9,7 +9,6 @@ import lombok.Data;
 
 @Data
 @Builder
-@Document(collection = "authUser")
 public class AuthUser {
 	@Id
 	private String id;
@@ -56,10 +55,5 @@ public class AuthUser {
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	public AuthUser() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-	
 	
 }

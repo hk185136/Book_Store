@@ -12,7 +12,6 @@ import lombok.Data;
 
 @Data
 @Builder
-@Document(collection = "Item")
 public class Item {
 	
 	@Id
