@@ -14,11 +14,13 @@ function Order({order,removeOrder}) {
       const res = await axios.put(`http://localhost:8080/api/item/updateStatus/${newStatus}`,order);
       if(res.status === 200){
         const res = await axios.get(`http://localhost:8080/api/user/books/${order.book.id}`);
-        if(newStatus == cancelled){
+        if(newStatus == cancelled && res.status == 200 && res.data){
+          console.log('entered if');
           const book = order.book;
           book.availableQuantity = res.data.availableQuantity+order.quantity;
           axios.put(`http://localhost:8080/api/admin/books/${book.id}`,book)
         }
+        
         else if(status == cancelled && newStatus!=cancelled){
           const book = order.book;
           book.availableQuantity = res.data.availableQuantity-order.quantity;

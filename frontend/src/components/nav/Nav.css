@@ -4,7 +4,7 @@
     margin-right: 25px;  */
     cursor: pointer;
     transition: 20ms;
-    font-size: 50px;
+    font-size: 40px;
     color: white;
 }
 .nav-img:hover{
@@ -38,8 +38,8 @@ min-width: 0;
     justify-content: space-between;
     z-index: 1000;
     color: white;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding-top: 12px;
+    padding-bottom: 12px;
     /* # rgb(151, 133, 99); */
 }
 #site-name{
