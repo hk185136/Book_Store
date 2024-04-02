@@ -19,7 +19,10 @@ function Orders({username}) {
       const res = await axios.put('http://localhost:8080/api/item/getOrders',{username : username||username1})
       setOrders(res.data);
       setFilteredOrders(res.data);
-      setIsLoading(false);
+      setTimeout(()=>{
+        setIsLoading(false);
+      },800)
+      
     }
     catch(e){
       alert(e.message);
@@ -70,7 +73,7 @@ async function removeOrder(id){
       </div>
       
       <div className='orders-grid'>
-      <>{filteredOrders.length===0 && ((isLoading===false)?<img className='no-orders' src='/emptyOrder.jpg'></img> : <h1>Loading...</h1>)}</>
+      <>{filteredOrders.length===0 && ((isLoading===false)?(<>{<img className='no-orders' src='/emptyOrder.jpg'></img>} </>): <h1>Loading...</h1>)}</>
         {
           filteredOrders.map((order)=><Order key={order.id} order = {order} removeOrder = {removeOrder}/>)
         }
