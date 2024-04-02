@@ -29,7 +29,7 @@ function Login() {
         }
         catch(e){
           console.log(e)
-          alert(e.response.data.message);
+          alert(e?.response?.data?.message);
         }
     }
     function handleClick(str){
