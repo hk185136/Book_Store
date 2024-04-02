@@ -1,11 +1,11 @@
 .userlist{
     display: flex;
     flex-direction: column;
-    background-color: burlywood;
+    background-color: #6b076b;
     width: 300px;
     padding: 20px 20px;
     position: fixed;
-    top: 90px;
+    top: 65px;
     left: 0;
 }
 .user-management{
@@ -20,7 +20,8 @@
     font-size: x-large;
     cursor: pointer;
     text-align: center;
-    background-color: rgb(236, 211, 180);
+    background-color: #8c078c;
+    color: white;
     margin-bottom: 20px;
     border-radius: 5px;
 }

@@ -61,7 +61,7 @@ function Nav({books,setBooks}) {    const [searchBy,setSearchBy] = useState('boo
     <div className='nav'>
         <div>
         
-        <Link to={'/home'} id='site-name'><IoLibrary className='nav-img' /></Link>
+        <Link to={'/home'} id='site-name'><IoLibrary className='nav-img'/><span>Book Store</span></Link>
         </div>
         
        
