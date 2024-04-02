@@ -32,14 +32,19 @@ function Login() {
           alert(e.response.data.message);
         }
     }
+    function handleClick(str){
+      setRole(str);
+      setName('');
+      setPassword('');
+    }
     const [Name,setName] = useState('');
     const [password,setPassword] = useState('');
 
   return (
     <div className='container'>
        {role === 'admin'&& <p style={{zIndex : 1}} className='header'>Admin login</p>} 
-        {(role === 'customer') && <button className='role-toggle' onClick={()=>setRole('admin')}>Login as admin</button>}
-        {(role === 'admin') && <button className='role-toggle' onClick={()=>setRole('customer')}>Login as Customer</button>}
+        {(role === 'customer') && <button className='role-toggle' onClick={()=>handleClick('admin')}>Login as admin</button>}
+        {(role === 'admin') && <button className='role-toggle' onClick={()=>handleClick('customer')}>Login as Customer</button>}
         <img src={(role == 'customer')?"https://www.specsavers-profile.com/wp-content/uploads/Online-education-concept.jpg":"https://th.bing.com/th/id/OIP.3clUiqEgJPbC8zXWQqfCrQHaGM?w=575&h=481&rs=1&pid=ImgDetMain"} className='bg-img' alt="" />
         <form className='form'>
             <label htmlFor="">Name</label>
