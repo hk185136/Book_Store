@@ -15,11 +15,18 @@ public class Orderhistory {
 	private Item item;
 	private String date;
 	
+	public Orderhistory()
+	{
+		
+	}
 	
 	
-	
-
-	
+	public Orderhistory(String id, Item item, String date) {
+		super();
+		this.id = id;
+		this.item = item;
+		this.date = date;
+	}
 	public String getId() {
 		return id;
 	}
