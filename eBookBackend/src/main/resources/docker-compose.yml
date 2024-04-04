@@ -7,14 +7,14 @@ services:
    - 27017:27017
    
   ebook.springapp:
-    image: "ebook"
+    image: "springboot-mongodb:1.0"
     container_name: "springapp"
     ports:
     - 8080:8080
     
     
   react_ebook:
-     image: "reactapp"  
+     image: "react-app:dev"  
      container_name: "frontend"
      ports:
      - 3000:3000  
