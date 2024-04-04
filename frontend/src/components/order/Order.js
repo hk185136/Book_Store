@@ -5,8 +5,10 @@ import axios from 'axios';
 import { pending } from '../../OrderStatus';
 import { delivered } from '../../OrderStatus';
 import { confirmed } from '../../OrderStatus';
+import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 function Order({order,removeOrder}) {
-  const user =JSON.parse(localStorage.getItem('user'));
+  const user = useSelector(state=>state);
   const [status,setStatus] = useState(order.status)
   const total = order.quantity*order.book.price;
   async function updateStatus(newStatus){
@@ -30,7 +32,8 @@ function Order({order,removeOrder}) {
       }
     }
     catch(e){
-      alert(e.message);
+      toast.error((e?.response?.data?.message) || (e.message));
+
     }
   }
   return (
@@ -63,8 +66,8 @@ function Order({order,removeOrder}) {
             </div>
             <div className='order-adtl-info'>
                 <p>Delivering to   :  {order.user.address}</p>
-                {(user.role === 'customer' || order.status=='cancelled' || order.status=='delivered') && <p>Status : {status}</p>}
-                {user.role === 'admin' && order.status !=='cancelled' && order.status !== 'delivered' && <select name="" id="" value={status} onChange={(e)=>updateStatus(e.target.value)}>
+                {(user.role === 'customer' || order.status==cancelled || order.status==delivered) && <p>Status : {status}</p>}
+                {user.role === 'admin' && order.status !==cancelled && order.status !== delivered && <select name="" id="" value={status} onChange={(e)=>updateStatus(e.target.value)}>
                   <option value={pending}>{pending}</option>
                   <option value={confirmed}>{confirmed}</option>
                   <option value={cancelled}>{cancelled}</option>

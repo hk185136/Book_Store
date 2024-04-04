@@ -2,17 +2,19 @@ import React, { useContext, useState } from 'react';
 import './Nav.css';
 import {Link} from 'react-router-dom'
 import Modal from '../modal/Modal';
-import { userContext } from '../../UserContext';
 import axios from 'axios';
 import { IoCartOutline } from "react-icons/io5";
 import { CgProfile } from "react-icons/cg";
 import { CiLogout } from "react-icons/ci";
 import { BiBookAdd } from "react-icons/bi";
 import { IoLibrary } from "react-icons/io5";
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 function Nav({books,setBooks}) {    const [searchBy,setSearchBy] = useState('book');
     const [isOpen,setIsOpen] = useState(false);
     const [search,setSearch] = useState('');
-    const [user,setUser] = useContext(userContext);
+    const user = useSelector(state=>state);
+    const dispatch = useDispatch();
     const initialState = {
         title : '',
         url : '',
@@ -31,7 +33,7 @@ function Nav({books,setBooks}) {    const [searchBy,setSearchBy] = useState('boo
             setBooks([...books,res.data])
         }
         catch(e){
-            alert(e.message);
+            toast.error((e?.response?.data?.message) || (e.message));
         }
     }
     async function handleSearch(){
@@ -52,7 +54,7 @@ function Nav({books,setBooks}) {    const [searchBy,setSearchBy] = useState('boo
             
         }
         catch(e){
-            alert(e.message);
+            toast.error((e?.response?.data?.message) || (e.message));
         }
     }
     }
@@ -70,8 +72,8 @@ function Nav({books,setBooks}) {    const [searchBy,setSearchBy] = useState('boo
             <span><img className='search-button' src='/search.png' onClick={handleSearch}></img></span>
             <p className='search-by-text'>Search by : </p>
             <select name="" id="search-by" value={searchBy} onChange={(e)=>setSearchBy(e.target.value)}>
-                <option value="book">book</option>
-                <option value="author">author</option>
+                <option value="book">Book</option>
+                <option value="author">Author</option>
             </select>
         </div>
        
@@ -81,7 +83,7 @@ function Nav({books,setBooks}) {    const [searchBy,setSearchBy] = useState('boo
             {(user.role === 'admin') && <BiBookAdd className='nav-img' onClick={()=>setIsOpen(true)}/>}
             {(user.role === 'customer'|| user.role==="user") && <Link to={'/home/cart'}><IoCartOutline className='nav-img'/></Link>}
             <Link to={'/home/profile'}><CgProfile className='nav-img' /></Link>
-            <Link to={'/'}><CiLogout className='nav-img' onClick={()=>{setUser(null);localStorage.removeItem('user')}} /></Link> 
+            <Link to={'/'}><CiLogout className='nav-img' onClick={()=>{dispatch({type : 'logout'})}} /></Link> 
         </div>
         {(isOpen) &&
             <Modal setIsOpen = {setIsOpen}>

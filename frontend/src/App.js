@@ -7,14 +7,15 @@ import Cart from './pages/cart/Cart';
 import Profile from './pages/profile/Profile';
 import PrivateRoute from './PrivateRoute';
 import Books from './components/booklist/Books';
-import { useState ,useEffect, useContext} from 'react';
-import { userContext } from './UserContext';
+import { useState ,useEffect} from 'react';
 import Orders from './pages/orders/Orders';
 import axios from 'axios';
 import Users from './pages/OrderManagement/Users';
+import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 function App() {
   const [books,setBooks] = useState([]);
-  const [user,setUser] = useContext(userContext);
+  const user = useSelector(state=>state);
   const [cartItems,setCartItems] = useState([]);
   useEffect(()=>{
     async function getAllBooks(){
@@ -24,21 +25,21 @@ function App() {
         setBooks(res.data);
       }
       catch(e){
-        alert(e.message);
+        toast.error((e?.response?.data?.message) || (e.message));
       }
     }
     async function getCartItems(){
       try{
-        console.log("searching by the name : "+JSON.parse(localStorage.getItem('user')).name)
-        const res = await axios.put('http://localhost:8080/api/item/searchByStatus/added to cart',{username : JSON.parse(localStorage.getItem('user')).name});
+        console.log("searching by the name : "+user.name)
+        const res = await axios.put('http://localhost:8080/api/item/searchByStatus/added to cart',{username : user.name});
         if(res.status==200){
           // console.log('useeffect runing')
-          console.log(res.data)
+          // console.log(res.data)
           setCartItems(res.data);
         }
       }
       catch(e){
-        alert(e.message);
+        toast.error((e?.response?.data?.message) || (e.message));
       }
       
     }

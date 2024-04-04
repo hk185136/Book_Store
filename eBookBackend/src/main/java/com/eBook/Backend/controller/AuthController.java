@@ -80,17 +80,20 @@ public class AuthController {
                     authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(),user.getPassword()));
 			String name=authentication.getName();
 			String role=userStored.get().getRole();
-			if(role.equals(roleFetched))
-				throw new Exception("Invalid Role");
+			if(!role.equals(roleFetched))
+				throw new Exception("Invalid username or password");
 			String address= userStored.get().getAddress();
 			String pno = userStored.get().getPno();
 			String token=jwtUtil.createToken(user);
 			LoginRes loginRes = new LoginRes(name, role , token, address, pno);
+			System.out.println("user not found1");
 			return ResponseEntity.ok(loginRes);
 		}catch (BadCredentialsException e){
+			System.out.println("user not found2");
             ErrorRes errorResponse = new ErrorRes(HttpStatus.BAD_REQUEST,"Invalid username or password");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }catch (Exception e){
+			System.out.println("user not found3");
             ErrorRes errorResponse = new ErrorRes(HttpStatus.BAD_REQUEST, e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }

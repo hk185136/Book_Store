@@ -3,6 +3,7 @@ import Book from '../book/Book';
 import './Books.css'
 import Sidebar from '../sidebar/Sidebar';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 function Books({books,setBooks,cartItems,setCartItems}) {
   console.log('re-rendered : ');
   console.log(cartItems);
@@ -51,7 +52,7 @@ function Books({books,setBooks,cartItems,setCartItems}) {
         }
       }
       catch(e){
-        alert(e.message)
+        toast.error((e?.response?.data?.message) || (e.message));
       }
       finally{
         setIsLoading(false);
@@ -88,7 +89,7 @@ function Books({books,setBooks,cartItems,setCartItems}) {
       }
     }
     catch(e){
-      alert(e.message);
+      toast.error((e?.response?.data?.message) || (e.message));
     }
   }
   async function editBook(id,book1){
@@ -104,7 +105,7 @@ function Books({books,setBooks,cartItems,setCartItems}) {
       }
     }
     catch(e){
-      alert(e.message);
+      toast.error((e?.response?.data?.message) || (e.message));
     }
   }
   return (

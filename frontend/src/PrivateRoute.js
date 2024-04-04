@@ -1,12 +1,11 @@
 import React, { useContext } from 'react';
-import { userContext } from './UserContext';
 import { Navigate, Outlet } from 'react-router';
+import { useSelector } from 'react-redux';
 function PrivateRoute() {
-    const [user,setUser] = useContext(userContext);
-    const localUser = JSON.parse(localStorage.getItem('user'));
+    const user = useSelector(state=>state);
   return (
     <>
-     {(user.token || (localUser && localUser.token))?<Outlet/>:<Navigate to={'/'}/>}
+     {(user!=null && user.token!='')?<Outlet/>:<Navigate to={'/'}/>}
     </>
    
   )

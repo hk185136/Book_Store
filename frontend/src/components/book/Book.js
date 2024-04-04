@@ -1,14 +1,15 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './Book.css';
-import { userContext } from '../../UserContext';
+import {useSelector} from 'react-redux';
 import Modal from '../modal/Modal';
 import axios from 'axios';
 import OrderForm from '../OrderForm/OrderForm';
+import { toast } from 'react-toastify';
 function Book({isInCart,cartId,book,deleteBook,editBook,cartItems,setCartItems}) {
   console.log('is in cart : ' + isInCart)
     const [isAdded,setIsAdded] = useState(isInCart);
     console.log('isAdded: ' + isAdded)
-    const [user,setUser] = useContext(userContext);
+    const user = useSelector(state=>state)
     const [isOpen,setIsOpen] = useState(false);
     const [newBook,setNewBook] = useState(book);
     const [showPopup,setShowPopup] = useState(false);
@@ -56,7 +57,7 @@ function Book({isInCart,cartId,book,deleteBook,editBook,cartItems,setCartItems})
         }
       }
       catch(e){
-        alert(e.message);
+        toast.error((e?.response?.data?.message) || (e.message));
       }
      
       

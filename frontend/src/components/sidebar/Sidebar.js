@@ -9,17 +9,17 @@ function Sidebar({setGenre,priceRange,setPriceRange}) {
         <div className='grid-filter'>
             <label htmlFor="All">All</label>
             <input type="radio" className='checkbox' name='genre' onChange={()=>setGenre('')}/>
-            <label htmlFor="horror">horror</label>
+            <label htmlFor="horror">Horror</label>
             <input type="radio" className='checkbox' name='genre' onChange={()=>setGenre('horror')}/>
-            <label htmlFor="">romance</label>
+            <label htmlFor="">Romance</label>
             <input type="radio" className='checkbox' name='genre' onChange={()=>setGenre('romance')}/>
-            <label htmlFor="">thriller</label>
+            <label htmlFor="">Thriller</label>
             <input type="radio" className='checkbox' name='genre' onChange={()=>setGenre('thriller')}/>
-            <label htmlFor="">fantasy</label>
+            <label htmlFor="">Fantasy</label>
             <input type="radio" className='checkbox' name='genre' onChange={()=>setGenre('fantasy')}/>
-            <label htmlFor="">historical</label>
+            <label htmlFor="">Historical</label>
             <input type="radio" className='checkbox' name='genre' onChange={()=>setGenre('historical')}/>
-            <label htmlFor="">mystery</label>
+            <label htmlFor="">Mystery</label>
             <input type="radio" className='checkbox' name='genre' onChange={()=>setGenre('mystery')}/>
         </div>
 

@@ -7,10 +7,11 @@ import { pending } from '../../OrderStatus';
 import { confirmed } from '../../OrderStatus';
 import { cancelled } from '../../OrderStatus';
 import { delivered } from '../../OrderStatus';
+import { toast } from 'react-toastify';
 function Orders({username}) {
   const [orders,setOrders] = useState([]);
   const [filteredOrders,setFilteredOrders] = useState([]);
-  const [filterStatus,setFilterStatus] = useState('*');
+  const [filterStatus,setFilterStatus] = useState('All');
   const [isLoading,setIsLoading] = useState(true);
   const location  = useLocation();
   const username1 = location.state?.username;
@@ -18,6 +19,7 @@ function Orders({username}) {
     try{
       const res = await axios.put('http://localhost:8080/api/item/getOrders',{username : username||username1})
       setOrders(res.data);
+      console.log(res.data);
       setFilteredOrders(res.data);
       setTimeout(()=>{
         setIsLoading(false);
@@ -25,7 +27,7 @@ function Orders({username}) {
       
     }
     catch(e){
-      alert(e.message);
+      toast.error((e?.response?.data?.message) || (e.message));
     }
   }
   get()
@@ -33,7 +35,7 @@ function Orders({username}) {
 function filterOrders(e){
   const status = e.target.value;
   setFilterStatus(status);
-  if(status === '*'){
+  if(status === 'All'){
     setFilteredOrders([...orders]);
   }
   else{
@@ -56,18 +58,18 @@ async function removeOrder(id){
     }
   }
   catch(e){
-    alert(e.message);
+    toast.error((e?.response?.data?.message) || (e.message));
   }
 }
   return (
     <div className='orders'>
       <div className='orders-filter'>
       <select className='order-filters' value={filterStatus} onChange={(e)=>filterOrders(e)}>
-        <option value='*'>*</option>
-        <option value={pending}>{pending}</option>
-        <option value={confirmed}>{confirmed}</option>
-        <option value={cancelled}>{cancelled}</option>
-        <option value={delivered}>{delivered}</option>
+        <option value='All'>All</option>
+        <option value={pending}>Pending</option>
+        <option value={confirmed}>Confirmed</option>
+        <option value={cancelled}>Cancelled</option>
+        <option value={delivered}>Delivered</option>
       </select>
       <button className='reset-filters' onClick={resetFilters}>Reset filter</button>
       </div>
