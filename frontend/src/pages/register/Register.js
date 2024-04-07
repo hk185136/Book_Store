@@ -64,6 +64,7 @@ function Register() {
       return true;
     }
     async function handleSubmit(e){
+      setPhoneError('')
       setIsValidName(true);
       setIsValidPhoneNum(true);
       setIsValidPassword(true);
@@ -86,6 +87,7 @@ function Register() {
           throw Error("Invalid password");
         }
         if(!validatePhoneNumber()){
+          setPhoneError('invalid phone number')
           setIsValidPhoneNum(false);
           return ;
         }
@@ -162,6 +164,7 @@ function Register() {
     const [isValidcPassword,setIsValidcPassword] = useState(true);
     const [phone_code,setPhoneCode] = useState(null);
     const [isValidPhoneNum,setIsValidPhoneNum] = useState(true);
+    const [phoneError,setPhoneError] = useState('');
     const paperStyle = {
       padding : '20px 20px',
       textAlign : 'center',
@@ -189,7 +192,7 @@ function Register() {
                    
 
 
-                  <Button style={{marginTop:'50px'}} type='submit' variant='contained' className='register-button' onClick={(e)=>handleSubmit(e)}>register</Button>
+                  <Button color='secondary' style={{marginTop:'50px'}} type='submit' variant='contained' className='register-button' onClick={(e)=>handleSubmit(e)}>register</Button>
               </Stack>
               {role === 'customer' && <Stack spacing={3}>
                 <h2>Address information</h2>
@@ -225,7 +228,7 @@ function Register() {
                         }
                         
                       </TextField>
-                        <TextField error={!isValidPhoneNum} helperText='Invalid phone number' label='Phone Number' className='login-input' value={phno} 
+                        <TextField error={!isValidPhoneNum} helperText={phoneError} label='Phone Number' className='login-input' value={phno} 
                         onChange={(e)=>setPhno(e.target.value)}/>
 
                       </div>

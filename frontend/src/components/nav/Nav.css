@@ -16,7 +16,6 @@
 min-width: 0;
     border-radius: 5px;
     border: none;
-    margin-right: -33px;
 }
 .search-button{
     width: 30px;
@@ -86,6 +85,7 @@ min-width: 0;
     font-size: larger;
     margin-bottom: 20px;
     border-radius: 4px;
+    width : 300px
 }
 .my-orders{
     text-decoration: none;

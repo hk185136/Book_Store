@@ -5,8 +5,6 @@ import Sidebar from '../sidebar/Sidebar';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 function Books({books,setBooks,cartItems,setCartItems}) {
-  console.log('re-rendered : ');
-  console.log(cartItems);
   const [genre,setGenre] = useState('');
   const [priceRange,setPriceRange] = useState({
     min:0,
@@ -61,8 +59,8 @@ function Books({books,setBooks,cartItems,setCartItems}) {
     filter();
   },[genre,priceRange])
   function isInCart(id) {
-    console.log('isInCart runnig');
-    console.log(cartItems)
+    // console.log('isInCart runnig');
+    // console.log(cartItems)
     for(let cartItem of cartItems){
       if(cartItem.book.id == id){
         return true;
@@ -114,7 +112,6 @@ function Books({books,setBooks,cartItems,setCartItems}) {
 
     
     (<div className='books'>
-    <div><button className='reset' onClick={()=>window.location.reload()}>Reset filter</button></div>
 
       {books.length>0?(<>
         <div className='books-grid'>
