@@ -11,11 +11,11 @@ function Register() {
     const navigate = useNavigate();
     const location = useLocation();
     const role = location.state.role;
-    console.log(role);
+    // console.log(role);
 
     useEffect(() => {
       GetCountries().then((result) => {
-        console.log(result);
+        // console.log(result);
         setCountries(result);
       });
   
@@ -71,6 +71,7 @@ function Register() {
       setIsValidcPassword(true);
       setPasswordError([]);
       setcPasswordError('');
+      setNameError('');
       try{
         e.preventDefault();
         let flag=false;
@@ -105,7 +106,7 @@ function Register() {
         }
         const response = await axios.post('http://localhost:8080/api/auth/signup',body);
         if(response.status===200){
-          navigate('/');
+          navigate('/',{state : {role : role}});
         }
 
       }
@@ -120,11 +121,11 @@ function Register() {
     }
     function handleCountryChange(e){
       const curCountry = countries[e.target.value];
-      console.log(curCountry)
+      // console.log(curCountry)
       setCountry(curCountry.name);
       setCountryind(e.target.value)
-      GetState(curCountry.id).then(res=>{console.log(res);setStates(res)});
-      console.log(curCountry.phone_code)
+      GetState(curCountry.id).then(res=>{setStates(res)});
+      // console.log(curCountry.phone_code)
       setPhoneCode(curCountry.phone_code)
       setState('');
       setCity('');
@@ -133,7 +134,7 @@ function Register() {
     }
     function handleStateChange(e){
       const curState = states[e.target.value];
-      console.log(curState)
+      // console.log(curState)
       setState(curState.name);
       setStateind(e.target.value);
       GetCity(countries[countryind].id,curState.id).then(res=>{

@@ -1,6 +1,6 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import './Login.css';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -8,11 +8,19 @@ import {Button, FormControl,Paper,Stack,TextField,CircularProgress,Box} from '@m
 function Login() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const location = useLocation();
+    // console.log(location);
     const [role,setRole] = useState('customer');
     const paperStyle = {
       padding : '20px',
       textAlign : 'center'
     }
+    useEffect(()=>{
+      if(location.state && location.state.role){
+        setRole(location.state.role);
+        // console.log(location.state.role);
+      }
+    },[])
     async function handleSubmit(e){
       if(Name === '' || password === ''){
         if(Name === '' ){
@@ -37,10 +45,10 @@ function Login() {
           setIsLoading(true);
           const response = await axios.post('http://localhost:8080/api/auth/signin/'+role,body);
           setIsLoading(false);
-          console.log(response);
+          // console.log(response);
           if(response.status===200){
             toast.success("Login successful",{autoClose:1000});
-            console.log(response.data);
+            // console.log(response.data);
             dispatch({type : 'login', data : response.data});
             navigate('/home');
           }
