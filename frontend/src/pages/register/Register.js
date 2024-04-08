@@ -36,28 +36,28 @@ function Register() {
       return true;
     }
     function validatePassword(){
-      let errorMsg = '';
+      let errorMsg = [];
       if(password.length<8){
-        errorMsg+='Password must have 8 or more characters';
+        errorMsg.push('Password must have 8 or more characters');
       }
-      else if(/\s/.test(password)){
-        errorMsg+='Password cannot contain spaces\n';
+      if(/\s/.test(password)){
+        errorMsg.push('Password cannot contain spaces');
       }
-      else if(!/[a-zA-Z]/.test(password)){
-        errorMsg+='Password must contain atleast one alphabet\n';
+      if(!/[a-zA-Z]/.test(password)){
+        errorMsg.push('Password must contain atleast one alphabet');
       }
-      else if(!/[A-Z]/.test(password)){
-        errorMsg+='Password must contain atleast one capital letter\n';
+      if(!/[A-Z]/.test(password)){
+        errorMsg.push('Password must contain atleast one capital letter');
       }
-      else if(!/[0-9]/.test(password)){
-        errorMsg+='Password must contain atleast one numeric digit\n';
+      if(!/[0-9]/.test(password)){
+        errorMsg.push('Password must contain atleast one numeric digit');
       }
-      else if(!/.*[!@#$%^&*()].*/.test(password)){
-        errorMsg+='Password must contain atleast one speacial character\n';
+      if(!/.*[!@#$%^&*()].*/.test(password)){
+        errorMsg.push('Password must contain atleast one speacial character');
       }
       setPasswordError(errorMsg);
       
-      if(errorMsg!=='') {
+      if(errorMsg.length!==0){
         setIsValidPassword(false);
         return false;
       };
@@ -69,27 +69,31 @@ function Register() {
       setIsValidPhoneNum(true);
       setIsValidPassword(true);
       setIsValidcPassword(true);
-      setPasswordError('');
+      setPasswordError([]);
       setcPasswordError('');
       try{
         e.preventDefault();
+        let flag=false;
         if(password!==confirmPassword){
           setIsValidcPassword(false);
           setcPasswordError('Password and confirm password do not match');
-          throw Error("Password and confirm password do not match.");
+          flag = true;
         }
         if(!validateUserName()){
           setIsValidName(false);
           setNameError('Invalid user name');
-          return;
+          flag = true;
         }
         if(!validatePassword()){
-          throw Error("Invalid password");
+          flag = true
         }
         if(!validatePhoneNumber()){
           setPhoneError('invalid phone number')
           setIsValidPhoneNum(false);
-          return ;
+          flag  = true;
+        }
+        if(flag){
+          throw Error('Invalid credentials');
         }
 
         const body = {
@@ -159,7 +163,7 @@ function Register() {
     const [stateind, setStateind] = useState(null);
     const [cityind, setCityind] = useState(null);
     const [city,setCity] = useState('');
-    const [passwordError,setPasswordError] = useState('');
+    const [passwordError,setPasswordError] = useState([]);
     const [cpasswordError,setcPasswordError] = useState('');
     const [isValidcPassword,setIsValidcPassword] = useState(true);
     const [phone_code,setPhoneCode] = useState(null);
@@ -183,7 +187,14 @@ function Register() {
                     onChange={(e)=>{
                         setName(e.target.value);
                       }} />
-                <TextField type="password" variant='standard' error={!isValidPassword} helperText={passwordError} required label='Password' className='form-input' value={password} onChange={(e)=>{
+                <TextField type="password" variant='standard' error={!isValidPassword} helperText={
+                  <ul>
+                    {
+                      passwordError.map((error)=><li>{error}</li>)
+                    }
+                  </ul>
+                  
+                } required label='Password' className='form-input' value={password} onChange={(e)=>{
                     setPassword(e.target.value);
                   }} />
                   <TextField variant='standard' error={!isValidcPassword} helperText={cpasswordError} type="password" required label='Confirm password' className='form-input' value={confirmPassword} 
