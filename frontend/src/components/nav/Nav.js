@@ -55,6 +55,11 @@ function Nav({books,setBooks}) {    const [searchBy,setSearchBy] = useState('boo
             setBookPriceErrorMessage('Price must be given');
             flag=false;
         }
+        if(newBook.availableQuantity === ''){
+            setbookAvailableQuantityError(true);
+            setbookAvailableQuantityErrorMessage('Quantity must be given');
+            flag=false;
+        }
         if(parseFloat(newBook.price)<0){
             setBookPriceError(true);
             setBookPriceErrorMessage('Invalid price');
@@ -154,11 +159,11 @@ function Nav({books,setBooks}) {    const [searchBy,setSearchBy] = useState('boo
             <Modal setIsOpen = {setIsOpen}>
                 <form className='add-book-form'>
                     <Stack spacing={3}> 
-                        <TextField label='Book name' error={bookNameError} helperText = {bookNameErrorMessage} className='add-book-input' value={newBook.title}  onChange={(e)=>{setNewBook({...newBook,title : e.target.value})}}/>
+                        <TextField label='Book name' required error={bookNameError} helperText = {bookNameErrorMessage} className='add-book-input' value={newBook.title}  onChange={(e)=>{setNewBook({...newBook,title : e.target.value})}}/>
                         <TextField label = 'Author' className='add-book-input' value={newBook.author} onChange={(e)=>{setNewBook({...newBook,author : e.target.value})}}/>
                         <TextField label='Genre'  className='add-book-input' value={newBook.genre} onChange={(e)=>setNewBook({...newBook,genre : e.target.value})}/>
                         <TextField label='Book image url'   className='add-book-input' value={newBook.url} onChange={(e)=>setNewBook({...newBook,url : e.target.value})}/>
-                        <TextField label='Price' error={bookPriceError} helperText = {bookPriceErrorMessage} className='add-book-input' value={newBook.price} onChange={(e)=>setNewBook({...newBook,price : e.target.value})}/>
+                        <TextField label='Price' required error={bookPriceError} helperText = {bookPriceErrorMessage} className='add-book-input' value={newBook.price} onChange={(e)=>setNewBook({...newBook,price : e.target.value})}/>
                         <TextField label='Quantity' error={bookAvailableQuantityError} helperText={bookAvailableQuantityErrorMessage}  className='add-book-input' value={newBook.availableQuantity} onChange={(e)=>setNewBook({...newBook,availableQuantity : e.target.value})}/>
                         <Button variant='contained' type='submit' className='buy-button' onClick={(e)=>{handleAdd(e);}}> Add </Button>
                     </Stack>
