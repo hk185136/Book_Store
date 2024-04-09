@@ -40,3 +40,12 @@ td{
     margin-top: 20px;
     margin-bottom: 20px;
 }
+.profile-pno{
+    padding: 10px 20px;
+    font-size: large;
+    margin-bottom: 20px;
+}
+.profile-addr{
+    padding: 10px 10px;
+    font-size: large;
+}

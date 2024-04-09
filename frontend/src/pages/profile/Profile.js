@@ -81,9 +81,9 @@ function Profile() {
       {(isOpen) && <Modal setIsOpen = {setIsOpen}>
         <form action="" style={{fontSize : 'larger'}}>
         <p>Phone No.</p>
-        <input type="text" value={pnoInput} onChange={(e)=>setPnoInput(e.target.value)}/>
+        <input type="text" className='profile-pno' value={pnoInput} onChange={(e)=>setPnoInput(e.target.value)}/>
         <p>Delivery address</p>
-        <textarea type="text" rows={3} value={addressInput} onChange={(e)=>setAddressInput(e.target.value)}/>
+        <textarea className='profile-addr' type="text" rows={3} value={addressInput} onChange={(e)=>setAddressInput(e.target.value)}/>
         <br />
         <button className='buy-button' style={{fontSize:'large'}}  onClick={(e)=>editProfile(e)}>Edit profile</button>
         </form>
