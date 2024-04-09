@@ -11,6 +11,8 @@ function Profile() {
   console.log(user);
   const [pno,setPno] = useState(user.pno || '');
   const [address,setAddress] = useState(user.address || '');
+  const [pnoInput,setPnoInput] = useState(user.pno || '');
+  const [addressInput,setAddressInput] = useState(user.address || '');
   const [isOpen,setIsOpen] = useState(false);
   const [history,setHistory] = useState([]);
   useEffect(()=>{
@@ -20,14 +22,27 @@ function Profile() {
     }
     get()
   },[])
+  // useEffect(()=>{
+  //   setAddressInput(address);
+  //   setPnoInput(pno);
+  // },[address,pno])
   async function editProfile(e){
     e.preventDefault(); 
     const body = {
       username:user.name,
-      pno:pno,
-      address:address
+      pno:pnoInput,
+      address:addressInput
     };
-    const res= axios.put(`http://localhost:8080/api/auth/editUser/${user.name}`,body);
+    setIsOpen(false);
+    try{
+      const res= await axios.put(`http://localhost:8080/api/auth/editUser/${user.name}`,body);
+      setAddress(addressInput);
+      setPno(pnoInput);
+
+    }
+    catch(e){
+      toast.error((e?.response?.data?.message) || (e.message));
+    }
 
   }
   function handleDelete(id){
@@ -61,14 +76,14 @@ function Profile() {
         <p>Delivery address</p>
         <p>-</p>
         <p>{(address.length>0)?address:"No address info"}</p>
-        <button className='buy-button' style={{fontSize:'large'}} onClick={()=>setIsOpen(true)}>Edit</button>
+        <button className='buy-button' style={{fontSize:'large'}} onClick={()=>{setIsOpen(true);setAddressInput(address);setPnoInput(pno)}}>Edit</button>
       </div>
       {(isOpen) && <Modal setIsOpen = {setIsOpen}>
         <form action="" style={{fontSize : 'larger'}}>
         <p>Phone No.</p>
-        <input type="text" value={pno} onChange={(e)=>setPno(e.target.value)}/>
+        <input type="text" value={pnoInput} onChange={(e)=>setPnoInput(e.target.value)}/>
         <p>Delivery address</p>
-        <textarea type="text" rows={3} value={address} onChange={(e)=>setAddress(e.target.value)}/>
+        <textarea type="text" rows={3} value={addressInput} onChange={(e)=>setAddressInput(e.target.value)}/>
         <br />
         <button className='buy-button' style={{fontSize:'large'}}  onClick={(e)=>editProfile(e)}>Edit profile</button>
         </form>

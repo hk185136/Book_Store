@@ -165,7 +165,7 @@ function Nav({books,setBooks}) {    const [searchBy,setSearchBy] = useState('boo
                         <TextField label='Book image url'   className='add-book-input' value={newBook.url} onChange={(e)=>setNewBook({...newBook,url : e.target.value})}/>
                         <TextField label='Price' required error={bookPriceError} helperText = {bookPriceErrorMessage} className='add-book-input' value={newBook.price} onChange={(e)=>setNewBook({...newBook,price : e.target.value})}/>
                         <TextField label='Quantity' error={bookAvailableQuantityError} helperText={bookAvailableQuantityErrorMessage}  className='add-book-input' value={newBook.availableQuantity} onChange={(e)=>setNewBook({...newBook,availableQuantity : e.target.value})}/>
-                        <Button variant='contained' type='submit' className='buy-button' onClick={(e)=>{handleAdd(e);}}> Add </Button>
+                        <Button variant='contained' color='secondary' type='submit' className='buy-button' onClick={(e)=>{handleAdd(e);}}> Add </Button>
                     </Stack>
                     
                 </form>

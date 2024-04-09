@@ -12,7 +12,7 @@
 .book-card{
     display: flex;
     max-width: 450px;
-    background-color: aliceblue;
+    background-color: rgb(252, 234, 252);
     padding-right: 50px;
     padding-left: 20px;
     align-items: center;
@@ -48,7 +48,7 @@
     font-size: large;
     border-radius: 5px;
     cursor: pointer;
-    background-color: rgb(86, 86, 208);
+    background-color: rgb(89, 13, 89);
     color: whitesmoke;
 }
 .cart-img,.delete{
@@ -63,8 +63,8 @@
 }
 .qty-popup{
     position: absolute;
-    z-index: 10;
-    background-color: rgb(71, 71, 116);
+    z-index: 10;;
+    background-color: rgb(93, 18, 93);
     color: white;
     border-radius: 4px;
     padding: 20px 20px;

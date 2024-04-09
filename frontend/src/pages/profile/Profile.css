@@ -1,5 +1,5 @@
 .profile-page{
-    background-color: aliceblue;
+    background-color: rgb(252, 234, 252);
     font-size: x-large;
     display: grid;
     grid-template-columns: 1fr 10px 1fr;
@@ -22,12 +22,12 @@ table,th,td{
 th{
     padding: 10px 10px;
     font-size: larger;
-    background-color: rgb(209, 160, 95);
+    background-color: rgb(223, 122, 223);
 }
 td{
     padding: 10px 10px;
     font-size: large;
-    background-color: antiquewhite;
+    background-color: rgb(252, 234, 252);
 }
 .clear-history{
     background-color: rgb(115, 59, 59);
