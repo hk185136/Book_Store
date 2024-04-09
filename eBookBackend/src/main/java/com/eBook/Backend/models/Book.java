@@ -31,6 +31,14 @@ public class Book {
 		this.availableQuantity = availableQuantity;
 	}
 
+	
+	
+	public Book() {
+		super();
+	}
+
+
+
 	public String getId() {
 		return id;
 	}
