@@ -1,36 +1,38 @@
-import React, { useState } from 'react'
+import React, { useReducer, useState } from 'react'
 import Modal from '../modal/Modal'
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 function OrderForm({setIsOpen,book}) {
+    const user = useSelector(state=>state);
+    console.log("user : ")
+    console.log(user);
     const [address,setAddress] = useState(getAddr());
     const [quantity,setQuantity] = useState(1);
     function getAddr(){
-        const user = JSON.parse(localStorage.getItem('user'));
         if(user && user.address && user.address !==''){
             return user.address;
         }
         return ''
     }
     async function handleBuy(e){
-      console.log("bought")
         e.preventDefault();
         const body = {
             book : book,
             user : {
-              username : JSON.parse(localStorage.getItem('user')).name,
+              username : user.name,
               address : address,
-              pno: JSON.parse(localStorage.getItem('user')).pno
+              pno: user.pno
             },
             quantity : quantity
           }
+          console.log(body);
           const res = await axios.post('http://localhost:8080/api/item/addToOrder',body);
           if(res.status === 200){
             const newBook = book;
             newBook.availableQuantity = newBook.availableQuantity - quantity;
             axios.put(`http://localhost:8080/api/admin/books/${book.id}`,newBook)
           }
-          console.log(res);
           setIsOpen(false);
     }
   return (

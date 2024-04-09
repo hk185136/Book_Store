@@ -1,26 +1,74 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './Book.css';
-import { userContext } from '../../UserContext';
+import {useSelector} from 'react-redux';
 import Modal from '../modal/Modal';
 import axios from 'axios';
 import OrderForm from '../OrderForm/OrderForm';
+import { toast } from 'react-toastify';
+import {Button, FormControl,Paper,Stack,TextField,Select,MenuItem, InputLabel} from '@mui/material'
 function Book({isInCart,cartId,book,deleteBook,editBook,cartItems,setCartItems}) {
-  console.log('is in cart : ' + isInCart)
     const [isAdded,setIsAdded] = useState(isInCart);
-    console.log('isAdded: ' + isAdded)
-    const [user,setUser] = useContext(userContext);
+    const user = useSelector(state=>state)
     const [isOpen,setIsOpen] = useState(false);
     const [newBook,setNewBook] = useState(book);
     const [showPopup,setShowPopup] = useState(false);
     const [quantity,setQuantity] = useState(1);
     const [orderOpen,setOrderOpen] = useState(false);
+    const [bookNameError,setBookNameError] = useState(false);
+    const [bookNameErrorMessage,setBookNameErrorMessage] = useState('');
+    const [bookPriceError,setBookPriceError] = useState(false);
+    const [bookPriceErrorMessage,setBookPriceErrorMessage] = useState('');
+    const [bookAvailableQuantityError,setbookAvailableQuantityError]=useState(false);
+    const [bookAvailableQuantityErrorMessage,setbookAvailableQuantityErrorMessage] = useState('');
     const largeTitle = {fontSize : 'large'}
     const mediumTitle = {fontSize : 'larger'}
     const smallTitle = {fontSize : 'xx-large'}
     useEffect(()=>{
-      console.log('use effect : '+isInCart);
+      // console.log('use effect : '+isInCart);
       setIsAdded(isInCart);
     },[isInCart])
+    useEffect(()=>{
+      setBookNameError(false);
+      setBookNameErrorMessage('');
+      setBookPriceError(false);
+      setBookPriceErrorMessage('');
+      setbookAvailableQuantityError(false);
+      setbookAvailableQuantityErrorMessage('')
+  },[isOpen])
+  function handleEdit(){
+    if(!validateBook(newBook)) return;
+    editBook(book.id,newBook);
+    setIsOpen(false);
+  }
+  function validateBook(){
+    let flag=true;
+    if(newBook.title === ''){
+        setBookNameError(true);
+        setBookNameErrorMessage('Book name cannot be empty');
+        flag=false;
+    }
+    if(newBook.price === ''){
+        setBookPriceError(true);
+        setBookPriceErrorMessage('Price must be given');
+        flag=false;
+    }
+    if(newBook.availableQuantity === ''){
+      setbookAvailableQuantityError(true);
+        setbookAvailableQuantityErrorMessage('Quantity must be given');
+        flag=false;
+    }
+    if(parseFloat(newBook.price)<0){
+        setBookPriceError(true);
+        setBookPriceErrorMessage('Invalid price');
+        flag=false;
+    }
+    if(parseFloat(newBook.availableQuantity)<0){
+        setbookAvailableQuantityError(true);
+        setbookAvailableQuantityErrorMessage('Invalid quantity');
+        flag=false;
+    }
+    return flag;
+}
     function togglePopup(e){
       setShowPopup(true);
       if(book.availableQuantity===0){
@@ -56,7 +104,7 @@ function Book({isInCart,cartId,book,deleteBook,editBook,cartItems,setCartItems})
         }
       }
       catch(e){
-        alert(e.message);
+        toast.error((e?.response?.data?.message) || (e.message));
       }
      
       
@@ -136,21 +184,17 @@ function Book({isInCart,cartId,book,deleteBook,editBook,cartItems,setCartItems})
         {(isOpen)&&
         <Modal setIsOpen = {setIsOpen}>
                 <form className='add-book-form'>
-                    <label htmlFor="">Book name</label>
-                    <input type="text" className='add-book-input' value={newBook.title}  onChange={(e)=>{setNewBook({...newBook,title : e.target.value})}}/>
-                    <label htmlFor="">Author</label>
-                    <input type="text" name='author' className='add-book-input' value={newBook.author} onChange={(e)=>{setNewBook({...newBook,author : e.target.value})}}/>
-                    <label htmlFor="">Genre</label>
-                    <input type="text" name='genre' className='add-book-input' value={newBook.genre} onChange={(e)=>setNewBook({...newBook,genre : e.target.value})}/>
-                    <label htmlFor="">Book image url</label>
-                    <input type="text" name='url' className='add-book-input' value={newBook.url} onChange={(e)=>setNewBook({...newBook,url : e.target.value})}/>
-                    <label htmlFor="">Price</label>
-                    <input type="text" name='price' className='add-book-input' value={newBook.price} onChange={(e)=>setNewBook({...newBook,price : e.target.value})}/>
-                    <label htmlFor="">Quantity</label>
-                    <input type="text" name='quantity' className='add-book-input' value={newBook.availableQuantity} onChange={(e)=>setNewBook({...newBook,availableQuantity : e.target.value})}/>
-                    <button type='submit' className='buy-button' onClick={(e)=>{e.preventDefault();
-                    setIsOpen(false);
-                      editBook(book.id,newBook)}}> Update </button>
+                <Stack spacing={3}> 
+                        <TextField label='Book name' required error={bookNameError} helperText = {bookNameErrorMessage} className='add-book-input' value={newBook.title}  onChange={(e)=>{setNewBook({...newBook,title : e.target.value})}}/>
+                        <TextField label = 'Author' className='add-book-input' value={newBook.author} onChange={(e)=>{setNewBook({...newBook,author : e.target.value})}}/>
+                        <TextField label='Genre'  className='add-book-input' value={newBook.genre} onChange={(e)=>setNewBook({...newBook,genre : e.target.value})}/>
+                        <TextField label='Book image url'   className='add-book-input' value={newBook.url} onChange={(e)=>setNewBook({...newBook,url : e.target.value})}/>
+                        <TextField label='Price' required error={bookPriceError} helperText = {bookPriceErrorMessage} className='add-book-input' value={newBook.price} onChange={(e)=>setNewBook({...newBook,price : e.target.value})}/>
+                        <TextField label='Quantity' required error={bookAvailableQuantityError} helperText={bookAvailableQuantityErrorMessage}  className='add-book-input' value={newBook.availableQuantity} onChange={(e)=>setNewBook({...newBook,availableQuantity : e.target.value})}/>
+                        <Button variant='contained' type='submit' className='buy-button' onClick={(e)=>{e.preventDefault();
+                    
+                    handleEdit()}}> Update</Button>
+                    </Stack>
                 </form>
             </Modal>
             

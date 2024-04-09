@@ -1,4 +1,5 @@
 import axios from "axios"
+import { toast } from "react-toastify";
 
 export const getHistory = async (username)=>{
     try{
@@ -8,7 +9,7 @@ export const getHistory = async (username)=>{
         return res.data;
     }
     catch(e){
-        alert(e.message);
+        toast.error((e?.response?.data?.message) || (e.message));
     }
 }
 
@@ -17,6 +18,6 @@ export const pushHistory = async (item) =>{
         axios.post(`http://localhost:8080/api/user/orderhistory/addToHistory`,item);
     }
     catch(e){
-        alert(e.message);   
+        toast.error((e?.response?.data?.message) || (e.message));   
     }
 }

@@ -2,6 +2,7 @@ import React from 'react'
 import CartBook from '../cartBook/CartBook'
 import './CartBooks.css';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 function CartBooks({cartItems,setCartItems,setTotal}) {
   async function deleteItem(id){
     try{
@@ -10,7 +11,7 @@ function CartBooks({cartItems,setCartItems,setTotal}) {
       setCartItems(newCartItems);
     }
     catch(e){
-      alert(e.message);
+      toast.error((e?.response?.data?.message) || (e.message));
     }
   }
 

@@ -1,26 +1,55 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import './Login.css';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { userContext } from '../../UserContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import {Button, FormControl,Paper,Stack,TextField,CircularProgress,Box} from '@mui/material'
 function Login() {
     const navigate = useNavigate();
-    const [user,setUser] = useContext(userContext);
+    const dispatch = useDispatch();
+    const location = useLocation();
+    // console.log(location);
     const [role,setRole] = useState('customer');
+    const paperStyle = {
+      padding : '20px',
+      textAlign : 'center'
+    }
+    useEffect(()=>{
+      if(location.state && location.state.role){
+        setRole(location.state.role);
+        // console.log(location.state.role);
+      }
+    },[])
     async function handleSubmit(e){
+      if(Name === '' || password === ''){
+        if(Name === '' ){
+          setIsValidName(false);
+          setNameError('Name must be filled')
+        }
+        if(password === ''){
+          setIsValidPassword(false);
+          setPasswordError('Password must be filled')
+          return;
+        }
+        return;
+      }
+     
         try{
           e.preventDefault();
   
           const body = {
             username : Name,
-            password : password,
+            password : password
           }
+          setIsLoading(true);
           const response = await axios.post('http://localhost:8080/api/auth/signin/'+role,body);
-          console.log(response);
+          setIsLoading(false);
+          // console.log(response);
           if(response.status===200){
-            console.log(response.data);
-            localStorage.setItem('user',JSON.stringify(response.data));
-            setUser(response.data);
+            toast.success("Login successful",{autoClose:1000});
+            // console.log(response.data);
+            dispatch({type : 'login', data : response.data});
             navigate('/home');
           }
           else{
@@ -28,8 +57,14 @@ function Login() {
           }
         }
         catch(e){
+          setName('');
+          setPassword('');
+          setIsLoading(false);
+          setIsValidName(false);
+          setIsValidPassword(false);
+          setPasswordError('Invalid username or password.')
           console.log(e)
-          alert(e?.response?.data?.message);
+          toast.error((e?.response?.data?.message) || (e.message));
         }
     }
     function handleClick(str){
@@ -38,23 +73,81 @@ function Login() {
       setPassword('');
     }
     const [Name,setName] = useState('');
+    const [isValidName,setIsValidName] = useState(true);
+    const [isValidPassword,setIsValidPassword] = useState(true);
+    const [nameError,setNameError] = useState('');
+    const [passwordError,setPasswordError] = useState('');
     const [password,setPassword] = useState('');
+    const [isLoading,setIsLoading] = useState(false);
 
   return (
-    <div className='container'>
-       {role === 'admin'&& <p style={{zIndex : 1}} className='header'>Admin login</p>} 
-        {(role === 'customer') && <button className='role-toggle' onClick={()=>handleClick('admin')}>Login as admin</button>}
-        {(role === 'admin') && <button className='role-toggle' onClick={()=>handleClick('customer')}>Login as Customer</button>}
-        <img src={(role == 'customer')?"https://www.specsavers-profile.com/wp-content/uploads/Online-education-concept.jpg":"https://th.bing.com/th/id/OIP.3clUiqEgJPbC8zXWQqfCrQHaGM?w=575&h=481&rs=1&pid=ImgDetMain"} className='bg-img' alt="" />
-        <form className='form'>
-            <label htmlFor="">Name</label>
-            <input type="text" className='form-input' value={Name} onChange={(e)=>{setName(e.target.value)}} />
-            <label htmlFor="">password</label>
-            <input type="password" className='form-input' value={password} onChange={(e)=>setPassword(e.target.value)}/>
-            <button type='submit' className='login-button' onClick={(e)=>handleSubmit(e)}>login</button>
-        </form>
-        <Link to='./register' state={{role: role}} className='link-register'>{(role==='admin')?'New admin':'New user'}</Link>
+    <>
+    {isLoading &&  <div className='loadingContainer' style={{zIndex:10,position:'absolute',top:0,left:0,right:0,bottom:0,display:'flex',alignItems:'center',justifyContent : 'center'}}>
+          <CircularProgress  size={'50px'}/>
+        </div>}
+       
+
+
+        <div className='container'>
+       {/* {role === 'admin'&& <p style={{zIndex : 1}} className='header'>Admin login</p>}  */}
+        {(role === 'customer') && <Button variant='contained' style={{position : 'absolute',top:'30px',right:'30px'}} className='role-toggle' color='secondary' onClick={()=>handleClick('admin')}>Login as admin</Button>}
+        {(role === 'admin') && <Button variant='contained' style={{position : 'absolute',top:'30px',right:'30px'}} className='role-toggle' color='secondary' onClick={()=>handleClick('customer')}>Login as Customer</Button>}
+
+        
+    
+        <FormControl>
+          <Paper elevation={10} style={paperStyle}>
+            <h1>Login</h1>
+            <Stack spacing={3}>
+              <TextField 
+                  helperText={nameError} 
+                  variant='standard'
+                  className='login-input' 
+                  error = {(isValidName)?false:true} 
+                  required = {true}  
+                  label='Name' 
+                  value={Name} 
+                  onChange={(e)=>{setName(e.target.value)}} 
+              />
+
+              <TextField 
+                  helperText={passwordError}
+                  variant='standard' 
+                  type='password' 
+                  error = {(isValidPassword)?false:true} 
+                  required 
+                  label='Password' 
+                  value={password} 
+                  onChange={(e)=>{setPassword(e.target.value)}} 
+              />
+              
+              <Button 
+                  sx={{marginTop:20}} 
+                  color='secondary'
+                  role='button' 
+                  type='submit' 
+                  variant='contained'  
+                  className='login-button' 
+                  onClick={(e)=>handleSubmit(e)}
+              >Login
+              </Button>
+              <Button 
+              color='secondary'
+              sx={{marginTop:20}} 
+              role='button' 
+              type='button' 
+              variant='outlined'  
+              onClick={(e)=>navigate('./register',{state : {role : role}})}
+              >{(role==='admin')?'New admin':'New user'}
+              </Button>
+            </Stack>
+          </Paper>
+          
+            
+        </FormControl>
     </div>
+    </>
+
   )
 }
 

@@ -1,12 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, {useState } from 'react'
 
 import CartBooks from '../../components/cartBooks/CartBooks';
 import './Cart.css';
-import { userContext } from '../../UserContext';
 import axios from 'axios';
 import Modal from '../../components/modal/Modal';
+import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 function Cart({cartItems,setCartItems}) {
-  const [user,setUser] = useContext(userContext);
+  const user = useSelector(state=>state);
   const [address,setAddress] = useState(user.address||'');
   const [total,setTotal] = useState(getTotal());
   const [isOpen,setIsOpen] = useState(false);
@@ -33,7 +34,6 @@ function Cart({cartItems,setCartItems}) {
           continue;
         }
         const qty = (book.availableQuantity<cartItem.quantity)?book.availableQuantity:cartItem.quantity
-        const user =  JSON.parse(localStorage.getItem('user'));
         // console.log(user)
         const body = {
           book : book,
@@ -56,7 +56,7 @@ function Cart({cartItems,setCartItems}) {
         }
       }
       catch(e){
-        alert(e);
+        toast.error((e?.response?.data?.message) || (e.message));
       }
 
     }

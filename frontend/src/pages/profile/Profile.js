@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import Orders from '../../pages/orders/Orders';
 import './Profile.css'
 import Modal from '../../components/modal/Modal';
 import axios from 'axios';
 import HIstoryItem from '../../components/HistoryItem/HIstoryItem';
 import { getHistory } from '../../HIstory';
+import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 function Profile() {
-  const user=JSON.parse(localStorage.getItem('user'));
+  const user=useSelector(state=>state);
+  console.log(user);
   const [pno,setPno] = useState(user.pno || '');
   const [address,setAddress] = useState(user.address || '');
   const [isOpen,setIsOpen] = useState(false);
@@ -14,23 +16,18 @@ function Profile() {
   useEffect(()=>{
     async function get(){
     const hist = await getHistory(user.name);
-    console.log(hist);
     setHistory(hist);
     }
     get()
   },[])
   async function editProfile(e){
     e.preventDefault(); 
-    const user = {
+    const body = {
       username:user.name,
       pno:pno,
       address:address
     };
-    const res= axios.put(`http://localhost:8080/api/auth/editUser/${user.name}`,user);
-    if(res.status === 200){
-      const prev = JSON.parse(localStorage.getItem('user'));
-      localStorage.setItem('user',{name : prev.name,address:address,pno:pno});
-    }
+    const res= axios.put(`http://localhost:8080/api/auth/editUser/${user.name}`,body);
 
   }
   function handleDelete(id){
@@ -40,7 +37,7 @@ function Profile() {
       setHistory(newHistory);
     }
     catch(e){
-      alert(e.message);
+      toast.error((e?.response?.data?.message) || (e.message));
     }
   }
   function clearHistory(){
@@ -49,7 +46,7 @@ function Profile() {
       setHistory([])
     }
     catch(e){
-      alert(e.message);
+      toast.error((e?.response?.data?.message) || (e.message));
     }
   }
   return (
@@ -69,9 +66,9 @@ function Profile() {
       {(isOpen) && <Modal setIsOpen = {setIsOpen}>
         <form action="" style={{fontSize : 'larger'}}>
         <p>Phone No.</p>
-        <input type="text" value={user.pno} onChange={(e)=>setPno(e.target.value)}/>
+        <input type="text" value={pno} onChange={(e)=>setPno(e.target.value)}/>
         <p>Delivery address</p>
-        <textarea type="text" rows={3} value={user.address} onChange={(e)=>setAddress(e.target.value)}/>
+        <textarea type="text" rows={3} value={address} onChange={(e)=>setAddress(e.target.value)}/>
         <br />
         <button className='buy-button' style={{fontSize:'large'}}  onClick={(e)=>editProfile(e)}>Edit profile</button>
         </form>
