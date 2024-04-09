@@ -26,6 +26,15 @@ public class Item {
 	
 	
 	
+	public Item(String id, Book book, AuthUser user, int quantity, String status, String date) {
+		super();
+		this.id = id;
+		this.book = book;
+		this.user = user;
+		this.quantity = quantity;
+		this.status = status;
+		this.date = date;
+	}
 	public String getId() {
 		return id;
 	}

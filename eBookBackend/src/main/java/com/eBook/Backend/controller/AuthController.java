@@ -41,10 +41,15 @@ public class AuthController {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
-	 private  AuthenticationManager authenticationManager;
+	@Autowired
+	private  AuthenticationManager authenticationManager;
 	
 	 @Autowired
 	private JwtUtil jwtUtil;
+	 
+	 public AuthController() {
+		 
+	 }
 	
     public AuthController(AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
         this.authenticationManager = authenticationManager;

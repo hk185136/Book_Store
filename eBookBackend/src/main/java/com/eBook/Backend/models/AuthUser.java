@@ -19,6 +19,17 @@ public class AuthUser {
 	private String pno;
 	private String address;
 	
+	
+	
+	public AuthUser(String id, String username, String password, String role, String pno, String address) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.role = role;
+		this.pno = pno;
+		this.address = address;
+	}
 	public String getId() {
 		return id;
 	}
