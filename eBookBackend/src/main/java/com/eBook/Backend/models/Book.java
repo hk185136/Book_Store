@@ -20,6 +20,11 @@ public class Book {
 	private double price;
 	private int availableQuantity;
 	
+	public Book()
+	{
+		
+	}
+	
 	public Book(String id, String url, String title, String author, String genre, double price, int availableQuantity) {
 		super();
 		this.id = id;

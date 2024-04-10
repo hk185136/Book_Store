@@ -24,7 +24,10 @@ public class Item {
 	@DateTimeFormat(pattern = "dd-MM-yyyy")
     private String date;
 	
-	
+	public Item()
+	{
+		
+	}
 	
 	public Item(String id, Book book, AuthUser user, int quantity, String status, String date) {
 		super();

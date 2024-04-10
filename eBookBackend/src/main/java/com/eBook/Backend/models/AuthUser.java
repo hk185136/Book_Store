@@ -19,6 +19,11 @@ public class AuthUser {
 	private String pno;
 	private String address;
 	
+	public AuthUser()
+	{
+		
+	}
+	
 	
 	
 	public AuthUser(String id, String username, String password, String role, String pno, String address) {
