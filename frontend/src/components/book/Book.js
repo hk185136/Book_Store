@@ -128,13 +128,13 @@ function Book({isInCart,cartId,book,deleteBook,editBook,cartItems,setCartItems})
             <p className='author-name'>{book.author.length>0 && <>By author : {book.author}</>}</p>
             <p className='price'>&#8377;{book.price}</p>
             {(user.role === 'admin') && (<>
-              <button className='edit-button' onClick={()=>setIsOpen(true)}>edit</button>
+              <Button variant='contained' color='secondary' className='edit-button' onClick={()=>setIsOpen(true)}>Edit</Button>
               <img className='delete' src="delete-button.png" alt="" onClick={()=>deleteBook(book)}/>
             </>)  }
             {(user.role === 'customer') && (book.availableQuantity>0) &&
             <>
             {book.availableQuantity>0 && <>
-             <button className='buy-button' onClick={handleBuy}>Buy</button>
+             <Button color='secondary' variant='contained' className='buy-button' onClick={handleBuy}>Buy</Button>
             {(isAdded)?(<img  onClick={(e)=>
               {
                 handleRemoveFromCart();
@@ -191,7 +191,7 @@ function Book({isInCart,cartId,book,deleteBook,editBook,cartItems,setCartItems})
                         <TextField label='Book image url'   className='add-book-input' value={newBook.url} onChange={(e)=>setNewBook({...newBook,url : e.target.value})}/>
                         <TextField label='Price' required error={bookPriceError} helperText = {bookPriceErrorMessage} className='add-book-input' value={newBook.price} onChange={(e)=>setNewBook({...newBook,price : e.target.value})}/>
                         <TextField label='Quantity' required error={bookAvailableQuantityError} helperText={bookAvailableQuantityErrorMessage}  className='add-book-input' value={newBook.availableQuantity} onChange={(e)=>setNewBook({...newBook,availableQuantity : e.target.value})}/>
-                        <Button variant='contained' type='submit' className='buy-button' onClick={(e)=>{e.preventDefault();
+                        <Button variant='contained' color='secondary' type='submit' className='buy-button' onClick={(e)=>{e.preventDefault();
                     
                     handleEdit()}}> Update</Button>
                     </Stack>

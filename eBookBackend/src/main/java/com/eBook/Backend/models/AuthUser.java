@@ -35,6 +35,15 @@ public class AuthUser {
 		this.pno = pno;
 		this.address = address;
 	}
+	
+	
+	
+	public AuthUser() {
+		super();
+	}
+
+
+
 	public String getId() {
 		return id;
 	}
