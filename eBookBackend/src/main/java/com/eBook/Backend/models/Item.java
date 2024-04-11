@@ -38,11 +38,6 @@ public class Item {
 		this.status = status;
 		this.date = date;
 	}
-	
-	
-	public Item() {
-		super();
-	}
 
 
 	public String getId() {

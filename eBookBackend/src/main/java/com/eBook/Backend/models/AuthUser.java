@@ -36,11 +36,6 @@ public class AuthUser {
 		this.address = address;
 	}
 	
-	
-	
-	public AuthUser() {
-		super();
-	}
 
 
 
