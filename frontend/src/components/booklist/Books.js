@@ -4,19 +4,21 @@ import './Books.css'
 import Sidebar from '../sidebar/Sidebar';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import LoadingComponent from '../Loading/LoadingComponent';
 function Books({books,setBooks,cartItems,setCartItems}) {
   const [genre,setGenre] = useState('');
   const [priceRange,setPriceRange] = useState({
     min:0,
     max:20000
   })
-  const [isLoading,setIsLoading] = useState(true);
+  const [isLoading,setIsLoading] = useState(false);
   useEffect(()=>{
    
     async function filter(){
     
       try{
         if(genre==''){
+          setIsLoading(true);
           const res = await axios.get(`http://localhost:8080/api/user/books/`);
 
           if(res.status==200){
@@ -29,10 +31,14 @@ function Books({books,setBooks,cartItems,setCartItems}) {
               })
             })
             // console.log(newBooks)
+           
+            console.log('loading')
             setBooks(newBooks);
+            setIsLoading(false);
           }
         }
         else{
+          setIsLoading(true);
           const res = await axios.get(`http://localhost:8080/api/user/books/genre/${genre}`);
 
           if(res.status==200){
@@ -45,15 +51,15 @@ function Books({books,setBooks,cartItems,setCartItems}) {
               })
             })
             // console.log(newBooks)
+           
+            console.log('loading')
             setBooks(newBooks);
+            setIsLoading(false);
           }
         }
       }
       catch(e){
         toast.error((e?.response?.data?.message) || (e.message));
-      }
-      finally{
-        setIsLoading(false);
       }
     }
     filter();
@@ -112,14 +118,14 @@ function Books({books,setBooks,cartItems,setCartItems}) {
 
     
     (<div className='books'>
-
+      <LoadingComponent isLoading={isLoading}/>
       {books.length>0?(<>
         <div className='books-grid'>
       {
           books.map((book)=><Book key={book.id} isInCart = {isInCart(book.id)} cartId = {findInCart(book.id)} book = {book} deleteBook = {deleteBook} editBook = {editBook} cartItems = {cartItems} setCartItems = {setCartItems}/>)
         }
       </div>
-      </>):((isLoading)? <h1>Loading ...</h1>:<img src='/no-search-found.png'></img>)}
+      </>):((!isLoading) &&  <img src='/no-search-found.png'></img>)}
       
      
     </div>)
