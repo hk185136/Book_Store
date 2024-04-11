@@ -49,6 +49,3 @@
 .login-input{
     width: 300px;
 }
-.loadingContainer{
-    backdrop-filter: blur(2px);
-}

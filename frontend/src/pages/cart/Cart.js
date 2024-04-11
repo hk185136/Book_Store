@@ -6,11 +6,13 @@ import axios from 'axios';
 import Modal from '../../components/modal/Modal';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import LoadingComponent from '../../components/Loading/LoadingComponent';
 function Cart({cartItems,setCartItems}) {
   const user = useSelector(state=>state);
   const [address,setAddress] = useState(user.address||'');
   const [total,setTotal] = useState(getTotal());
   const [isOpen,setIsOpen] = useState(false);
+  const [isLoading,setIsLoading] = useState(false);
   console.log("cart items in cart page  : ");
   console.log(cartItems);
   function getTotal(){
@@ -22,6 +24,7 @@ function Cart({cartItems,setCartItems}) {
   }
   async function handleBuy(e){
     setIsOpen(false);
+    setIsLoading(true);
     e.preventDefault();
     
     for(let cartItem of cartItems){
@@ -58,11 +61,15 @@ function Cart({cartItems,setCartItems}) {
       catch(e){
         toast.error((e?.response?.data?.message) || (e.message));
       }
+      finally{
+        setIsLoading(false);
+      }
 
     }
   }
   return (
       <div className='cart'>
+        <LoadingComponent isLoading={isLoading}/>
         {(cartItems.length>0)?<>
           <CartBooks cartItems = {cartItems} setCartItems = {setCartItems} setTotal = {setTotal}/>
           <div className='order1'>
@@ -71,7 +78,7 @@ function Cart({cartItems,setCartItems}) {
             <p className='total-cost'>Total cost : <span style={{color : 'green'}}>&#8377;{total}</span></p>
             <button className='buy-button' onClick={()=>setIsOpen(true)}>Buy</button>
         </div>
-        </>:
+        </>: 
         <img src='/emptyCart.png'></img>}
         {isOpen && <Modal setIsOpen = {setIsOpen}>
         <form className='add-book-form'>

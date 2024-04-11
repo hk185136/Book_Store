@@ -4,7 +4,8 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import {Button, FormControl,Paper,Stack,TextField,CircularProgress,Box} from '@mui/material'
+import {Button, FormControl,Paper,Stack,TextField,CircularProgress,Box} from '@mui/material';
+import LoadingComponent from '../../components/Loading/LoadingComponent';
 function Login() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -82,9 +83,7 @@ function Login() {
 
   return (
     <>
-    {isLoading &&  <div className='loadingContainer' style={{zIndex:10,position:'absolute',top:0,left:0,right:0,bottom:0,display:'flex',alignItems:'center',justifyContent : 'center'}}>
-          <CircularProgress  size={'50px'}/>
-        </div>}
+    <LoadingComponent isLoading={isLoading}/>
        
 
 

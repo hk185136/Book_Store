@@ -8,6 +8,7 @@ import { confirmed } from '../../OrderStatus';
 import { cancelled } from '../../OrderStatus';
 import { delivered } from '../../OrderStatus';
 import { toast } from 'react-toastify';
+import LoadingComponent from '../../components/Loading/LoadingComponent';
 function Orders({username}) {
   const [orders,setOrders] = useState([]);
   const [filteredOrders,setFilteredOrders] = useState([]);
@@ -21,10 +22,7 @@ function Orders({username}) {
       setOrders(res.data);
       console.log(res.data);
       setFilteredOrders(res.data);
-      setTimeout(()=>{
-        setIsLoading(false);
-      },800)
-      
+      setIsLoading(false);
     }
     catch(e){
       toast.error((e?.response?.data?.message) || (e.message));
@@ -33,6 +31,7 @@ function Orders({username}) {
   get()
 },[username])
 function filterOrders(e){
+  setIsLoading(true);
   const status = e.target.value;
   setFilterStatus(status);
   if(status === 'All'){
@@ -42,10 +41,13 @@ function filterOrders(e){
     const newFilteredOrders = orders.filter((order)=>order.status === status);
     setFilteredOrders(newFilteredOrders);
   }
+  setIsLoading(false);
 }
 function resetFilters(){
+  setIsLoading(true);
   setFilterStatus('*');
   setFilteredOrders([...orders])
+  setIsLoading(false);
 }
 async function removeOrder(id){
   try{
@@ -63,6 +65,7 @@ async function removeOrder(id){
 }
   return (
     <div className='orders'>
+       <LoadingComponent isLoading={isLoading}/>
       <div className='orders-filter'>
       <select className='order-filters' value={filterStatus} onChange={(e)=>filterOrders(e)}>
         <option value='All'>All</option>
@@ -75,7 +78,8 @@ async function removeOrder(id){
       </div>
       
       <div className='orders-grid'>
-      <>{filteredOrders.length===0 && ((isLoading===false)?(<>{<img className='no-orders' src='/emptyOrder.jpg'></img>} </>): <h1>Loading...</h1>)}</>
+       
+      <>{filteredOrders.length===0 && isLoading===false && <>{<img className='no-orders' src='/emptyOrder.jpg'></img>} </>}</>
         {
           filteredOrders.map((order)=><Order key={order.id} order = {order} removeOrder = {removeOrder}/>)
         }
