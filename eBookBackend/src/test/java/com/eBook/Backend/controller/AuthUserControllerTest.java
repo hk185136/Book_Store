@@ -66,13 +66,7 @@ class AuthUserControllerTest
 	
 	@MockBean
 	private AuthUserRepository authUserRepository;
-	
-//	AuthUser user2 = new AuthUser("2", "ranjanreddy", "1234678", "admin", "1234567810", "hyderabad");
-//	UserDetails user1 = User.builder().username("ranjan").password("12345678").roles("customer").build();
-//	UserDetails user2 = User.builder().username("ranjanreddy").password("12345678").roles("admin").build();
-//		when(authUserImplementation.loadUserByUsername("ranjan")).thenReturn(user1);
 
-//	
 	@Test
 	public void test_createUser() throws Exception
 	{
