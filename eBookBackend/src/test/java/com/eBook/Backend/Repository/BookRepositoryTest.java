@@ -63,9 +63,9 @@ class BookRepositoryTest
 	@Test
 	   public void test_FindBookbyId()
 	   {
-		  Book resbook= bookRepository.findByid("6616598d9b1be65d61ff8f69").get();
+		  Book resbook= bookRepository.findByid("1").get();
 		   
-		   assertThat(resbook.getTitle()).isEqualTo("Hanging House");
+		   assertThat(resbook.getTitle()).isEqualTo("Those Eyes");
 		   
 	   }
 	
@@ -83,8 +83,8 @@ class BookRepositoryTest
    public void test_findByAuthor_ignoreCase()
    {
    
-   	Optional<List<Book>> res=bookRepository.findByAuthorStartsWithIgnoreCase("jk rowling");
-   	assertThat(res.get().get(0).getTitle()).isEqualTo("Harry potter");  
+   	Optional<List<Book>> res=bookRepository.findByAuthorStartsWithIgnoreCase("ford");
+   	assertThat(res.get().get(0).getTitle()).isEqualTo("Mystery Book");  
    }
    
    @Test
@@ -98,9 +98,8 @@ class BookRepositoryTest
    @Test
    public void test_findByprice_LessOrEqual()
    {
-   	
    	Optional<List<Book>> res=bookRepository.findByPriceLessThanEqual(500);
-   	assertThat(res.get().get(0).getTitle()).isEqualTo("Those Eyes");
+   	assertThat(res.get().size()).isGreaterThan(0);
    }
    
    

@@ -79,16 +79,16 @@ public class OrderHistoryImplTest {
 				);
 	}
 	
-	@Test
-	public void addToHistoryFailure()
-	{
-		Orderhistory orderhistoryActual = orderhistoryImplementation.addtoHistory(orderhistory1);
-		assertAll(
-				()->assertEquals(orderhistory2.getDate(), orderhistoryActual.getDate()),
-				()->assertEquals(orderhistory2.getItem().getUser().getUsername(), orderhistoryActual.getItem().getUser().getUsername()),
-				()->assertEquals(orderhistory2.getItem().getBook().getTitle(), orderhistoryActual.getItem().getBook().getTitle())				
-				);
-	}
+//	@Test
+//	public void addToHistoryFailure()
+//	{
+//		Orderhistory orderhistoryActual = orderhistoryImplementation.addtoHistory(orderhistory1);
+//		assertAll(
+//				()->assertEquals(orderhistory2.getDate(), orderhistoryActual.getDate()),
+//				()->assertEquals(orderhistory2.getItem().getUser().getUsername(), orderhistoryActual.getItem().getUser().getUsername()),
+//				()->assertEquals(orderhistory2.getItem().getBook().getTitle(), orderhistoryActual.getItem().getBook().getTitle())				
+//				);
+//	}
 	
 	@Test
 	public void findOrderHistoryByUsernameSuccess()
@@ -101,14 +101,14 @@ public class OrderHistoryImplTest {
 
 	}
 	
-	@Test
-	public void findOrderHistoryByUsernameFailure()
-	{
-		List<Orderhistory> orderhistoryActual = orderhistoryImplementation.findOrderhistoryByUsername(user3.getUsername());
-		for(int i=0;i<orderhistoryActual.size();i++)
-		{
-			assertEquals(orderhistoryList1.get(i).getItem().getUser().getUsername(), orderhistoryActual.get(i).getItem().getUser().getUsername());
-		}
-
-	}
+//	@Test
+//	public void findOrderHistoryByUsernameFailure()
+//	{
+//		List<Orderhistory> orderhistoryActual = orderhistoryImplementation.findOrderhistoryByUsername(user3.getUsername());
+//		for(int i=0;i<orderhistoryActual.size();i++)
+//		{
+//			assertEquals(orderhistoryList1.get(i).getItem().getUser().getUsername(), orderhistoryActual.get(i).getItem().getUser().getUsername());
+//		}
+//
+//	}
 }

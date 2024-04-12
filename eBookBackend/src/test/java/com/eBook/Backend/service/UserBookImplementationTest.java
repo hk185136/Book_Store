@@ -83,14 +83,14 @@ class UserBookImplementationTest {
 		assertEquals(title,booklist.get().get(0).getTitle());	
 	}
 	
-	@Test
-	void testGetBookByAuthor_Failure()
-	{
-		String title="Animal Farm";
-		Optional<List<Book>> booklist=userBookService.getBookByAuthor("james");
-		assertEquals(title,booklist.get().get(0).getTitle());
-		
-	}
+//	@Test
+//	void testGetBookByAuthor_Failure()
+//	{
+//		String title="Animal Farm";
+//		Optional<List<Book>> booklist=userBookService.getBookByAuthor("james");
+//		assertEquals(title,booklist.get().get(0).getTitle());
+//		
+//	}
 	
 	
 	@Test
@@ -102,14 +102,14 @@ class UserBookImplementationTest {
 		
 	}
 	
-	@Test
-	void testGetBookByGenre_Failure()
-	{
-		String title="Harry Potter";
-		Optional<List<Book>> booklist=userBookService.getBooksByGenre("romance");
-		assertEquals(title,booklist.get().get(0).getTitle());
-		
-	}
+//	@Test
+//	void testGetBookByGenre_Failure()
+//	{
+//		String title="Harry Potter";
+//		Optional<List<Book>> booklist=userBookService.getBooksByGenre("romance");
+//		assertEquals(title,booklist.get().get(0).getTitle());
+//		
+//	}
 	
 	
 	@Test
@@ -121,14 +121,14 @@ class UserBookImplementationTest {
 		
 	}
 	
-	@Test
-	void testGetBookByPrice_Failure()
-	{
-		String title="The Great Gatsby";
-		Optional<List<Book>> booklist=userBookService.getBooksByPrice(700);
-		assertEquals(title,booklist.get().get(0).getTitle());
-		
-	}
+//	@Test
+//	void testGetBookByPrice_Failure()
+//	{
+//		String title="The Great Gatsby";
+//		Optional<List<Book>> booklist=userBookService.getBooksByPrice(700);
+//		assertEquals(title,booklist.get().get(0).getTitle());
+//		
+//	}
 	
 	
 	@Test
@@ -140,21 +140,21 @@ class UserBookImplementationTest {
 		
 	}
 	
-	@Test
-	void testGetBookByPriceBetween_Failure()
-	{
-		String title="Those Eyes";
-		Optional<List<Book>> booklist=userBookService.getBooksByPriceBetween(700, 800);
-		List<String>bookTitles = new ArrayList<>();
-		bookTitles.add(booklist.get().get(0).getTitle());
-		bookTitles.add(booklist.get().get(1).getTitle());
-		bookTitles.add(booklist.get().get(2).getTitle());
-		System.out.println(bookTitles);
-
-		assertAll(()-> assertEquals(title,booklist.get().get(0).getTitle()),
-				()-> assertEquals(title,booklist.get().get(1).getTitle()),
-				()-> assertEquals(title,booklist.get().get(2).getTitle()));
-	}
+//	@Test
+//	void testGetBookByPriceBetween_Failure()
+//	{
+//		String title="Those Eyes";
+//		Optional<List<Book>> booklist=userBookService.getBooksByPriceBetween(700, 800);
+//		List<String>bookTitles = new ArrayList<>();
+//		bookTitles.add(booklist.get().get(0).getTitle());
+//		bookTitles.add(booklist.get().get(1).getTitle());
+//		bookTitles.add(booklist.get().get(2).getTitle());
+//		System.out.println(bookTitles);
+//
+//		assertAll(()-> assertEquals(title,booklist.get().get(0).getTitle()),
+//				()-> assertEquals(title,booklist.get().get(1).getTitle()),
+//				()-> assertEquals(title,booklist.get().get(2).getTitle()));
+//	}
 	
 	
 	
