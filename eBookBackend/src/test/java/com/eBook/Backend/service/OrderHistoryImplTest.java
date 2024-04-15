@@ -15,21 +15,21 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Sort;
 
-import com.eBook.Backend.Repository.CartRepository;
-import com.eBook.Backend.Repository.OrderhistoryRepository;
+import com.eBook.Backend.Repository.CartAndOrderRepository;
+import com.eBook.Backend.Repository.OrderHistoryRepository;
 import com.eBook.Backend.models.AuthUser;
 import com.eBook.Backend.models.Book;
 import com.eBook.Backend.models.Item;
-import com.eBook.Backend.models.Orderhistory;
+import com.eBook.Backend.models.OrderHistory;
 
 @SpringBootTest
 public class OrderHistoryImplTest {
 
 	@Autowired
-	private OrderhistoryImplementation orderhistoryImplementation;
+	private OrderHistoryImplementation OrderHistoryImplementation;
 	
 	@MockBean
-	private OrderhistoryRepository orderhistoryRepository;
+	private OrderHistoryRepository OrderHistoryRepository;
 	
 	Book book1=new Book("1", "url1","Those Eyes", "james","horror", 500,20);
 	Book book2= new Book("2","url2","The Great Gatsby", "Scott", "Romance",700, 20);
@@ -52,63 +52,42 @@ public class OrderHistoryImplTest {
 	Item invalidItem5 = new Item("5",book5,user1,30,"delivered","18-04-2024");
 	
 	
-	Orderhistory orderhistory1 = new Orderhistory("1",item1,"05-04-2024 15:30:10");
-	Orderhistory orderhistory2 = new Orderhistory("2",item2,"10-04-2024 20:10:05");
-	Orderhistory orderhistory3 = new Orderhistory("3",item3,"13-04-2024 20:10:00");
+	OrderHistory OrderHistory1 = new OrderHistory("1",item1,"05-04-2024 15:30:10");
+	OrderHistory OrderHistory2 = new OrderHistory("2",item2,"10-04-2024 20:10:05");
+	OrderHistory OrderHistory3 = new OrderHistory("3",item3,"13-04-2024 20:10:00");
 	Sort sort= Sort.by(Sort.Direction.DESC,"date");
 	
-	List<Orderhistory>orderhistoryList = new ArrayList<>() {{add(orderhistory2);add(orderhistory3);}};
-	List<Orderhistory>orderhistoryList1 = new ArrayList<>() {{add(orderhistory1);add(orderhistory3);}};
+	List<OrderHistory>OrderHistoryList = new ArrayList<>() {{add(OrderHistory2);add(OrderHistory3);}};
+	List<OrderHistory>OrderHistoryList1 = new ArrayList<>() {{add(OrderHistory1);add(OrderHistory3);}};
 	
 	
 	@BeforeEach
 	public void setUp() {
-		when(orderhistoryRepository.save(orderhistory1)).thenReturn(orderhistory1);
+		when(OrderHistoryRepository.save(OrderHistory1)).thenReturn(OrderHistory1);
 		
-		when(orderhistoryRepository.findByUsername(user3.getUsername(), sort)).thenReturn(orderhistoryList);
+		when(OrderHistoryRepository.findByUsername(user3.getUsername(), sort)).thenReturn(OrderHistoryList);
 	}
 	
 	@Test
-	public void addToHistorySuccess()
+	public void addToHistory()
 	{
-		Orderhistory orderhistoryActual = orderhistoryImplementation.addtoHistory(orderhistory1);
+		OrderHistory OrderHistoryActual = OrderHistoryImplementation.addtoHistory(OrderHistory1);
 		assertAll(
-				()->assertEquals(orderhistory1.getDate(), orderhistoryActual.getDate()),
-				()->assertEquals(orderhistory1.getItem().getUser().getUsername(), orderhistoryActual.getItem().getUser().getUsername()),
-				()->assertEquals(orderhistory1.getItem().getBook().getTitle(), orderhistoryActual.getItem().getBook().getTitle())				
+				()->assertEquals(OrderHistory1.getDate(), OrderHistoryActual.getDate()),
+				()->assertEquals(OrderHistory1.getItem().getUser().getUsername(), OrderHistoryActual.getItem().getUser().getUsername()),
+				()->assertEquals(OrderHistory1.getItem().getBook().getTitle(), OrderHistoryActual.getItem().getBook().getTitle())				
 				);
 	}
 	
-//	@Test
-//	public void addToHistoryFailure()
-//	{
-//		Orderhistory orderhistoryActual = orderhistoryImplementation.addtoHistory(orderhistory1);
-//		assertAll(
-//				()->assertEquals(orderhistory2.getDate(), orderhistoryActual.getDate()),
-//				()->assertEquals(orderhistory2.getItem().getUser().getUsername(), orderhistoryActual.getItem().getUser().getUsername()),
-//				()->assertEquals(orderhistory2.getItem().getBook().getTitle(), orderhistoryActual.getItem().getBook().getTitle())				
-//				);
-//	}
 	
 	@Test
-	public void findOrderHistoryByUsernameSuccess()
+	public void findOrderHistoryByUsername()
 	{
-		List<Orderhistory> orderhistoryActual = orderhistoryImplementation.findOrderhistoryByUsername(user3.getUsername());
-		for(int i=0;i<orderhistoryActual.size();i++)
+		List<OrderHistory> OrderHistoryActual = OrderHistoryImplementation.findOrderHistoryByUsername(user3.getUsername());
+		for(int i=0;i<OrderHistoryActual.size();i++)
 		{
-			assertEquals(orderhistoryList.get(i).getItem().getUser().getUsername(), orderhistoryActual.get(i).getItem().getUser().getUsername());
+			assertEquals(OrderHistoryList.get(i).getItem().getUser().getUsername(), OrderHistoryActual.get(i).getItem().getUser().getUsername());
 		}
 
 	}
-	
-//	@Test
-//	public void findOrderHistoryByUsernameFailure()
-//	{
-//		List<Orderhistory> orderhistoryActual = orderhistoryImplementation.findOrderhistoryByUsername(user3.getUsername());
-//		for(int i=0;i<orderhistoryActual.size();i++)
-//		{
-//			assertEquals(orderhistoryList1.get(i).getItem().getUser().getUsername(), orderhistoryActual.get(i).getItem().getUser().getUsername());
-//		}
-//
-//	}
 }

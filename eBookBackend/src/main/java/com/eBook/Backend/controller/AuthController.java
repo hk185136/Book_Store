@@ -1,40 +1,42 @@
 package com.eBook.Backend.controller;
 
-import java.util.List;
-import java.util.Optional;
-
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import com.eBook.Backend.models.AuthUser;
+import com.eBook.Backend.Repository.AuthUserRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import com.eBook.Backend.models.response.ErrorRes;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.http.HttpStatus;
+import com.eBook.Backend.auth.JwtUtil;
+import java.util.List;
+import com.eBook.Backend.models.response.AuthUserRes;
+import lombok.NoArgsConstructor;
+import java.util.Optional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 
-import com.eBook.Backend.Repository.AuthUserRepository;
-import com.eBook.Backend.auth.JwtUtil;
-import com.eBook.Backend.models.AuthUser;
-import com.eBook.Backend.models.response.ErrorRes;
-import com.eBook.Backend.models.response.LoginRes;
 
-import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
+@NoArgsConstructor
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "*")
+// Class to implement rest APIs for user authentication and authorization.
 public class AuthController {
+	// Autowiring repository layer class, password encoding class, spring's authentication manage class and token generation class.
 	@Autowired
 	private  AuthUserRepository userRepository;
 	
@@ -46,19 +48,11 @@ public class AuthController {
 	
 	 @Autowired
 	private JwtUtil jwtUtil;
+	
 	 
-	 public AuthController() {
-		 
-	 }
-	
-    public AuthController(AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
-        this.authenticationManager = authenticationManager;
-        this.jwtUtil = jwtUtil;
-
-    }
-	
+	 // Post request which accepts user data, creates, stores and returns new user data if that user name does not exist in database else returns an error response with a message.
 	@PostMapping("/signup")
-	public ResponseEntity registerUser(@RequestBody AuthUser user)
+	public ResponseEntity<Object> registerUser(@RequestBody AuthUser user)
 	{
 		try {
 			if(userRepository.findByusername(user.getUsername()).isPresent())
@@ -68,7 +62,7 @@ public class AuthController {
 			}
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
 			AuthUser save = userRepository.save(user);
-			LoginRes registerRes = new LoginRes(save.getUsername(),save.getRole(),"",save.getAddress(), save.getPno());
+			AuthUserRes registerRes = new AuthUserRes(save.getUsername(),save.getRole(),"",save.getAddress(), save.getPno());
 			return ResponseEntity.ok(registerRes);
 		} catch (Exception e) {
 			ErrorRes errorResponse = new ErrorRes(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -76,8 +70,9 @@ public class AuthController {
 		}
 	}
 	
+	// Post request which accepts user data, role(customer/admin), returns user data as response if that user name is already present in database and role matches with that existing user's role else returns error response with a message. 
 	@PostMapping("/signin/{role}")
-	public ResponseEntity loginUser(@RequestBody AuthUser user,@PathVariable("role")String roleFetched)
+	public ResponseEntity<Object> loginUser(@RequestBody AuthUser user,@PathVariable("role")String roleFetched)
 	{
 		try {
 			Optional<AuthUser> userStored = userRepository.findByusername(user.getUsername());
@@ -90,7 +85,7 @@ public class AuthController {
 			String address= userStored.get().getAddress();
 			String pno = userStored.get().getPno();
 			String token=jwtUtil.createToken(user);
-			LoginRes loginRes = new LoginRes(name, role , token, address, pno);
+			AuthUserRes loginRes = new AuthUserRes(name, role , token, address, pno);
 			return ResponseEntity.ok(loginRes);
 		}catch (BadCredentialsException e){
             ErrorRes errorResponse = new ErrorRes(HttpStatus.BAD_REQUEST,"Invalid username or password");
@@ -102,6 +97,8 @@ public class AuthController {
 	}
 	
 	
+	
+	// Put request which accepts user data, user name and returns the updated user response.
 	@PutMapping("/editUser/{name}")
 	public ResponseEntity<AuthUser> editUser(@PathVariable("name")String userName, @RequestBody AuthUser user)
 	{
@@ -113,6 +110,7 @@ public class AuthController {
 	    return ResponseEntity.ok(updatedUser);
 	}
 	
+	//Get request which returns a list of all users stored in the database.
 	@GetMapping("/getAllUsers")
 	public ResponseEntity<List<AuthUser>> getAllUsers()
 	{

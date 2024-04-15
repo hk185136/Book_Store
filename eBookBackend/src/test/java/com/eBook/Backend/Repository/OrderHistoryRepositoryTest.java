@@ -32,14 +32,14 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import com.eBook.Backend.models.AuthUser;
 import com.eBook.Backend.models.Book;
 import com.eBook.Backend.models.Item;
-import com.eBook.Backend.models.Orderhistory;
+import com.eBook.Backend.models.OrderHistory;
 
 @DataMongoTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class OrderHistoryRepositoryTest {
 	@Autowired
-	private OrderhistoryRepository orderhistoryRepository;
+	private OrderHistoryRepository OrderHistoryRepository;
 	
 	@Autowired
 	private BookRepository bookRepository;
@@ -48,16 +48,16 @@ public class OrderHistoryRepositoryTest {
 	private AuthUserRepository authUserRepository;
 	
 	@Autowired
-	private CartRepository cartRepository;
+	private CartAndOrderRepository cartRepository;
 	
 	
 	private Book book1,book2,book3,book4,book5;
 	private AuthUser user1,user2,user3;
 	private Item item1,item2,item3,item4,item5;
-	private Orderhistory orderhistory1,orderhistory2,orderhistory3;
+	private OrderHistory OrderHistory1,OrderHistory2,OrderHistory3;
 	private Sort sort= Sort.by(Sort.Direction.DESC,"date");
 
-	List<Orderhistory>orderhistoryList ;
+	List<OrderHistory>OrderHistoryList ;
 	@BeforeAll
 	public void setUp()
 	{
@@ -78,9 +78,9 @@ public class OrderHistoryRepositoryTest {
 		item4 = new Item("4",book4,user1,12,"added to cart","13-04-2024");
 		item5 = new Item("5",book5,user1,9,"delivered","18-04-2024");	
 		
-		orderhistory1 = new Orderhistory("1",item1,"05-04-2024 15:30:10");
-		orderhistory2 = new Orderhistory("2",item2,"10-04-2024 20:10:05");
-		orderhistory3 = new Orderhistory("3",item3,"13-04-2024 20:10:00");
+		OrderHistory1 = new OrderHistory("1",item1,"05-04-2024 15:30:10");
+		OrderHistory2 = new OrderHistory("2",item2,"10-04-2024 20:10:05");
+		OrderHistory3 = new OrderHistory("3",item3,"13-04-2024 20:10:00");
 		
 	}
 	
@@ -105,20 +105,20 @@ public class OrderHistoryRepositoryTest {
 		bookRepository.save(book4);
 		bookRepository.save(book5);	
 		
-		orderhistoryRepository.save(orderhistory1);
-		orderhistoryRepository.save(orderhistory2);
-		orderhistoryRepository.save(orderhistory3);
+		OrderHistoryRepository.save(OrderHistory1);
+		OrderHistoryRepository.save(OrderHistory2);
+		OrderHistoryRepository.save(OrderHistory3);
 		
 		
-		List<Orderhistory> orderHistoryList=orderhistoryRepository.findAll();
+		List<OrderHistory> OrderHistoryList=OrderHistoryRepository.findAll();
 		
-		assertThat(orderHistoryList.size()).isGreaterThan(0);
+		assertThat(OrderHistoryList.size()).isGreaterThan(0);
 	}
 	
 	@Test
 	public void getHistoryByUsername()
 	{
-		List<Orderhistory> userHistoryActual = orderhistoryRepository.findByUsername("ranjan",sort);
+		List<OrderHistory> userHistoryActual = OrderHistoryRepository.findByUsername("ranjan",sort);
 		
 		assertThat(userHistoryActual.size()).isGreaterThan(0);
 	}
@@ -151,12 +151,12 @@ public class OrderHistoryRepositoryTest {
 		bookRepository.deleteAll(bookDel);
 		
 		
-		List<Orderhistory>historyDel = new ArrayList<>();
-		historyDel.add(orderhistory1);
-		historyDel.add(orderhistory2);
-		historyDel.add(orderhistory3);
+		List<OrderHistory>historyDel = new ArrayList<>();
+		historyDel.add(OrderHistory1);
+		historyDel.add(OrderHistory2);
+		historyDel.add(OrderHistory3);
 		
-		orderhistoryRepository.deleteAll(historyDel);
+		OrderHistoryRepository.deleteAll(historyDel);
 		
 		
 	}

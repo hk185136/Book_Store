@@ -34,16 +34,9 @@ public class AuthUserImplementationTest {
 	}
 	
 	@Test
-	public void loadUserByUsernameSuccess()
+	public void loadUserByUsername()
 	{
 		UserDetails userActual = authUserImplementation.loadUserByUsername("ranjan");
 		assertEquals(user1.getUsername(),userActual.getUsername());
 	}
-	
-//	@Test
-//	public void loadUserByUsernameFailure()
-//	{
-//		UserDetails userActual = authUserImplementation.loadUserByUsername("ranjan");
-//		assertEquals(user2.getUsername(),userActual.getUsername());
-//	}
 }

@@ -1,15 +1,16 @@
 package com.eBook.Backend.models;
 
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.data.mongodb.core.index.Indexed;
+import jakarta.persistence.Id;
+
 
 @Data
 @Builder
+// Class representing a user.
 public class AuthUser {
+	// Following variables show what is stored inside a user object.
 	@Id
 	private String id;
 	@Indexed
@@ -19,11 +20,11 @@ public class AuthUser {
 	private String pno;
 	private String address;
 	
+	// No args and all args constructors.
 	public AuthUser()
 	{
 		
 	}
-	
 	
 	
 	public AuthUser(String id, String username, String password, String role, String pno, String address) {
@@ -38,7 +39,8 @@ public class AuthUser {
 	
 
 
-
+	
+	//Getters and setters for the fields
 	public String getId() {
 		return id;
 	}

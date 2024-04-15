@@ -1,27 +1,28 @@
 package com.eBook.Backend.models;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-public class Orderhistory {
+//Class representing Order history.
+public class OrderHistory {
 	
 	@Id
+	// Following variables show what is stored inside a order history object.
 	private String id;
 	private Item item;
 	private String date;
 	
-	public Orderhistory()
+	// No args and all args constructors.
+	public OrderHistory()
 	{
 		
 	}
 	
-	
-	public Orderhistory(String id, Item item, String date) {
+	//Getters and setters for the fields
+	public OrderHistory(String id, Item item, String date) {
 		super();
 		this.id = id;
 		this.item = item;
@@ -45,9 +46,5 @@ public class Orderhistory {
 	public void setDate(String date) {
 		this.date = date;
 	}
-	
-	
-	
-	
 
 }

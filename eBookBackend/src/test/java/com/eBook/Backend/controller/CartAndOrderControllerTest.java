@@ -26,22 +26,22 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.eBook.Backend.models.AuthUser;
 import com.eBook.Backend.models.Book;
 import com.eBook.Backend.models.Item;
-import com.eBook.Backend.service.CartServiceImpl;
-import com.eBook.Backend.service.OrderhistoryImplementation;
+import com.eBook.Backend.service.CartAndOrderServiceImpl;
+import com.eBook.Backend.service.OrderHistoryImplementation;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ch.qos.logback.core.net.ObjectWriter;
 
 
-@WebMvcTest(controllers = CartController.class, excludeAutoConfiguration = {SecurityAutoConfiguration.class})
-class CartControllerTest
+@WebMvcTest(controllers = CartAndOrderController.class, excludeAutoConfiguration = {SecurityAutoConfiguration.class})
+class CartAndOrderControllerTest
 {
     
 	@MockBean
-	CartServiceImpl cartService;
+	CartAndOrderServiceImpl cartService;
 	
 	@MockBean
-	private OrderhistoryImplementation orderhistoryImplementation;
+	private OrderHistoryImplementation orderhistoryImplementation;
 	
 	@Autowired
 	MockMvc mockMvc;
@@ -52,7 +52,7 @@ class CartControllerTest
 		Book book=new Book("1","url","Little Brother Lost","Ford","thriller",7299,10);
 		AuthUser user=new AuthUser("1","maheen","maheen","user","123456789","hyderabad");	
 		Item item=new Item("1",book,user,2,"pending","10 April 2024");
-		when(cartService.addItemToCart(item)).thenReturn(item);
+		when(cartService.addItem(item)).thenReturn(item);
 		mockMvc.perform(post("/api/item/addToCart")
 		.contentType(MediaType.APPLICATION_JSON)
 		.with(csrf())
@@ -68,7 +68,7 @@ class CartControllerTest
 		Book book=new Book("1","url","Little Brother Lost","Ford","thriller",7299,10);
 		AuthUser user=new AuthUser("1","maheen","maheen","user","123456789","hyderabad");	
 		Item item=new Item("1",book,user,2,"pending","10 April 2024");
-		when(cartService.addItemToOrders(item)).thenReturn(item);
+		when(cartService.addItem(item)).thenReturn(item);
 		mockMvc.perform(post("/api/item/addToOrder")
 		.contentType(MediaType.APPLICATION_JSON)
 		.with(csrf())

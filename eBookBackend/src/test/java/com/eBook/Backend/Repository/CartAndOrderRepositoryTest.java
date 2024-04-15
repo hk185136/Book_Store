@@ -35,9 +35,9 @@ import com.eBook.Backend.models.Item;
 @DataMongoTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class CartRepositoryTest {
+public class CartAndOrderRepositoryTest {
 	@Autowired
-	private CartRepository cartRepository;
+	private CartAndOrderRepository cartRepository;
 	
 	@Autowired
 	private BookRepository bookRepository;

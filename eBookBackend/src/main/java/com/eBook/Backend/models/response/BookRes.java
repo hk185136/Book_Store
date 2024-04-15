@@ -1,33 +1,31 @@
 package com.eBook.Backend.models.response;
 
+
+//Class for Book API response .
 public class BookRes {
+	//Following fields shows what shall be stored in response.
 	private String bId;
-	private byte[] bPreview;
 	private String bTitle;
 	private String bAuthor;
 	private String bGenre;
 	private double bPrice;
 	
-	public BookRes(byte[] bPreview, String bTitle, String bAuthor, String bGenre, double bPrice) {
+	//All args constructor.
+	public BookRes(String bTitle, String bAuthor, String bGenre, double bPrice) {
 		super();
-		this.bPreview = bPreview;
 		this.bTitle = bTitle;
 		this.bAuthor = bAuthor;
 		this.bGenre = bGenre;
 		this.bPrice = bPrice;
 	}
 	
+	
+	//Getters and setters for the above fields.
 	public String getbId() {
 		return bId;
 	}
 	public void setbId(String bId) {
 		this.bId = bId;
-	}
-	public byte[] getbPreview() {
-		return bPreview;
-	}
-	public void setbPreview(byte[] bPreview) {
-		this.bPreview = bPreview;
 	}
 	public String getbTitle() {
 		return bTitle;

@@ -1,88 +1,88 @@
 package com.eBook.Backend.controller;
 
-import java.text.SimpleDateFormat;
-import com.eBook.Backend.service.OrderhistoryImplementation;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
+import com.eBook.Backend.models.AuthUser;
+import lombok.AllArgsConstructor;
+import com.eBook.Backend.service.CartAndOrderServiceImpl;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
+import java.util.Date;
+import org.springframework.http.HttpStatus;
+import com.eBook.Backend.models.Item;
+import com.eBook.Backend.models.OrderHistory;
+import com.eBook.Backend.service.OrderHistoryImplementation;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.Set;
+import java.text.SimpleDateFormat;
 
-import com.eBook.Backend.models.AuthUser;
-import com.eBook.Backend.models.Item;
-import com.eBook.Backend.models.Orderhistory;
-import com.eBook.Backend.service.CartServiceImpl;
-import com.eBook.Backend.service.OrderhistoryImplementation;
 
-import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/item/")
 @CrossOrigin(origins = "*")
-public class CartController {
-	@Autowired
-	private CartServiceImpl cartServiceImpl;
-	@Autowired
-	private OrderhistoryImplementation orderhistoryImplementation;
+// Class to implement Rest APIs for managing orders.
+public class CartAndOrderController {
 	
+	//Autowiring service and repository layer classes.
+	@Autowired
+	private CartAndOrderServiceImpl cartServiceImpl;
+	@Autowired
+	private OrderHistoryImplementation OrderHistoryImplementation;
+	
+	
+	//Post request which accepts item data, sets the item status added to cart, stores it in database and returns a response with that item data.
 	@PostMapping("/addToCart")
 	public ResponseEntity<Item> addItemToCart(@RequestBody Item item)
 	{
 		item.setStatus("added to cart");
-		return ResponseEntity.ok(cartServiceImpl.addItemToCart(item));
+		return ResponseEntity.ok(cartServiceImpl.addItem(item));
 	}
 	
+	//Post request which accepts item data, sets the item status , stores it in database and returns a response with that item data.
 	@PostMapping("/addToOrder")
 	public ResponseEntity<Item> addItemToOrders(@RequestBody Item item)
 	{
-		item.setStatus("pending");
+		item.setStatus("confirmed");
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		item.setDate(dateFormat.format(new Date()));
-		Orderhistory history = new Orderhistory();
+		OrderHistory history = new OrderHistory();
 		history.setItem(item);
 		history.setDate(dateFormat.format(new Date()));
-		orderhistoryImplementation.addtoHistory(history);
-		return ResponseEntity.ok(cartServiceImpl.addItemToOrders(item));
+		OrderHistoryImplementation.addtoHistory(history);
+		return ResponseEntity.ok(cartServiceImpl.addItem(item));
 	}
+		
 	
-	
-	
-	
-	
-	
-	
+	//Put request which accepts item data, status to be updated with and returns a success response.
 	@PutMapping("/updateStatus/{status}")
 	public ResponseEntity<String> updateItemStatus(@RequestBody Item item, @PathVariable("status")String newStatus)
 	{
 		cartServiceImpl.updateItemStatus(item, newStatus);
 		item.setStatus(newStatus);
-		Orderhistory history = new Orderhistory();
+		OrderHistory history = new OrderHistory();
 		history.setItem(item);
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		history.setDate(dateFormat.format(new Date())); 
-		orderhistoryImplementation.addtoHistory(history);
+		OrderHistoryImplementation.addtoHistory(history);
 		return ResponseEntity.ok("status updated");
 	}
 	
+	// Put request which accepts user data, status and returns a list of items related to that user and status.
 	@PutMapping("/searchByStatus/{status}")
 	public ResponseEntity<Set<Item>> searchByUserAndStatus(@RequestBody AuthUser user, @PathVariable("status") String status)
 	{
 		return ResponseEntity.ok(cartServiceImpl.findItemsByStatusAndUsername(status, user.getUsername()));
 	}
 	
+	// Put request which accepts user data and returns all the items related to that user.
 	@PutMapping("/getOrders")
 	public ResponseEntity<Set<Item>> getOrders(@RequestBody AuthUser user)
 	{
@@ -93,7 +93,7 @@ public class CartController {
 		return ResponseEntity.ok(orders);
 	}
 	
-	
+	// Put request which accepts item data, item id, increases that item quantity by one.
 	@PutMapping("{id}/increase")
 	public ResponseEntity<Item> increaseItem(@RequestBody Item item, @PathVariable("id") String itemId)
 	{
@@ -101,6 +101,7 @@ public class CartController {
 		return ResponseEntity.ok(cartServiceImpl.increaseItem(item));
 	}
 	
+	// Put request which accepts item data, item id, decreases that item quantity by one.
 	@PutMapping("{id}/decrease")
 	public ResponseEntity<Item> decreaseItem(@RequestBody Item item, @PathVariable("id") String itemId)
 	{
@@ -108,6 +109,7 @@ public class CartController {
 		return ResponseEntity.ok(cartServiceImpl.decreaseItem(item));
 	}
 	
+	// Delete request which accepts an item id, deletes the item with that id and returns a success message.
 	@DeleteMapping("{id}")
 	public ResponseEntity<String> deleteItemFromCart(@PathVariable("id") String itemId)
 	{

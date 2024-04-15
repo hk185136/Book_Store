@@ -12,21 +12,27 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Component
+// Class responsible for managing JWT token.
 public class JwtUtil {
 
 
+	//Secret key used in encryption and token validity time.
     private final String secret_key = "mysecretkey";
     private long accessTokenValidity = 60*60*1000;
 
+    //A parser for reading JWT strings, used to convert them into a JWT object.
     private final JwtParser jwtParser;
 
+    //Strings used in token validation.
     private final String TOKEN_HEADER = "Authorization";
     private final String TOKEN_PREFIX = "Bearer ";
 
+    //All args constructor.
     public JwtUtil(){
         this.jwtParser = Jwts.parser().setSigningKey(secret_key);
     }
 
+    // Function to create a JWT token and assigns it to a user.
     public String createToken(AuthUser user) {
         Claims claims = Jwts.claims().setSubject(user.getId());
         claims.put("userName",user.getUsername());
@@ -38,11 +44,14 @@ public class JwtUtil {
                 .signWith(SignatureAlgorithm.HS256, secret_key)
                 .compact();
     }
-
+    
+    
+    // Parses the input token.
     private Claims parseJwtClaims(String token) {
         return jwtParser.parseClaimsJws(token).getBody();
     }
 
+    // All the following methods help in JWT token validation.
     public Claims resolveClaims(HttpServletRequest req) {
         try {
             String token = resolveToken(req);
@@ -68,6 +77,7 @@ public class JwtUtil {
         return null;
     }
 
+    
     public boolean validateClaims(Claims claims) throws AuthenticationException {
         try {
             return claims.getExpiration().after(new Date());
@@ -79,10 +89,5 @@ public class JwtUtil {
     public String getEmail(Claims claims) {
         return claims.getSubject();
     }
-
-    private List<String> getRoles(Claims claims) {
-        return (List<String>) claims.get("roles");
-    }
-
 
 }

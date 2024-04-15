@@ -9,7 +9,9 @@ import lombok.Data;
 
 @Data
 @Builder
+//Class representing a book.
 public class Book {
+	// Following variables show what is stored inside a book object.
 	@Id
 	private String id;
 	private String url;
@@ -21,6 +23,8 @@ public class Book {
 	private int availableQuantity;
 
 	
+	
+	// No args and all args constructors.
 	public Book(String id, String url, String title, String author, String genre, double price, int availableQuantity) {
 		super();
 		this.id = id;
@@ -40,6 +44,7 @@ public class Book {
 
 
 
+	//Getters and setters for the fields
 	public String getId() {
 		return id;
 	}

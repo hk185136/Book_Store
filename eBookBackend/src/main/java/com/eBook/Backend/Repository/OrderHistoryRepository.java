@@ -10,20 +10,12 @@ import org.springframework.stereotype.Repository;
 
 import com.eBook.Backend.models.AuthUser;
 import com.eBook.Backend.models.Item;
-import com.eBook.Backend.models.Orderhistory;
-
+import com.eBook.Backend.models.OrderHistory;
 
 
 @Repository
-public interface OrderhistoryRepository extends MongoRepository<Orderhistory, String>
+public interface OrderHistoryRepository extends MongoRepository<OrderHistory, String>
 {
 	@Query(value = "{'item.user.username': ?0}")
-	List<Orderhistory> findByUsername(String username,Sort sort);
-
-	
-	
-
-	
-
-
+	List<OrderHistory> findByUsername(String username,Sort sort);
 }

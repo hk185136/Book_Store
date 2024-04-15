@@ -25,18 +25,18 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.event.annotation.BeforeTestClass;
 
-import com.eBook.Backend.Repository.CartRepository;
+import com.eBook.Backend.Repository.CartAndOrderRepository;
 import com.eBook.Backend.models.AuthUser;
 import com.eBook.Backend.models.Book;
 import com.eBook.Backend.models.Item;
 
 @SpringBootTest
-public class CartServiceImpTest {
+public class CartAndOrderServiceImpTest {
 	@Autowired
-	private CartServiceImpl cartServiceImpl;
+	private CartAndOrderServiceImpl cartServiceImpl;
 	
 	@MockBean
-	private CartRepository cartRepository;
+	private CartAndOrderRepository cartRepository;
 	
 	Book book1=new Book("1", "url1","Those Eyes", "james","horror", 500,20);
 	Book book2= new Book("2","url2","The Great Gatsby", "Scott", "Romance",700, 20);
@@ -83,9 +83,9 @@ public class CartServiceImpTest {
 	}
 	
 	@Test
-	public void addItemToCartSuccess()
+	public void addItemToCart()
 	{
-		Item itemActual = cartServiceImpl.addItemToCart(item1);
+		Item itemActual = cartServiceImpl.addItem(item1);
 		assertAll(
 				()->assertEquals(item1.getBook().getTitle(),itemActual.getBook().getTitle()),
 				()->assertEquals(item1.getUser().getUsername(),itemActual.getUser().getUsername()),
@@ -93,22 +93,11 @@ public class CartServiceImpTest {
 				);
 	}
 	
-	
-//	@Test
-//	public void addItemToCartFailure()
-//	{
-//		Item itemActual = cartServiceImpl.addItemToCart(invalidItem3);
-//		assertAll(
-//				()->assertEquals(invalidItem3.getBook().getTitle(),itemActual.getBook().getTitle()),
-//				()->assertEquals(invalidItem3.getUser().getUsername(),itemActual.getUser().getUsername()),
-//				()->assertTrue(invalidItem3.getQuantity()<=itemActual.getBook().getAvailableQuantity())			
-//				);
-//	}
-	
+
 	@Test
-	public void addItemToOrdersSuccess()
+	public void addItemToOrders()
 	{
-		Item itemActual = cartServiceImpl.addItemToOrders(item2);
+		Item itemActual = cartServiceImpl.addItem(item2);
 		assertAll(
 				()->assertEquals(item2.getBook().getTitle(),itemActual.getBook().getTitle()),
 				()->assertEquals(item2.getUser().getUsername(),itemActual.getUser().getUsername()),
@@ -116,19 +105,9 @@ public class CartServiceImpTest {
 				);
 	}
 	
-//	@Test
-//	public void addItemToOrdersFailure()
-//	{
-//		Item itemActual = cartServiceImpl.addItemToOrders(invalidItem5);
-//		assertAll(
-//				()->assertEquals(invalidItem5.getBook().getTitle(),itemActual.getBook().getTitle()),
-//				()->assertEquals(invalidItem5.getUser().getUsername(),itemActual.getUser().getUsername()),
-//				()->assertTrue(invalidItem5.getQuantity()<=itemActual.getBook().getAvailableQuantity())			
-//				);
-//	}
-	
+
 	@Test
-	public void increaseItemSuccess()
+	public void increaseItem()
 	{
 		Item itemActual = cartServiceImpl.increaseItem(item3);
 		assertAll(
@@ -139,20 +118,10 @@ public class CartServiceImpTest {
 				);
 	}
 	
-//	@Test
-//	public void increaseItemFailure()
-//	{
-//		Item itemActual = cartServiceImpl.increaseItem(item3);
-//		assertAll(
-//				()->assertEquals(item3.getBook().getTitle(),itemActual.getBook().getTitle()),
-//				()->assertEquals(item3.getUser().getUsername(),itemActual.getUser().getUsername()),
-//				()->assertEquals("pending",itemActual.getStatus()),
-//				()->assertEquals(item3.getQuantity(), itemActual.getQuantity())
-//				);
-//	}
+
 	
 	@Test
-	public void decreaseItemSuccess()
+	public void decreaseItem()
 	{
 		Item itemActual = cartServiceImpl.decreaseItem(item3);
 		assertAll(
@@ -163,20 +132,9 @@ public class CartServiceImpTest {
 				);
 	}
 	
-//	@Test
-//	public void decreaseItemFailure()
-//	{
-//		Item itemActual = cartServiceImpl.decreaseItem(item3);
-//		assertAll(
-//				()->assertEquals(item3.getBook().getTitle(),itemActual.getBook().getTitle()),
-//				()->assertEquals(item3.getUser().getUsername(),itemActual.getUser().getUsername()),
-//				()->assertEquals("pending",itemActual.getStatus()),
-//				()->assertEquals(item3.getQuantity(), itemActual.getQuantity())
-//				);
-//	}
 	
 	@Test
-	public void findByStatusAndUsernameSuccess()
+	public void findByStatusAndUsername()
 	{
 		Set<Item> temp = cartServiceImpl.findItemsByStatusAndUsername(item1.getStatus(), user1.getUsername());
 		List<Item> itemsActual= new ArrayList<>();
@@ -187,33 +145,11 @@ public class CartServiceImpTest {
 		}
 	}
 	
-//	@Test
-//	public void findByStatusAndUsernameFailure()
-//	{
-//		Set<Item> temp = cartServiceImpl.findItemsByStatusAndUsername(item1.getStatus(), user1.getUsername());
-//		List<Item> itemsActual= new ArrayList<>();
-//		itemsActual.addAll(temp);
-//		for(int i=0;i<itemsActual.size();i++)
-//		{
-//			assertEquals(invalidItems.get(i).getStatus(), itemsActual.get(i).getStatus());
-//			assertEquals(invalidItems.get(i).getUser().getUsername(), itemsActual.get(i).getUser().getUsername());
-//		}
-//	}
 	
 	@Test
-	public void UpdateItemStatusSuccess()
+	public void UpdateItemStatus()
 	{
 		Item itemActual = cartServiceImpl.updateItemStatus(item4,"pending");
 		assertEquals(item4.getStatus(), itemActual.getStatus());
 	}
-
-	
-//	@Test
-//	public void UpdateItemStatusFailure()
-//	{
-//		Item itemActual = cartServiceImpl.updateItemStatus(item4,"pending");
-//		assertEquals(item3.getStatus(), itemActual.getStatus());
-//	}
-	
-	
 }

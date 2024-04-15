@@ -1,21 +1,22 @@
 package com.eBook.Backend.models;
 
-import java.util.Date;
 
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.data.mongodb.core.index.Indexed;
+import jakarta.persistence.Id;
+
+
 
 @Data
 @Builder
+//Class representing a Item.
 public class Item {
 	
 	@Id
 	@Indexed
+	// Following variables show what is stored inside a item object.
 	private String id;
 	private Book book;
 	private AuthUser user;
@@ -24,6 +25,8 @@ public class Item {
 	@DateTimeFormat(pattern = "dd-MM-yyyy")
     private String date;
 	
+	
+	// No args and all args constructors.
 	public Item()
 	{
 		
@@ -40,6 +43,7 @@ public class Item {
 	}
 
 
+	//Getters and setters for the fields
 	public String getId() {
 		return id;
 	}

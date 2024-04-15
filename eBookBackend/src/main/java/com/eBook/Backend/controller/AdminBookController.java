@@ -1,36 +1,33 @@
 package com.eBook.Backend.controller;
 
+import com.eBook.Backend.service.AdminBookImplementation;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import com.eBook.Backend.models.Book;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.eBook.Backend.Repository.BookRepository;
-import com.eBook.Backend.models.AuthUser;
-import com.eBook.Backend.models.Book;
-import com.eBook.Backend.models.response.ErrorRes;
-import com.eBook.Backend.models.response.LoginRes;
-import com.eBook.Backend.service.AdminBookImplementation;
-
-import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/admin/books/")
 @CrossOrigin(origins = "*")
+//Class to implement rest APIS for admin side book store management
 public class AdminBookController {
 	@Autowired
+	//autowiring the service implementation layer class 
 	private AdminBookImplementation adminBookImplementation;
 	
 	@PostMapping
+	//Post request which accepts book data, stores that data in database and returns that book data.
 	public ResponseEntity<Book> createBook(@RequestBody Book book)
 	{
 		Book savedBook = adminBookImplementation.createBook(book);
@@ -38,6 +35,7 @@ public class AdminBookController {
 	}
 	
 	@PutMapping("{id}")
+	//Put request which accepts new book data, an existing book id, updates the book with that id with the new book data and returns the updated book data.
 	public ResponseEntity<Book> updateBook(@PathVariable("id") String bookId, @RequestBody Book book)
 	{
 		book.setId(bookId);
@@ -46,6 +44,7 @@ public class AdminBookController {
 	}
 	
 	@DeleteMapping("{id}")
+	//Delete request whcih accepts book id, deletes a book with that id and returns a success message.
 	public ResponseEntity deleteBook(@PathVariable("id") String bookId)
 	{
 		adminBookImplementation.deleteBook(bookId);

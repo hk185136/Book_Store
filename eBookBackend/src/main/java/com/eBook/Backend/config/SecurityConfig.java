@@ -17,13 +17,16 @@ import com.eBook.Backend.service.AuthUserImplementation;
 
 @Configuration
 @EnableWebSecurity
+// Class to configure spring security.
 public class SecurityConfig {
 	
+	// Autowiring implementation layer class.
 	@Autowired
 	private AuthUserImplementation userDetailsService;
 
-	@Bean
-    public SecurityFilterChain defaultFilterChain(HttpSecurity httpSecurity) throws Exception {
+    // Configuring filter chain for the security gateway. Below it states that CORS is disabled, a request to any of the APIS is allowed without having to login to spring security.
+    @Bean
+    SecurityFilterChain defaultFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .csrf(csrf-> csrf.disable())
                 .authorizeHttpRequests(auth-> auth.requestMatchers(new AntPathRequestMatcher("/**")).permitAll()
@@ -32,17 +35,18 @@ public class SecurityConfig {
                 .formLogin(Customizer.withDefaults())
                 .build();
     }
-	
-	 @Bean
-	    public AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder)
-	            throws Exception {
-	        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-	        authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
-	        return authenticationManagerBuilder.build();
+
+    // Overriding the authenticationManager method helps in authentication of user.
+    @Bean
+    AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder)throws Exception {
+        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
+        return authenticationManagerBuilder.build();
     }
 
-	@Bean
-	public PasswordEncoder passwordEncoder() {
+    // Returns an encrypter class.
+    @Bean
+    PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 	
