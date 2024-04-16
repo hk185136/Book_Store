@@ -12,12 +12,3 @@ export const getHistory = async (username)=>{
         toast.error((e?.response?.data?.message) || (e.message));
     }
 }
-
-export const pushHistory = async (item) =>{
-    try{
-        axios.post(`http://localhost:8080/api/user/orderhistory/addToHistory`,item);
-    }
-    catch(e){
-        toast.error((e?.response?.data?.message) || (e.message));   
-    }
-}

@@ -11,15 +11,43 @@ function Register() {
     const navigate = useNavigate();
     const location = useLocation();
     const role = location.state.role;
-    // console.log(role);
+    const [Name,setName] = useState('');
+    const [password,setPassword] = useState('');
+    const [isValidName,setIsValidName] = useState(true);
+    const [nameError,setNameError] = useState('');
+    const [isValidPassword,setIsValidPassword] = useState(true);
+    const [confirmPassword,setConfirmPassword] = useState('');
+    const [country,setCountry] = useState('');
+    const [phno,setPhno] = useState('');
+    const [countries,setCountries] = useState([]);
+    const [states,setStates] = useState([]);
+    const [cities,setCities] = useState([]);
+    const [state,setState] = useState('');
+    const [countryind, setCountryind] = useState(null);
+    const [stateind, setStateind] = useState(null);
+    const [cityind, setCityind] = useState(null);
+    const [city,setCity] = useState('');
+    const [passwordError,setPasswordError] = useState([]);
+    const [cpasswordError,setcPasswordError] = useState('');
+    const [isValidcPassword,setIsValidcPassword] = useState(true);
+    const [phone_code,setPhoneCode] = useState(null);
+    const [isValidPhoneNum,setIsValidPhoneNum] = useState(true);
+    const [phoneError,setPhoneError] = useState('');
+    const paperStyle = {
+      padding : '20px 20px',
+      textAlign : 'center',
+      display:'flex',
+      flexDirection : 'row',
+      gap : '50px'
+    }
 
+    
     useEffect(() => {
       GetCountries().then((result) => {
-        // console.log(result);
         setCountries(result);
       });
-  
     }, []);
+
     function validatePhoneNumber(){
       if(phno.length ===0 && phone_code==null){
         return true;
@@ -121,11 +149,9 @@ function Register() {
     }
     function handleCountryChange(e){
       const curCountry = countries[e.target.value];
-      // console.log(curCountry)
       setCountry(curCountry.name);
       setCountryind(e.target.value)
       GetState(curCountry.id).then(res=>{setStates(res)});
-      // console.log(curCountry.phone_code)
       setPhoneCode(curCountry.phone_code)
       setState('');
       setCity('');
@@ -134,7 +160,6 @@ function Register() {
     }
     function handleStateChange(e){
       const curState = states[e.target.value];
-      // console.log(curState)
       setState(curState.name);
       setStateind(e.target.value);
       GetCity(countries[countryind].id,curState.id).then(res=>{
@@ -148,35 +173,7 @@ function Register() {
       setCityind(e.target.value);
       setCity(curcity.name)
     }
-    const [Name,setName] = useState('');
-    const [password,setPassword] = useState('');
-    const [isValidName,setIsValidName] = useState(true);
-    const [nameError,setNameError] = useState('');
-    const [isValidPassword,setIsValidPassword] = useState(true);
-    const [confirmPassword,setConfirmPassword] = useState('');
-    const [country,setCountry] = useState('');
-    const [phno,setPhno] = useState('');
-    const [countries,setCountries] = useState([]);
-    const [states,setStates] = useState([]);
-    const [cities,setCities] = useState([]);
-    const [state,setState] = useState('');
-    const [countryind, setCountryind] = useState(null);
-    const [stateind, setStateind] = useState(null);
-    const [cityind, setCityind] = useState(null);
-    const [city,setCity] = useState('');
-    const [passwordError,setPasswordError] = useState([]);
-    const [cpasswordError,setcPasswordError] = useState('');
-    const [isValidcPassword,setIsValidcPassword] = useState(true);
-    const [phone_code,setPhoneCode] = useState(null);
-    const [isValidPhoneNum,setIsValidPhoneNum] = useState(true);
-    const [phoneError,setPhoneError] = useState('');
-    const paperStyle = {
-      padding : '20px 20px',
-      textAlign : 'center',
-      display:'flex',
-      flexDirection : 'row',
-      gap : '50px'
-    }
+
   return (
     <div className='container'>
         <FormControl className='form' >

@@ -11,7 +11,15 @@ function HIstoryItem({history,handleDelete}) {
     <tr>
         <td style={{color : 'green'}}>{history.date}</td>
         <td>{sentence[history.item.status]}</td>
-        <td><img style={{cursor:'pointer'}} src='/delete-button.png' height={20} onClick={()=>handleDelete(history.id)}></img></td>
+        <td>
+          <img 
+            style={{cursor:'pointer'}} 
+            src='/delete-button.png' 
+            height={20} 
+            onClick={()=>handleDelete(history.id)}
+          >
+          </img>
+        </td>
     </tr>
   )
 }
