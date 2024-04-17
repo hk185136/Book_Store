@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.text.SimpleDateFormat;
 
 
@@ -46,18 +48,23 @@ public class CartAndOrderController {
 		return ResponseEntity.ok(cartServiceImpl.addItem(item));
 	}
 	
-	//Post request which accepts item data, sets the item status , stores it in database and returns a response with that item data.
+	//Post request which accepts item data, automates the status of item, adds an entry to history, stores those in database and returns a response with that item data.
 	@PostMapping("/addToOrder")
 	public ResponseEntity<Item> addItemToOrders(@RequestBody Item item)
 	{
-		item.setStatus("confirmed");
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		item.setDate(dateFormat.format(new Date()));
-		OrderHistory history = new OrderHistory();
-		history.setItem(item);
-		history.setDate(dateFormat.format(new Date()));
+		cartServiceImpl.addItem(item);
+
+		cartServiceImpl.updateItemStatus(item, "confirmed");
+		cartServiceImpl.updateItemOrderedDate(item);
+		
+		OrderHistory history = OrderHistoryImplementation.setItemToHistory(item);
 		OrderHistoryImplementation.addtoHistory(history);
-		return ResponseEntity.ok(cartServiceImpl.addItem(item));
+		
+
+		cartServiceImpl.itemDeliveryTimer(item, "On the way", 5000);
+		
+		cartServiceImpl.itemDeliveryTimer(item, "Delivered", 15000);
+		return ResponseEntity.ok(item);
 	}
 		
 	
@@ -66,11 +73,7 @@ public class CartAndOrderController {
 	public ResponseEntity<String> updateItemStatus(@RequestBody Item item, @PathVariable("status")String newStatus)
 	{
 		cartServiceImpl.updateItemStatus(item, newStatus);
-		item.setStatus(newStatus);
-		OrderHistory history = new OrderHistory();
-		history.setItem(item);
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		history.setDate(dateFormat.format(new Date())); 
+		OrderHistory history = OrderHistoryImplementation.setItemToHistory(item);
 		OrderHistoryImplementation.addtoHistory(history);
 		return ResponseEntity.ok("status updated");
 	}

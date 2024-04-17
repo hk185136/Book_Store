@@ -7,6 +7,8 @@ import java.util.Date;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import java.util.List;
+
+import com.eBook.Backend.models.Item;
 import com.eBook.Backend.models.OrderHistory;
 import com.eBook.Backend.service.OrderHistoryImplementation;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,7 +23,7 @@ import java.text.SimpleDateFormat;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/user/OrderHistory/")
+@RequestMapping("/api/user/orderHistory/")
 @CrossOrigin(origins = "*")
 // Class to implement the Rest APIs for order history.
 public class OrderHistoryController 
@@ -33,7 +35,7 @@ public class OrderHistoryController
 	
 	// Post request which accepts OrderHistory data, adds it to database and returns that data.
 	@PostMapping("/addToHistory")
-	public ResponseEntity<OrderHistory> addItemToHistory(@RequestBody OrderHistory order)
+	public ResponseEntity<OrderHistory> addToHistory(@RequestBody OrderHistory order)
 	{
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		order.setDate(dateFormat.format(new Date()));

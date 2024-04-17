@@ -1,9 +1,13 @@
 package com.eBook.Backend.service;
 
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +19,7 @@ import com.eBook.Backend.Repository.OrderHistoryRepository;
 import com.eBook.Backend.models.AuthUser;
 import com.eBook.Backend.models.Book;
 import com.eBook.Backend.models.Item;
+import com.eBook.Backend.models.OrderHistory;
 
 @Service
 //Class which provides user defined CRUD operations for cart and orders.
@@ -29,7 +34,6 @@ public class CartAndOrderServiceImpl {
 		Item itemAddedTocart = CartRepository.save(Item);
 		return itemAddedTocart;
 	}
-	
 	
 	//Increases item quantity count by one.
 	public Item increaseItem(Item item) {
@@ -59,14 +63,42 @@ public class CartAndOrderServiceImpl {
 		return Items;
 	}
 	
+	// Accepts item data, updates the ordered date field and returns item data.
+	public Item updateItemOrderedDate(Item item)
+	{
+		Item storedItem  =  CartRepository.findById(item.getId()).get();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		storedItem.setDate(dateFormat.format(new Date()));
+		CartRepository.save(storedItem);
+		return storedItem;
+	}
+	
 	// Updates an existing item with new status.
 	public Item updateItemStatus(Item item, String status)
 	{
 		Item storedItem  =  CartRepository.findById(item.getId()).get();
 		storedItem.setStatus(status);
 		CartRepository.save(storedItem);
+		System.out.println("status updated");
 		return storedItem;
 	}
+	
+	// Accepts item, status and delivery time and schedules item status updation task after delivery time.
+	public void itemDeliveryTimer(Item item, String status, long deliveryTime)
+	{
+		TimerTask startTimer = new TimerTask() {
+	        public void run() {
+	        	System.out.println("Timer");
+	        	updateItemStatus(item, status);
+	        }
+	    };
+	    
+	    Timer Timer = new Timer("Delivery Timer");
+	    
+	    Timer.schedule(startTimer, deliveryTime);
+	}
+	
+	
 	
 	
 }
