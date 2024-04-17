@@ -1,8 +1,6 @@
-import React, { useState } from 'react'
+import React from 'react'
 import './Sidebar.css';
-import Rating from '../rating/Rating';
-import axios from 'axios';
-function Sidebar({setGenre,priceRange,setPriceRange}) {
+function Sidebar({setGenre,setPriceRange}) {
     return (
     <div className='sidebar'>
         <h2 className='heading-filter'>Genre</h2>
@@ -25,29 +23,33 @@ function Sidebar({setGenre,priceRange,setPriceRange}) {
 
         <h2 className='heading-filter'>Price</h2>
         <div className='grid-filter'>
-        <label htmlFor="">All</label>
-            <input type="radio" className='checkbox' name='price' onChange={()=>
-            {
-              setPriceRange({min : 0,max:20000});
-            }}/>
-            <label htmlFor="">Under &#8377;1000</label>
-            <input type="radio" className='checkbox' name='price' onChange={()=>
-            {
-              setPriceRange({min : 0,max:1000});
-            }}/>
-            <label htmlFor="">&#8377;1000 - &#8377;5000</label>
-            <input type="radio" className='checkbox' name='price' onChange={()=>
-            {
-              setPriceRange({min : 1000,max:5000});
-            }}/>
-            <label htmlFor="">&#8377;5000 - &#8377;20,000</label>
-            <input type="radio" className='checkbox' name='price' onChange={()=>
-            {
-              setPriceRange({min : 5000,max:20000});
-            }}/>
+
+          <label htmlFor="">All</label>
+          <input type="radio" className='checkbox' name='price' onChange={()=>
+          {
+            setPriceRange({min : 0,max:20000});
+          }}/>
+
+          <label htmlFor="">Under &#8377;1000</label>
+          <input type="radio" className='checkbox' name='price' onChange={()=>
+          {
+            setPriceRange({min : 0,max:1000});
+          }}/>
+
+          <label htmlFor="">&#8377;1000 - &#8377;5000</label>
+          <input type="radio" className='checkbox' name='price' onChange={()=>
+          {
+            setPriceRange({min : 1000,max:5000});
+          }}/>
+
+          <label htmlFor="">&#8377;5000 - &#8377;20,000</label>
+          <input type="radio" className='checkbox' name='price' onChange={()=>
+          {
+            setPriceRange({min : 5000,max:20000});
+          }}/>
+
         </div>
 
-       
     </div>
   )
 }

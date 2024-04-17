@@ -5,6 +5,7 @@ import Sidebar from '../sidebar/Sidebar';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import LoadingComponent from '../Loading/LoadingComponent';
+
 function Books({books,setBooks,cartItems,setCartItems}) {
   const [genre,setGenre] = useState('');
   const [priceRange,setPriceRange] = useState({
@@ -12,10 +13,9 @@ function Books({books,setBooks,cartItems,setCartItems}) {
     max:20000
   })
   const [isLoading,setIsLoading] = useState(false);
+
   useEffect(()=>{
-   
     async function filter(){
-    
       try{
         if(genre==''){
           setIsLoading(true);
@@ -30,9 +30,6 @@ function Books({books,setBooks,cartItems,setCartItems}) {
                 return book1.id==book2.id;
               })
             })
-            // console.log(newBooks)
-           
-            console.log('loading')
             setBooks(newBooks);
             setIsLoading(false);
           }
@@ -50,9 +47,6 @@ function Books({books,setBooks,cartItems,setCartItems}) {
                 return book1.id==book2.id;
               })
             })
-            // console.log(newBooks)
-           
-            console.log('loading')
             setBooks(newBooks);
             setIsLoading(false);
           }
@@ -64,9 +58,8 @@ function Books({books,setBooks,cartItems,setCartItems}) {
     }
     filter();
   },[genre,priceRange])
+
   function isInCart(id) {
-    // console.log('isInCart runnig');
-    // console.log(cartItems)
     for(let cartItem of cartItems){
       if(cartItem.book.id == id){
         return true;
@@ -84,7 +77,6 @@ function Books({books,setBooks,cartItems,setCartItems}) {
   }
   async function deleteBook(book1){
     try{
-      // console.log(book1.id)
       const url = 'http://localhost:8080/api/admin/books/' + book1.id;
       const res = await axios.delete(url);
       if(res.status == 200){
@@ -99,10 +91,7 @@ function Books({books,setBooks,cartItems,setCartItems}) {
   async function editBook(id,book1){
     try{
       const url = 'http://localhost:8080/api/admin/books/' + id;
-      // console.log("pointed")
-      // console.log(book1)
       const res = await axios.put(url,book1);
-      // console.log(res);
       if(res.status == 200){
         const newBooks = books.map((book)=>(book.id===id)?book1:book);
         setBooks(newBooks)
@@ -112,25 +101,35 @@ function Books({books,setBooks,cartItems,setCartItems}) {
       toast.error((e?.response?.data?.message) || (e.message));
     }
   }
+
   return (
     <>
-    <Sidebar setGenre = {setGenre} priceRange = {priceRange} setPriceRange = {setPriceRange}/>
+      <Sidebar setGenre = {setGenre} setPriceRange = {setPriceRange}/>
 
-    
-    (<div className='books'>
-      <LoadingComponent isLoading={isLoading}/>
-      {books.length>0?(<>
-        <div className='books-grid'>
-      {
-          books.map((book)=><Book key={book.id} isInCart = {isInCart(book.id)} cartId = {findInCart(book.id)} book = {book} deleteBook = {deleteBook} editBook = {editBook} cartItems = {cartItems} setCartItems = {setCartItems}/>)
-        }
-      </div>
-      </>):((!isLoading) &&  <img src='/no-search-found.png'></img>)}
-      
-     
-    </div>)
-    </>
-    
+      (<div className='books'>
+        <LoadingComponent isLoading={isLoading}/>
+        {books.length>0?(
+          <>
+            <div className='books-grid'>
+              {
+                books.map((book)=>
+                  <Book 
+                    key={book.id} 
+                    isInCart = {isInCart(book.id)} 
+                    cartId = {findInCart(book.id)} 
+                    book = {book} 
+                    deleteBook = {deleteBook} 
+                    editBook = {editBook} 
+                    cartItems = {cartItems} 
+                    setCartItems = {setCartItems}
+                  />
+                )
+              }
+            </div>
+          </>) :
+        ((!isLoading) && <img src='/no-search-found.png'></img>)}
+      </div>)
+    </> 
   )
 }
 

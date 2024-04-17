@@ -8,13 +8,13 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 function Profile() {
   const user=useSelector(state=>state);
-  console.log(user);
   const [pno,setPno] = useState(user.pno || '');
   const [address,setAddress] = useState(user.address || '');
   const [pnoInput,setPnoInput] = useState(user.pno || '');
   const [addressInput,setAddressInput] = useState(user.address || '');
   const [isOpen,setIsOpen] = useState(false);
   const [history,setHistory] = useState([]);
+
   useEffect(()=>{
     async function get(){
     const hist = await getHistory(user.name);
@@ -22,10 +22,7 @@ function Profile() {
     }
     get()
   },[])
-  // useEffect(()=>{
-  //   setAddressInput(address);
-  //   setPnoInput(pno);
-  // },[address,pno])
+
   async function editProfile(e){
     e.preventDefault(); 
     const body = {
@@ -66,6 +63,7 @@ function Profile() {
   }
   return (
     <div className='profile-page-container'>
+
       <div className='profile-page'>
         <p>Username</p>
         <p>-</p>
@@ -78,6 +76,7 @@ function Profile() {
         <p>{(address.length>0)?address:"No address info"}</p>
         <button className='buy-button' style={{fontSize:'large'}} onClick={()=>{setIsOpen(true);setAddressInput(address);setPnoInput(pno)}}>Edit</button>
       </div>
+
       {(isOpen) && <Modal setIsOpen = {setIsOpen}>
         <form action="" style={{fontSize : 'larger'}}>
         <p>Phone No.</p>
@@ -87,23 +86,21 @@ function Profile() {
         <br />
         <button className='buy-button' style={{fontSize:'large'}}  onClick={(e)=>editProfile(e)}>Edit profile</button>
         </form>
-    </Modal>}
-    <div className='history'> 
-    
-    {history.length>0 && 
-    <>
-    <button className='clear-history' onClick={clearHistory}>Clear history</button>      <table className='table'>
-        <tr>
-          <th>Time</th>
-          <th>Activity</th>
-        </tr>
-        {history.map((historyItem) => <HIstoryItem key={historyItem.id} history = {historyItem} handleDelete={handleDelete}/>)}
-      </table>
-    </>
-    
-        }
+      </Modal>}
 
-    </div>
+      <div className='history'> 
+        {history.length>0 && 
+        <>
+        <button className='clear-history' onClick={clearHistory}>Clear history</button>
+          <table className='table'>
+            <tr>
+              <th>Time</th>
+              <th>Activity</th>
+            </tr>
+            {history.map((historyItem) => <HIstoryItem key={historyItem.id} history = {historyItem} handleDelete={handleDelete}/>)}
+          </table>
+        </>}
+      </div>
       
     </div>
     

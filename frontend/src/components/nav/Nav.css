@@ -1,7 +1,5 @@
 .nav-img{
     width : 50px;
-    /* margin-left: 40px; 
-    margin-right: 25px;  */
     cursor: pointer;
     transition: 20ms;
     font-size: 40px;
@@ -39,10 +37,8 @@ min-width: 0;
     color: white;
     padding-top: 12px;
     padding-bottom: 12px;
-    /* # rgb(151, 133, 99); */
 }
 #site-name{
-    /* font-size: xx-large; */
     font-family: cursive;
     color: white;
     text-decoration: none;

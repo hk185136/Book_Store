@@ -1,4 +1,3 @@
-import './App.css';
 import Login from './pages/login/Login';
 import {BrowserRouter as Router,Routes,Route} from 'react-router-dom';
 import Register from './pages/register/Register';
@@ -13,6 +12,7 @@ import axios from 'axios';
 import Users from './pages/OrderManagement/Users';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+
 function App() {
   const [books,setBooks] = useState([]);
   const user = useSelector(state=>state);
@@ -21,7 +21,6 @@ function App() {
     async function getAllBooks(){
       try{
         const res = await axios.get('http://localhost:8080/api/user/books/');
-        // console.log(res.data);
         setBooks(res.data);
       }
       catch(e){
@@ -33,8 +32,6 @@ function App() {
         console.log("searching by the name : "+user.name)
         const res = await axios.put('http://localhost:8080/api/item/searchByStatus/added to cart',{username : user.name});
         if(res.status==200){
-          // console.log('useeffect runing')
-          // console.log(res.data)
           setCartItems(res.data);
         }
       }
@@ -58,15 +55,28 @@ function App() {
             <Route path='/register' element={<Register/>}></Route>
             <Route element={<PrivateRoute/>}>
               <Route path="/home" element={<Home books = {books} setBooks = {setBooks} />}>
-                <Route path='/home' element={<Books books = {books} setBooks = {setBooks} cartItems = {cartItems} setCartItems = {setCartItems}  />}/>
-                <Route path="/home/cart" element={<Cart cartItems = {cartItems} setCartItems = {setCartItems}  />}/>
+
+                <Route path='/home' element={
+                  <Books 
+                  books = {books} 
+                  setBooks = {setBooks} 
+                  cartItems = {cartItems} 
+                  setCartItems = {setCartItems}  
+                  />
+                }/>
+                
+                <Route path="/home/cart" element={
+                  <Cart 
+                  cartItems = {cartItems} 
+                  setCartItems = {setCartItems} 
+                  />
+                }/>
+                
                 <Route path="/home/profile" element={<Profile/>}/>
                 <Route path='/home/orders' element={<Orders/>}/>
                 <Route path='/home/users' element={<Users/>}/>
               </Route>
-              
             </Route>
-            
           </Routes> 
       </Router>
     </div>

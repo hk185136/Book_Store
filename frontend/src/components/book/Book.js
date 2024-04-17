@@ -5,7 +5,8 @@ import Modal from '../modal/Modal';
 import axios from 'axios';
 import OrderForm from '../OrderForm/OrderForm';
 import { toast } from 'react-toastify';
-import {Button, FormControl,Paper,Stack,TextField,Select,MenuItem, InputLabel} from '@mui/material'
+import {Button,Stack,TextField} from '@mui/material';
+
 function Book({isInCart,cartId,book,deleteBook,editBook,cartItems,setCartItems}) {
     const [isAdded,setIsAdded] = useState(isInCart);
     const user = useSelector(state=>state)
@@ -24,9 +25,9 @@ function Book({isInCart,cartId,book,deleteBook,editBook,cartItems,setCartItems})
     const mediumTitle = {fontSize : 'larger'}
     const smallTitle = {fontSize : 'xx-large'}
     useEffect(()=>{
-      // console.log('use effect : '+isInCart);
       setIsAdded(isInCart);
     },[isInCart])
+
     useEffect(()=>{
       setBookNameError(false);
       setBookNameErrorMessage('');
@@ -35,6 +36,7 @@ function Book({isInCart,cartId,book,deleteBook,editBook,cartItems,setCartItems})
       setbookAvailableQuantityError(false);
       setbookAvailableQuantityErrorMessage('')
   },[isOpen])
+
   function handleEdit(){
     if(!validateBook(newBook)) return;
     editBook(book.id,newBook);
@@ -68,56 +70,53 @@ function Book({isInCart,cartId,book,deleteBook,editBook,cartItems,setCartItems})
         flag=false;
     }
     return flag;
-}
-    function togglePopup(e){
-      setShowPopup(true);
-      if(book.availableQuantity===0){
-        setTimeout(()=>{
-          setShowPopup(false);
-        },1000)
-      }
-    }
-    // console.log(orderOpen);
-    async function handleBuy(){
-      setOrderOpen(true)
-    }
-    async function handleAddToCart(){
-      const res = await axios.post('http://localhost:8080/api/item/addToCart',{
-        book : book,
-        user : {username : user.name},
-        quantity : quantity
-      })
-      if(res.status == 200){
-        setCartItems([...cartItems,res.data])
-        setIsAdded(true);
+  }
+  function togglePopup(e){
+    setShowPopup(true);
+    if(book.availableQuantity===0){
+      setTimeout(()=>{
         setShowPopup(false);
-      }
-      
+      },1000)
     }
-    async function handleRemoveFromCart(){
-      try{
-        const res = await axios.delete('http://localhost:8080/api/item/' + cartId);
-        const newCartItems = cartItems.filter((item)=>item.id!==cartId);
-        setCartItems(newCartItems);
-        if(res.status == 200){
-          setIsAdded(false);
-        }
-      }
-      catch(e){
-        toast.error((e?.response?.data?.message) || (e.message));
-      }
-     
-      
+  }
+  async function handleBuy(){
+    setOrderOpen(true)
+  }
+  async function handleAddToCart(){
+    const res = await axios.post('http://localhost:8080/api/item/addToCart',{
+      book : book,
+      user : {username : user.name},
+      quantity : quantity
+    })
+    if(res.status == 200){
+      setCartItems([...cartItems,res.data])
+      setIsAdded(true);
+      setShowPopup(false);
     }
-    function assignStyle(title){
-      if(title.length<10){
-        return smallTitle;
+  }
+  async function handleRemoveFromCart(){
+    try{
+      const res = await axios.delete('http://localhost:8080/api/item/' + cartId);
+      const newCartItems = cartItems.filter((item)=>item.id!==cartId);
+      setCartItems(newCartItems);
+      if(res.status == 200){
+        setIsAdded(false);
       }
-      else if(title.length<20){
-        return mediumTitle;
-      }
-      return largeTitle;
     }
+    catch(e){
+      toast.error((e?.response?.data?.message) || (e.message));
+    } 
+  }
+  function assignStyle(title){
+    if(title.length<10){
+      return smallTitle;
+    }
+    else if(title.length<20){
+      return mediumTitle;
+    }
+    return largeTitle;
+  }
+
   return (
     <div className='book-card'>
         <div className='book-img-container'>
@@ -127,24 +126,49 @@ function Book({isInCart,cartId,book,deleteBook,editBook,cartItems,setCartItems})
             <p className='book-name' style={assignStyle(book.title)}>{book.title}</p>
             <p className='author-name'>{book.author.length>0 && <>By author : {book.author}</>}</p>
             <p className='price'>&#8377;{book.price}</p>
+
             {(user.role === 'admin') && (<>
-              <Button variant='contained' color='secondary' className='edit-button' onClick={()=>setIsOpen(true)}>Edit</Button>
+              <Button 
+                variant='contained' 
+                color='secondary' 
+                className='edit-button' 
+                onClick={()=>setIsOpen(true)}
+                >
+                  Edit
+              </Button>
               <img className='delete' src="delete-button.png" alt="" onClick={()=>deleteBook(book)}/>
             </>)  }
+
             {(user.role === 'customer') && (book.availableQuantity>0) &&
             <>
-            {book.availableQuantity>0 && <>
-             <Button color='secondary' variant='contained' className='buy-button' onClick={handleBuy}>Buy</Button>
-            {(isAdded)?(<img  onClick={(e)=>
-              {
-                handleRemoveFromCart();
+              {book.availableQuantity>0 && 
+                <>
+                  <Button 
+                    color='secondary' 
+                    variant='contained' 
+                    className='buy-button' 
+                    onClick={handleBuy}
+                    >Buy
+                  </Button>
+                  {(isAdded)?(<img onClick={(e)=>
+                    {
+                      handleRemoveFromCart();
+                    }} 
+                    className='cart-img' 
+                    src="/remove-from-cart.svg" 
+                    alt="" />) :
+                    (<img 
+                    onClick={(e)=>{togglePopup(e)}} 
+                    className='cart-img' 
+                    src="/add-to-cart.png" 
+                    alt="" />)
+                  }
+                </>
               }
-              } className='cart-img' src="/remove-from-cart.svg" alt="" />):(<img  onClick={(e)=>{togglePopup(e)}} className='cart-img' src="/add-to-cart.png" alt="" />)}</>}
-
-            
             </>}
             {
-              (user.role === 'customer') && book.availableQuantity===0 && <p style={{marginTop:20}}>No copies available</p>
+              (user.role === 'customer') && book.availableQuantity===0 && 
+              <p style={{marginTop:20}}>No copies available</p>
             }
             {(showPopup)&& (
               <div className='qty-popup' style={{left : 150,top : 130}}>
@@ -177,30 +201,79 @@ function Book({isInCart,cartId,book,deleteBook,editBook,cartItems,setCartItems})
               
             </div>
             )}
-            
-           
-           
+
         </div>
         {(isOpen)&&
         <Modal setIsOpen = {setIsOpen}>
-                <form className='add-book-form'>
-                <Stack spacing={3}> 
-                        <TextField label='Book name' required error={bookNameError} helperText = {bookNameErrorMessage} className='add-book-input' value={newBook.title}  onChange={(e)=>{setNewBook({...newBook,title : e.target.value})}}/>
-                        <TextField label = 'Author' className='add-book-input' value={newBook.author} onChange={(e)=>{setNewBook({...newBook,author : e.target.value})}}/>
-                        <TextField label='Genre'  className='add-book-input' value={newBook.genre} onChange={(e)=>setNewBook({...newBook,genre : e.target.value})}/>
-                        <TextField label='Book image url'   className='add-book-input' value={newBook.url} onChange={(e)=>setNewBook({...newBook,url : e.target.value})}/>
-                        <TextField label='Price' required error={bookPriceError} helperText = {bookPriceErrorMessage} className='add-book-input' value={newBook.price} onChange={(e)=>setNewBook({...newBook,price : e.target.value})}/>
-                        <TextField label='Quantity' required error={bookAvailableQuantityError} helperText={bookAvailableQuantityErrorMessage}  className='add-book-input' value={newBook.availableQuantity} onChange={(e)=>setNewBook({...newBook,availableQuantity : e.target.value})}/>
-                        <Button variant='contained' color='secondary' type='submit' className='buy-button' onClick={(e)=>{e.preventDefault();
-                    
-                    handleEdit()}}> Update</Button>
-                    </Stack>
-                </form>
-            </Modal>
+          <form className='add-book-form'>
+            <Stack spacing={3}> 
             
+              <TextField 
+                label='Book name' 
+                required 
+                error={bookNameError} 
+                helperText = {bookNameErrorMessage} 
+                className='add-book-input' 
+                value={newBook.title} 
+                onChange={(e)=>{setNewBook({...newBook,title : e.target.value})}}
+              />
 
-}
-{(orderOpen) && (<OrderForm setIsOpen={setOrderOpen} book = {book}/>)}
+              <TextField 
+                label = 'Author' 
+                className='add-book-input' 
+                value={newBook.author} 
+                onChange={(e)=>{setNewBook({...newBook,author : e.target.value})}}
+              />
+
+              <TextField 
+                label='Genre' 
+                className='add-book-input' 
+                value={newBook.genre} 
+                onChange={(e)=>setNewBook({...newBook,genre : e.target.value})}
+              />
+
+              <TextField 
+                label='Book image url' 
+                className='add-book-input' 
+                value={newBook.url} 
+                onChange={(e)=>setNewBook({...newBook,url : e.target.value})}
+              />
+
+              <TextField 
+                label='Price' 
+                required 
+                error={bookPriceError} 
+                helperText = {bookPriceErrorMessage} 
+                className='add-book-input' 
+                value={newBook.price} 
+                onChange={(e)=>setNewBook({...newBook,price : e.target.value})}
+              />
+
+              <TextField 
+                label='Quantity' 
+                required 
+                error={bookAvailableQuantityError} 
+                helperText={bookAvailableQuantityErrorMessage} 
+                className='add-book-input' 
+                value={newBook.availableQuantity} 
+                onChange={(e)=>setNewBook({...newBook,availableQuantity : e.target.value})}
+              />
+
+              <Button 
+                variant='contained' 
+                color='secondary' 
+                type='submit' 
+                className='buy-button' 
+                onClick={(e)=>{e.preventDefault();handleEdit()}}
+              > Update
+              </Button>
+
+            </Stack>
+          </form>
+        </Modal>
+        }
+
+        {(orderOpen) && (<OrderForm setIsOpen={setOrderOpen} book = {book}/>)}
     </div>
   )
 }

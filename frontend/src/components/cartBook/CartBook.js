@@ -8,7 +8,6 @@ function CartBook({cartItem,deleteItem,setTotal}) {
     useEffect(()=>{
         async function getBook(){
             try{
-                // console.log(cartItem.book.id);
                 const res = await axios.get(`http://localhost:8080/api/user/books/${cartItem.book.id}`);
                 if(res.status == 200){
                     setAvailableQuantity(res.data.availableQuantity);
@@ -49,46 +48,63 @@ function CartBook({cartItem,deleteItem,setTotal}) {
     }
   return (
     <div className='book-card'>
+
         <div className='book-img-container'>
             <img src={cartItem.book.url} alt="No image" className='book-img'/>
         </div>
+
         <div className='book-details'>
             <p className='book-name'>{cartItem.book.title}</p>
             <p className='author-name'>By author : {cartItem.book.author}</p>
             <p className='price'>&#8377;{cartItem.book.price}</p>
-            {(cartItem.book.availableQuantity===0)?(<p>This book is out of stock</p>):
-            (<>
+            {
+                (cartItem.book.availableQuantity===0)?
+                    (<p>This book is out of stock</p>) :
+                (<>
             
-            {availableQuantity === 0 && <p>This book is no longer available</p>}
-            {availableQuantity>0 && <>
-                <div className='quantity'>
-                <p>Qty : </p>
-           
-           {(qty>1) &&  <button className='qty-controller' onClick={()=>{
-               if(qty>0)
-                   decrement();
-               }}>
-                   -</button>}
-          
-           {(qty>availableQuantity)?availableQuantity:qty}
-           {qty<availableQuantity && <button className='qty-controller' onClick={()=>{
-               if(qty<availableQuantity){
-                   increment();
-               }
-               
-               }}>+</button>}
+                    {availableQuantity === 0 && <p>This book is no longer available</p>}
+                    {availableQuantity>0 && 
+                    <>
+                        <div className='quantity'>
+                            <p>Qty : </p>
+                            {(qty>1) && <button className='qty-controller' 
+                            onClick={()=>{
+                                if(qty>0)
+                                    decrement();
+                            }}>
+                            -</button>}
                 
+                            {(qty>availableQuantity)?availableQuantity:qty}
+
+                            {qty<availableQuantity && <button className='qty-controller' 
+                            onClick={()=>{
+                                if(qty<availableQuantity){
+                                    increment();
+                                }
+                            }}>+</button>}
+                        
+                        </div>
+                    </>
+                    }
+                </>)
+            }
+            {qty>0 && availableQuantity>0 && 
+                <div>
+                    <p className='subtotal'>Sub total : 
+                    <span 
+                    style={{color : 'green'}}
+                    >
+                        &#8377;{cartItem.book.price*((qty>availableQuantity)?availableQuantity:qty)}
+                    </span>
+                    </p>
                 </div>
-            </>}
-           
-           
-            
-           
-            </>)}
-            {qty>0 && availableQuantity>0 && <div><p className='subtotal'>Sub total : <span style={{color : 'green'}}>&#8377;{cartItem.book.price*((qty>availableQuantity)?availableQuantity:qty)}</span></p></div>}
-            <button className='remove-from-cart-button' onClick={()=>deleteItem(cartItem.id)}>Remove from cart</button>
-        </div>
-        
+            }
+            <button 
+            className='remove-from-cart-button' 
+            onClick={()=>deleteItem(cartItem.id)}
+            >Remove from cart
+            </button>
+        </div> 
     </div>
   )
 }

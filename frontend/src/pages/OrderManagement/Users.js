@@ -1,6 +1,5 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import {Link} from 'react-router-dom'
 import './Users.css'
 import Orders from '../orders/Orders';
 function Users() {
@@ -17,23 +16,23 @@ function Users() {
         }
         getUsers()
     },[])
+    
   return (
     <div className='user-management'> 
         <div className='userlist'>
             {
-                users.map((user)=><div className='user-tile' key={user.id} onClick={()=>setUsername(user.username)}>
-                       <p>{user.username}</p>
-                    </div>
+                users.map((user)=>  <div className='user-tile' 
+                                    key={user.id} 
+                                    onClick={()=>setUsername(user.username)}>
+                                            <p>{user.username}</p>
+                                    </div>
                 )
             }
         </div>
         <div className='orders-comp'>
-        <Orders username = {username}/>
+            <Orders username = {username}/>
         </div>
-        
-
-    </div>
-   
+    </div>  
   )
 }
 

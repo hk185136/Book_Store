@@ -1,5 +1,4 @@
 import {createStore} from 'redux';
-import React from 'react'
 const reducer = (state=null,action)=>{
     switch(action.type){
         case 'login' : return action.data;

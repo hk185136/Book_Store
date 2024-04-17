@@ -1,5 +1,4 @@
 import React, {useState } from 'react'
-
 import CartBooks from '../../components/cartBooks/CartBooks';
 import './Cart.css';
 import axios from 'axios';
@@ -7,14 +6,14 @@ import Modal from '../../components/modal/Modal';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import LoadingComponent from '../../components/Loading/LoadingComponent';
+
 function Cart({cartItems,setCartItems}) {
   const user = useSelector(state=>state);
   const [address,setAddress] = useState(user.address||'');
   const [total,setTotal] = useState(getTotal());
   const [isOpen,setIsOpen] = useState(false);
   const [isLoading,setIsLoading] = useState(false);
-  console.log("cart items in cart page  : ");
-  console.log(cartItems);
+
   function getTotal(){
     let total = 0;
     for(let cartItem of cartItems){
@@ -37,7 +36,6 @@ function Cart({cartItems,setCartItems}) {
           continue;
         }
         const qty = (book.availableQuantity<cartItem.quantity)?book.availableQuantity:cartItem.quantity
-        // console.log(user)
         const body = {
           book : book,
           user : {
@@ -52,9 +50,7 @@ function Cart({cartItems,setCartItems}) {
           const newBook = book;
           newBook.availableQuantity = newBook.availableQuantity - qty;
           axios.put(`http://localhost:8080/api/admin/books/${book.id}`,newBook)
-          // console.log('removing the cartitme : '+cartItem)
           const res = await axios.delete(`http://localhost:8080/api/item/${cartItem.id}`);
-          // console.log(res)
           setCartItems(prev => prev.filter((cartItem1) => cartItem1.id!==cartItem.id));
         }
       }
@@ -68,19 +64,19 @@ function Cart({cartItems,setCartItems}) {
     }
   }
   return (
-      <div className='cart'>
-        <LoadingComponent isLoading={isLoading}/>
-        {(cartItems.length>0)?<>
-          <CartBooks cartItems = {cartItems} setCartItems = {setCartItems} setTotal = {setTotal}/>
-          <div className='order1'>
-            <h1 className='order-summary'>Order summary</h1>
-            <p className='total-items'>Total items : {cartItems.length}</p>
-            <p className='total-cost'>Total cost : <span style={{color : 'green'}}>&#8377;{total}</span></p>
-            <button className='buy-button' onClick={()=>setIsOpen(true)}>Buy</button>
+    <div className='cart'>
+      <LoadingComponent isLoading={isLoading}/>
+      {(cartItems.length>0)?<>
+        <CartBooks cartItems = {cartItems} setCartItems = {setCartItems} setTotal = {setTotal}/>
+        <div className='order1'>
+          <h1 className='order-summary'>Order summary</h1>
+          <p className='total-items'>Total items : {cartItems.length}</p>
+          <p className='total-cost'>Total cost : <span style={{color : 'green'}}>&#8377;{total}</span></p>
+          <button className='buy-button' onClick={()=>setIsOpen(true)}>Buy</button>
         </div>
-        </>: 
-        <img src='/emptyCart.png'></img>}
-        {isOpen && <Modal setIsOpen = {setIsOpen}>
+      </>: 
+      <img src='/emptyCart.png'></img>}
+      {isOpen && <Modal setIsOpen = {setIsOpen}>
         <form className='add-book-form'>
             {(user.address==='') && <p>Your account does not have an address</p>}
             <label htmlFor="">Address</label>
@@ -88,12 +84,10 @@ function Cart({cartItems,setCartItems}) {
             
             <button className='buy-button' onClick={(e)=>handleBuy(e)}>Buy</button>
         </form>
-</Modal>}
-        
-      </div>
+      </Modal>}
       
-    
+    </div> 
   )
 }
 
-export default Cart
+export default Cart;

@@ -1,4 +1,4 @@
-import React, { useContext, useDeferredValue, useEffect, useState, useTransition } from 'react';
+import React, { useContext, useDeferredValue, useEffect, useState} from 'react';
 import './Nav.css';
 import {Link} from 'react-router-dom'
 import Modal from '../modal/Modal';
@@ -10,7 +10,7 @@ import { BiBookAdd } from "react-icons/bi";
 import { IoLibrary } from "react-icons/io5";
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import {Button, FormControl,Paper,Stack,TextField,Select,MenuItem, InputLabel} from '@mui/material'
+import {Button,Stack,TextField} from '@mui/material'
 function Nav({books,setBooks}) {    const [searchBy,setSearchBy] = useState('book');
     const [isOpen,setIsOpen] = useState(false);
     const [search,setSearch] = useState('');
@@ -101,21 +101,18 @@ function Nav({books,setBooks}) {    const [searchBy,setSearchBy] = useState('boo
                 if(searchBy=='book'){
                     const res = await axios.get(`http://localhost:8080/api/user/books/title/${curSearch}`);
                     if(res.status == 200){
-                        console.log('api call made');
                         setBooks(res.data)
                     }
                 }
                 else{
                     const res = await axios.get(`http://localhost:8080/api/user/books/author/${curSearch}`);
                     if(res.status == 200){
-                        console.log('api call made');
                         setBooks(res.data)
                     }
                 }
             }
             else{
                 const res = await axios.get('http://localhost:8080/api/user/books/');
-                console.log('api call made');
                 setBooks(res.data);
             }
             
@@ -159,15 +156,66 @@ function Nav({books,setBooks}) {    const [searchBy,setSearchBy] = useState('boo
             <Modal setIsOpen = {setIsOpen}>
                 <form className='add-book-form'>
                     <Stack spacing={3}> 
-                        <TextField label='Book name' required error={bookNameError} helperText = {bookNameErrorMessage} className='add-book-input' value={newBook.title}  onChange={(e)=>{setNewBook({...newBook,title : e.target.value})}}/>
-                        <TextField label = 'Author' className='add-book-input' value={newBook.author} onChange={(e)=>{setNewBook({...newBook,author : e.target.value})}}/>
-                        <TextField label='Genre'  className='add-book-input' value={newBook.genre} onChange={(e)=>setNewBook({...newBook,genre : e.target.value})}/>
-                        <TextField label='Book image url'   className='add-book-input' value={newBook.url} onChange={(e)=>setNewBook({...newBook,url : e.target.value})}/>
-                        <TextField label='Price' required error={bookPriceError} helperText = {bookPriceErrorMessage} className='add-book-input' value={newBook.price} onChange={(e)=>setNewBook({...newBook,price : e.target.value})}/>
-                        <TextField label='Quantity' error={bookAvailableQuantityError} helperText={bookAvailableQuantityErrorMessage}  className='add-book-input' value={newBook.availableQuantity} onChange={(e)=>setNewBook({...newBook,availableQuantity : e.target.value})}/>
-                        <Button variant='contained' color='secondary' type='submit' className='buy-button' onClick={(e)=>{handleAdd(e);}}> Add </Button>
-                    </Stack>
                     
+                        <TextField 
+                        label='Book name' 
+                        required 
+                        error={bookNameError} 
+                        helperText = {bookNameErrorMessage} 
+                        className='add-book-input' 
+                        value={newBook.title}  
+                        onChange={(e)=>{setNewBook({...newBook,title : e.target.value})}}
+                        />
+
+                        <TextField 
+                        label = 'Author' 
+                        className='add-book-input' 
+                        value={newBook.author} 
+                        onChange={(e)=>{setNewBook({...newBook,author : e.target.value})}}
+                        />
+
+                        <TextField 
+                        label='Genre'  
+                        className='add-book-input' 
+                        value={newBook.genre} 
+                        onChange={(e)=>setNewBook({...newBook,genre : e.target.value})}
+                        />
+
+                        <TextField 
+                        label='Book image url' 
+                        className='add-book-input' 
+                        value={newBook.url} 
+                        onChange={(e)=>setNewBook({...newBook,url : e.target.value})}
+                        />
+
+                        <TextField 
+                        label='Price' 
+                        required 
+                        error={bookPriceError} 
+                        helperText = {bookPriceErrorMessage} 
+                        className='add-book-input' 
+                        value={newBook.price} 
+                        onChange={(e)=>setNewBook({...newBook,price : e.target.value})}
+                        />
+
+                        <TextField 
+                        label='Quantity' 
+                        error={bookAvailableQuantityError} 
+                        helperText={bookAvailableQuantityErrorMessage}  
+                        className='add-book-input' 
+                        value={newBook.availableQuantity} 
+                        onChange={(e)=>setNewBook({...newBook,availableQuantity : e.target.value})}
+                        />
+
+                        <Button 
+                        variant='contained' 
+                        color='secondary' 
+                        type='submit' 
+                        className='buy-button' 
+                        onClick={(e)=>{handleAdd(e);}}
+                        > Add 
+                        </Button>
+                    </Stack>      
                 </form>
             </Modal>
         }

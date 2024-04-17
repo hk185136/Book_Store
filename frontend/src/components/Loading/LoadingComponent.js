@@ -4,17 +4,13 @@ import './LoadingComponent.css'
 function LoadingComponent({isLoading}) {
   return (
     <>
-    {isLoading &&  <div className='loadingContainer'>
-
-          
-        </div>}
+    {isLoading && <div className='loadingContainer'></div>}
         {
-            isLoading && <div className='loading' >  
+          isLoading && <div className='loading' >  
             <CircularProgress  size={'50px'}/>
-        </div>
+          </div>
         }
     </>
-    
   )
 }
 

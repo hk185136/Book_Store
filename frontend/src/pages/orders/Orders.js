@@ -9,6 +9,7 @@ import { cancelled } from '../../OrderStatus';
 import { delivered } from '../../OrderStatus';
 import { toast } from 'react-toastify';
 import LoadingComponent from '../../components/Loading/LoadingComponent';
+
 function Orders({username}) {
   const [orders,setOrders] = useState([]);
   const [filteredOrders,setFilteredOrders] = useState([]);
@@ -16,6 +17,7 @@ function Orders({username}) {
   const [isLoading,setIsLoading] = useState(true);
   const location  = useLocation();
   const username1 = location.state?.username;
+
   useEffect(()=>{async function get(){
     try{
       const res = await axios.put('http://localhost:8080/api/item/getOrders',{username : username||username1})
@@ -30,6 +32,7 @@ function Orders({username}) {
   }
   get()
 },[username])
+
 function filterOrders(e){
   setIsLoading(true);
   const status = e.target.value;
@@ -65,16 +68,16 @@ async function removeOrder(id){
 }
   return (
     <div className='orders'>
-       <LoadingComponent isLoading={isLoading}/>
+      <LoadingComponent isLoading={isLoading}/>
       <div className='orders-filter'>
-      <select className='order-filters' value={filterStatus} onChange={(e)=>filterOrders(e)}>
-        <option value='All'>All</option>
-        <option value={pending}>Pending</option>
-        <option value={confirmed}>Confirmed</option>
-        <option value={cancelled}>Cancelled</option>
-        <option value={delivered}>Delivered</option>
-      </select>
-      <button className='reset-filters' onClick={resetFilters}>Reset filter</button>
+        <select className='order-filters' value={filterStatus} onChange={(e)=>filterOrders(e)}>
+          <option value='All'>All</option>
+          <option value={pending}>Pending</option>
+          <option value={confirmed}>Confirmed</option>
+          <option value={cancelled}>Cancelled</option>
+          <option value={delivered}>Delivered</option>
+        </select>
+        <button className='reset-filters' onClick={resetFilters}>Reset filter</button>
       </div>
       
       <div className='orders-grid'>

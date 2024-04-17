@@ -4,6 +4,7 @@ import './CartBooks.css';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 function CartBooks({cartItems,setCartItems,setTotal}) {
+  
   async function deleteItem(id){
     try{
       const res = await axios.delete('http://localhost:8080/api/item/' + id);
@@ -18,9 +19,15 @@ function CartBooks({cartItems,setCartItems,setTotal}) {
   return (
     <div className='card-grid'>
       {
-        cartItems.map((cartItem) => <CartBook key={cartItem.id} cartItem = {cartItem} deleteItem = {deleteItem} setTotal = {setTotal}/>)
+        cartItems.map((cartItem) => 
+          <CartBook 
+          key={cartItem.id} 
+          cartItem = {cartItem} 
+          deleteItem = {deleteItem} 
+          setTotal = {setTotal}
+          />
+        )
       }
-     
     </div>
   )
 }
