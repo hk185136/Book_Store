@@ -56,14 +56,13 @@ public class UserBookImplementation {
 		return books;
 	}
 	
-public Optional<List<Book>> getBooksByPriceBetween(double p1,double p2){
+	public Optional<List<Book>> getBooksByPriceBetween(double p1,double p2){
 		
 		List<Book> books=bookRepository.findByPriceBetween(p1,p2).get();
 		books.addAll(bookRepository.findByPrice(p1).get());
 		books.addAll(bookRepository.findByPrice(p2).get());
 		return Optional.of(books);
 	}
-	
 	
 	
 }

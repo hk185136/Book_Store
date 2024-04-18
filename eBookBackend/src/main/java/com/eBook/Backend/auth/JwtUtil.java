@@ -47,8 +47,8 @@ public class JwtUtil {
     
     
     // Parses the input token.
-    private Claims parseJwtClaims(String token) {
-        return jwtParser.parseClaimsJws(token).getBody();
+    private Claims parseJwtClaims(String token){
+    	return jwtParser.parseClaimsJws(token).getBody();
     }
 
     // All the following methods help in JWT token validation.
