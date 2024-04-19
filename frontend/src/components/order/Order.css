@@ -1,17 +1,15 @@
 .order{
     display: flex;
     flex-direction: column;
-    /* align-items: center;
-    justify-content: center; */
     width: 500px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
     transition: 80ms;
+    background-color: rgb(252, 234, 252);
 }
 .order:hover{
     transform: scale(1.01);
 }
 .order-adtl-info{
-    background-color: aliceblue;
     padding: 20px 20px;
     font-size: larger;
     font-style: italic;
@@ -31,4 +29,22 @@
 }
 .order-card-button:hover{
     transform: scale(1.02);
+}
+.close-icon{
+    font-size: 40px;
+    align-self: end;
+    cursor: pointer;
+    transition: 40ms;
+}
+.close-icon:hover{
+    transform: scale(1.02);
+}
+.status-step{
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    background-color: rgb(196, 196, 196);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

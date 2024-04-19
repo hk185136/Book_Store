@@ -10,7 +10,9 @@ import { BiBookAdd } from "react-icons/bi";
 import { IoLibrary } from "react-icons/io5";
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import {Button,Stack,TextField} from '@mui/material'
+import {Button,Stack,TextField} from '@mui/material';
+import { IoIosNotifications } from "react-icons/io";
+
 function Nav({books,setBooks}) {    const [searchBy,setSearchBy] = useState('book');
     const [isOpen,setIsOpen] = useState(false);
     const [search,setSearch] = useState('');
@@ -86,6 +88,7 @@ function Nav({books,setBooks}) {    const [searchBy,setSearchBy] = useState('boo
         try{
             e.preventDefault();
             setNewBook(initialState);
+            // Adding the book.
             const res = await axios.post('http://localhost:8080/api/admin/books/',newBook);
             setBooks([...books,res.data]);
             setIsOpen(false)
@@ -99,12 +102,14 @@ function Nav({books,setBooks}) {    const [searchBy,setSearchBy] = useState('boo
             if(curSearch.length>0){
 
                 if(searchBy=='book'){
+                    // Get books based on the book name.
                     const res = await axios.get(`http://localhost:8080/api/user/books/title/${curSearch}`);
                     if(res.status == 200){
                         setBooks(res.data)
                     }
                 }
                 else{
+                    // Get book based on the author name.
                     const res = await axios.get(`http://localhost:8080/api/user/books/author/${curSearch}`);
                     if(res.status == 200){
                         setBooks(res.data)
@@ -112,6 +117,7 @@ function Nav({books,setBooks}) {    const [searchBy,setSearchBy] = useState('boo
                 }
             }
             else{
+                // Get all the books.
                 const res = await axios.get('http://localhost:8080/api/user/books/');
                 setBooks(res.data);
             }
@@ -150,6 +156,7 @@ function Nav({books,setBooks}) {    const [searchBy,setSearchBy] = useState('boo
             {(user.role === 'admin') && <BiBookAdd className='nav-img' onClick={()=>setIsOpen(true)}/>}
             {(user.role === 'customer'|| user.role==="user") && <Link to={'/home/cart'}><IoCartOutline className='nav-img'/></Link>}
             {user.role === 'customer' && <Link to={'/home/profile'}><CgProfile className='nav-img' /></Link>}
+            {user.role === 'customer' && <Link to={'/home/notifications'}><IoIosNotifications className='nav-img'/></Link>}
             <Link to={'/'}><CiLogout className='nav-img' onClick={()=>{dispatch({type : 'logout'})}} /></Link> 
         </div>
         {(isOpen) &&

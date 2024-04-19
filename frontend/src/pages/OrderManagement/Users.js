@@ -8,7 +8,6 @@ function Users() {
     useEffect(()=>{
         async function getUsers(){
             const res = await axios.get('http://localhost:8080/api/auth/getAllUsers');
-            console.log(res)
             if(res.status === 200){
                 setUsers(res.data);
                 setUsername(res.data[0].username);

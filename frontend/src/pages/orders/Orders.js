@@ -3,10 +3,7 @@ import './Orders.css';
 import Order from '../../components/order/Order';
 import axios from 'axios';
 import { useLocation } from 'react-router';
-import { pending } from '../../OrderStatus';
-import { confirmed } from '../../OrderStatus';
-import { cancelled } from '../../OrderStatus';
-import { delivered } from '../../OrderStatus';
+import { Confirmed,OnTheWay,Delivered,Cancelled } from '../../OrderStatus';
 import { toast } from 'react-toastify';
 import LoadingComponent from '../../components/Loading/LoadingComponent';
 
@@ -20,9 +17,9 @@ function Orders({username}) {
 
   useEffect(()=>{async function get(){
     try{
+      setIsLoading(true);
       const res = await axios.put('http://localhost:8080/api/item/getOrders',{username : username||username1})
       setOrders(res.data);
-      console.log(res.data);
       setFilteredOrders(res.data);
       setIsLoading(false);
     }
@@ -72,10 +69,10 @@ async function removeOrder(id){
       <div className='orders-filter'>
         <select className='order-filters' value={filterStatus} onChange={(e)=>filterOrders(e)}>
           <option value='All'>All</option>
-          <option value={pending}>Pending</option>
-          <option value={confirmed}>Confirmed</option>
-          <option value={cancelled}>Cancelled</option>
-          <option value={delivered}>Delivered</option>
+          <option value={Confirmed}>Confirmed</option>
+          <option value={Cancelled}>Cancelled</option>
+          <option value={Delivered}>Delivered</option>
+          <option value={OnTheWay}>On the way</option>
         </select>
         <button className='reset-filters' onClick={resetFilters}>Reset filter</button>
       </div>

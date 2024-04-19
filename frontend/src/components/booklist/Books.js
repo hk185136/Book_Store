@@ -19,14 +19,17 @@ function Books({books,setBooks,cartItems,setCartItems}) {
       try{
         if(genre==''){
           setIsLoading(true);
-          const res = await axios.get(`http://localhost:8080/api/user/books/`);
+          // Get all the books.
+          const booksResponse = await axios.get(`http://localhost:8080/api/user/books/`);
 
-          if(res.status==200){
-            const res2 = await axios.get(`http://localhost:8080/api/user/books/pricerange/${priceRange.min}/${priceRange.max}`);
-            const arr1 = res.data;
-            const arr2 = res2.data;
-            const newBooks = arr1.filter(book1=>{
-              return arr2.some(book2=>{
+          if(booksResponse.status==200){
+            //Get all the books whose price is in the selected range.
+            const priceRangeResponse = await axios.get(`http://localhost:8080/api/user/books/pricerange/${priceRange.min}/${priceRange.max}`);
+            const allBooks = booksResponse.data;
+            const booksInPriceRange = priceRangeResponse.data;
+            // Find the intersection of all books and the books in price range.
+            const newBooks = allBooks.filter(book1=>{
+              return booksInPriceRange.some(book2=>{
                 return book1.id==book2.id;
               })
             })
@@ -36,14 +39,17 @@ function Books({books,setBooks,cartItems,setCartItems}) {
         }
         else{
           setIsLoading(true);
-          const res = await axios.get(`http://localhost:8080/api/user/books/genre/${genre}`);
+          // When genre is selected get the books specific to that genre.
+          const genreResponse = await axios.get(`http://localhost:8080/api/user/books/genre/${genre}`);
 
-          if(res.status==200){
-            const res2 = await axios.get(`http://localhost:8080/api/user/books/pricerange/${priceRange.min}/${priceRange.max}`);
-            const arr1 = res.data;
-            const arr2 = res2.data;
-            const newBooks = arr1.filter(book1=>{
-              return arr2.some(book2=>{
+          if(genreResponse.status==200){
+            // Get all the books whose price is in the selected range.
+            const priceRangeResponse = await axios.get(`http://localhost:8080/api/user/books/pricerange/${priceRange.min}/${priceRange.max}`);
+            const genreBooks = genreResponse.data;
+            const booksInPriceRange = priceRangeResponse.data;
+            // Find the intersection of genre specific books and the books in price range.
+            const newBooks = genreBooks.filter(book1=>{
+              return booksInPriceRange.some(book2=>{
                 return book1.id==book2.id;
               })
             })

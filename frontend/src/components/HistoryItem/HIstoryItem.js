@@ -2,10 +2,10 @@ import React from 'react'
 
 function HIstoryItem({history,handleDelete}) {
     const sentence = {
-        cancelled : 'Cancelled the order of '+history.item.quantity+' units of '+history.item.book.title+' book',
-        pending : 'Placed Order request for '+history.item.quantity+' units of '+history.item.book.title+' book',
-        confirmed : 'Order confirmed : '+history.item.quantity+' units of '+history.item.book.title+' book',
-        delivered : 'Order delivered : \n'+history.item.quantity+' units of '+history.item.book.title+'\nbook Address : '+history.item.user.address
+        Cancelled : 'Cancelled the order of '+history.item.quantity+' units of '+history.item.book.title+' book',
+        Confirmed : 'Order confirmed : '+history.item.quantity+' units of '+history.item.book.title+' book',
+        Delivered : 'Order delivered : \n'+history.item.quantity+' units of '+history.item.book.title+'\nbook Address : '+history.item.user.address,
+        'On the way' : 'Order is on the way : \n'+history.item.quantity+' units of '+history.item.book.title+'\nbook Address : '+history.item.user.address
     }
   return (
     <tr>

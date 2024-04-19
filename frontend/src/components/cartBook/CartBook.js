@@ -8,6 +8,7 @@ function CartBook({cartItem,deleteItem,setTotal}) {
     useEffect(()=>{
         async function getBook(){
             try{
+                // Get the latest copy of the book that is in the cart.
                 const res = await axios.get(`http://localhost:8080/api/user/books/${cartItem.book.id}`);
                 if(res.status == 200){
                     setAvailableQuantity(res.data.availableQuantity);
@@ -29,7 +30,8 @@ function CartBook({cartItem,deleteItem,setTotal}) {
          setQty(prev=>prev+1)
          setTotal(prev=>prev+cartItem.book.price)
         try{
-            const res = axios.put(`http://localhost:8080/api/item/${cartItem.id}/increase`,cartItem)
+            // Increase the quantity in the cart.
+            await axios.put(`http://localhost:8080/api/item/${cartItem.id}/increase`,cartItem)
         }
         catch(e){
             toast.error((e?.response?.data?.message) || (e.message));
@@ -40,7 +42,8 @@ function CartBook({cartItem,deleteItem,setTotal}) {
         setQty(prev=>prev-1)  
         setTotal(prev=>prev-cartItem.book.price)
         try{
-            const res = axios.put(`http://localhost:8080/api/item/${cartItem.id}/decrease`,cartItem)
+            // Decrease the quantity in the cart.
+            await axios.put(`http://localhost:8080/api/item/${cartItem.id}/decrease`,cartItem)
         }
         catch(e){
             toast.error((e?.response?.data?.message) || (e.message));

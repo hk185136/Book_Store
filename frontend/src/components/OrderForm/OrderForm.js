@@ -2,11 +2,14 @@ import React, { useReducer, useState } from 'react'
 import Modal from '../modal/Modal'
 import axios from 'axios';
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import { CircularProgress } from '@mui/material';
 
 function OrderForm({setIsOpen,book}) {
     const user = useSelector(state=>state);
     const [address,setAddress] = useState(getAddr());
     const [quantity,setQuantity] = useState(1);
+    const [isLoading,setIsLoading] = useState(false);
     function getAddr(){
         if(user && user.address && user.address !==''){
             return user.address;
@@ -14,23 +17,36 @@ function OrderForm({setIsOpen,book}) {
         return ''
     }
     async function handleBuy(e){
-      e.preventDefault();
-      const body = {
-        book : book,
-        user : {
-          username : user.name,
-          address : address,
-          pno: user.pno
-        },
-        quantity : quantity
+      try{
+        e.preventDefault();
+        setIsLoading(true);
+        const body = {
+          book : book,
+          user : {
+            username : user.name,
+            address : address,
+            pno: user.pno
+          },
+          quantity : quantity
+        }
+        // Add the book to orders of the current user.
+        const res = await axios.post('http://localhost:8080/api/item/addToOrder',body);
+        setIsLoading(false);
+        setIsOpen(false);
+        if(res.status === 200){
+          toast.success("Order placed successfully");
+          const newBook = book;
+          newBook.availableQuantity = newBook.availableQuantity - quantity;
+          // As book is ordered, decrease it's available quantity.
+          await axios.put(`http://localhost:8080/api/admin/books/${book.id}`,newBook);
+        }
       }
-      const res = await axios.post('http://localhost:8080/api/item/addToOrder',body);
-      if(res.status === 200){
-        const newBook = book;
-        newBook.availableQuantity = newBook.availableQuantity - quantity;
-        axios.put(`http://localhost:8080/api/admin/books/${book.id}`,newBook)
+      catch(e){
+        setIsLoading(false);
+        setIsOpen(false);
+        toast.error((e?.response?.data?.message) || (e.message));
       }
-      setIsOpen(false);
+     
     }
   return (
     <Modal setIsOpen = {setIsOpen}>
@@ -70,13 +86,16 @@ function OrderForm({setIsOpen,book}) {
               >+
               </button>}
             </div>
-            <button 
-            className='buy-button' 
-            style={{margin:0}} 
-            onClick={(e)=>handleBuy(e)}
-            >
-              Buy
-            </button>
+            {isLoading ? <CircularProgress/> : 
+              <button 
+              className='buy-button' 
+              style={{margin:0}} 
+              onClick={(e)=>handleBuy(e)}
+              >
+                Buy
+              </button>
+            }
+            
         </form>
     </Modal>
   )

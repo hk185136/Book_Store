@@ -3,9 +3,8 @@ import { toast } from "react-toastify";
 
 export const getHistory = async (username)=>{
     try{
-        console.log("called getHistory")
-        const res = await axios.get(`http://localhost:8080/api/user/orderhistory/getOrderHistory/${username}`);
-        console.log(res.data);
+        // Getting history of current user.
+        const res = await axios.get(`http://localhost:8080/api/user/orderHistory/getOrderHistory/${username}`);
         return res.data;
     }
     catch(e){

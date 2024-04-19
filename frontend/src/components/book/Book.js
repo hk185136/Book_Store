@@ -28,6 +28,7 @@ function Book({isInCart,cartId,book,deleteBook,editBook,cartItems,setCartItems})
       setIsAdded(isInCart);
     },[isInCart])
 
+    // Reset all the errors whenever the form is opened or closed.
     useEffect(()=>{
       setBookNameError(false);
       setBookNameErrorMessage('');
@@ -37,10 +38,38 @@ function Book({isInCart,cartId,book,deleteBook,editBook,cartItems,setCartItems})
       setbookAvailableQuantityErrorMessage('')
   },[isOpen])
 
-  function handleEdit(){
-    if(!validateBook(newBook)) return;
-    editBook(book.id,newBook);
-    setIsOpen(false);
+  async function handleNotify(){
+    const notificationBody = {
+      user : {
+        username : user.name
+      },
+      book : book,
+      item : null,
+      notificationTitle : 'Restock alert',
+      description : `${book.title} is now available.`
+    }
+    const res = await axios.post('http://localhost:8080/api/user/notifications/addNotification',notificationBody);
+    console.log(res);
+  }
+  async function handleEdit(){
+    try{
+      if(!validateBook(newBook)) return;
+      console.log(book.availableQuantity,newBook.availableQuantity);
+      if(book.availableQuantity == 0 && newBook.availableQuantity>0){
+        console.log("hello")
+        const res = await axios.post('http://localhost:8080/api/user/notifications/dispatchStockRefillNotficationToSpecificUser',
+        null,
+        {params : {bookname : book.title}});
+        console.log(res);
+      }
+      
+      
+      editBook(book.id,newBook);
+      setIsOpen(false);
+    }
+    catch(e){
+      console.log(e)
+    }
   }
   function validateBook(){
     let flag=true;
@@ -83,6 +112,7 @@ function Book({isInCart,cartId,book,deleteBook,editBook,cartItems,setCartItems})
     setOrderOpen(true)
   }
   async function handleAddToCart(){
+    // Push the book to the cart of the current user.
     const res = await axios.post('http://localhost:8080/api/item/addToCart',{
       book : book,
       user : {username : user.name},
@@ -92,10 +122,12 @@ function Book({isInCart,cartId,book,deleteBook,editBook,cartItems,setCartItems})
       setCartItems([...cartItems,res.data])
       setIsAdded(true);
       setShowPopup(false);
+      toast.success("Added to cart");
     }
   }
   async function handleRemoveFromCart(){
     try{
+      // Remove book from the cart of the current user.
       const res = await axios.delete('http://localhost:8080/api/item/' + cartId);
       const newCartItems = cartItems.filter((item)=>item.id!==cartId);
       setCartItems(newCartItems);
@@ -168,7 +200,10 @@ function Book({isInCart,cartId,book,deleteBook,editBook,cartItems,setCartItems})
             </>}
             {
               (user.role === 'customer') && book.availableQuantity===0 && 
-              <p style={{marginTop:20}}>No copies available</p>
+              <>
+                <p style={{marginTop:20}}>No copies available</p>
+                <Button onClick={handleNotify} variant='contained'>Notify me</Button>
+              </>
             }
             {(showPopup)&& (
               <div className='qty-popup' style={{left : 150,top : 130}}>

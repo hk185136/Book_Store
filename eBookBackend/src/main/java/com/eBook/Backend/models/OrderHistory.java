@@ -1,11 +1,14 @@
 package com.eBook.Backend.models;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
+@Document(collection = "orderHistory")
 //Class representing Order history.
 public class OrderHistory {
 	

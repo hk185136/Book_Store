@@ -12,6 +12,7 @@ import axios from 'axios';
 import Users from './pages/OrderManagement/Users';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import Notifications from './pages/notifications/Notifications';
 
 function App() {
   const [books,setBooks] = useState([]);
@@ -20,6 +21,7 @@ function App() {
   useEffect(()=>{
     async function getAllBooks(){
       try{
+        // Getting all books.
         const res = await axios.get('http://localhost:8080/api/user/books/');
         setBooks(res.data);
       }
@@ -29,7 +31,7 @@ function App() {
     }
     async function getCartItems(){
       try{
-        console.log("searching by the name : "+user.name)
+        // Getting books that are in cart of the current user.
         const res = await axios.put('http://localhost:8080/api/item/searchByStatus/added to cart',{username : user.name});
         if(res.status==200){
           setCartItems(res.data);
@@ -47,6 +49,31 @@ function App() {
  
   },[user])
 
+  useEffect(()=>{
+    async function subscribe(){
+    // Subscribe user to the notifications
+      const eventSource = new EventSource("http://localhost:8080/api/user/notifications/subscribe/"+user.name);
+      eventSource.addEventListener("Refill stock",(event)=>{
+        toast.success(event.data);
+        console.log(event);
+      })
+      eventSource.onopen = (event) => {
+        console.log("connection opened")
+      }
+      eventSource.onerror = (event) => {
+        console.log(event.target.readyState)
+        if (event.target.readyState === EventSource.CLOSED) {
+          console.log('eventsource closed (' + event.target.readyState + ')')
+        }
+        eventSource.close();
+      }
+    }
+    console.log(user);
+    if(user && user.role==='customer'){
+      subscribe()
+    }
+    
+  },[user])
   return (
     <div className="App">
       <Router>
@@ -75,6 +102,7 @@ function App() {
                 <Route path="/home/profile" element={<Profile/>}/>
                 <Route path='/home/orders' element={<Orders/>}/>
                 <Route path='/home/users' element={<Users/>}/>
+                <Route path='/home/notifications' element = {<Notifications/>}/>
               </Route>
             </Route>
           </Routes> 

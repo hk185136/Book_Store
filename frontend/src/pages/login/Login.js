@@ -1,6 +1,6 @@
 import React, {useEffect, useState } from 'react';
 import './Login.css';
-import {useLocation, useNavigate } from 'react-router-dom';
+import {useLocation, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch} from 'react-redux';
 import { toast } from 'react-toastify';
@@ -58,9 +58,6 @@ function Login() {
             dispatch({type : 'login', data : response.data});
             navigate('/home');
           }
-          else{
-            console.log('error')
-          }
         }
         catch(e){
           setName('');
@@ -69,7 +66,6 @@ function Login() {
           setIsValidName(false);
           setIsValidPassword(false);
           setPasswordError('Invalid username or password.')
-          console.log(e)
           toast.error((e?.response?.data?.message) || (e.message));
         }
     }

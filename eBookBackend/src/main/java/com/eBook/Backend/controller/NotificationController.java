@@ -41,18 +41,23 @@ public class NotificationController {
 	
 	@Autowired
 	private NotificationServiceImpl notificationServiceImpl;
-	
-	private String SUBSCRIBED_USERNAME ="";
-	
+	@GetMapping(value = "/getNotifications/{username}")
+	public ResponseEntity<List<Notification>> getNotificationsByUsername(@PathVariable String username){
+		return ResponseEntity.ok(notificationServiceImpl.getNotificationsByUser(username).get());
+	}
+	@DeleteMapping(value = "/deleteNotification/{id}")
+	public ResponseEntity<String> deleteNotificationByid(@PathVariable String id){
+		notificationServiceImpl.deleteById(id);
+		return ResponseEntity.status(200).body("Deleted successfully");
+	}
 	@PostMapping(value = "/addNotification")
 	public ResponseEntity<Notification> addNotification(@RequestBody Notification notification)
 	{
 		return ResponseEntity.status(200).body(notificationServiceImpl.addtoNotifications(notification));
 	}
 	
-	@GetMapping(value = "/subscribe", consumes = MediaType.ALL_VALUE)
-	public SseEmitter subscribe(@RequestParam String username) {
-		SUBSCRIBED_USERNAME=username;
+	@GetMapping(value = "/subscribe/{username}", consumes = MediaType.ALL_VALUE)
+	public SseEmitter subscribe(@PathVariable String username) {
 		return notificationServiceImpl.initUserSubscription(username);
 	}
 	
@@ -60,18 +65,23 @@ public class NotificationController {
 	@PostMapping(value = "/dispatchStockRefillNotficationToSpecificUser")
 	public ResponseEntity<String> dispatchStockRefillBookNotification(@RequestParam String bookname)
 	{
-		Notification stockRefillNotification = notificationServiceImpl.getNotificationsByTitleAndUsername(bookname, SUBSCRIBED_USERNAME).get();
-		notificationServiceImpl.dispatchNotification(SUBSCRIBED_USERNAME, "Refill stock", stockRefillNotification);
-		notificationServiceImpl.deleteById(stockRefillNotification.getId());
+		List<Notification>stockRefillNotifications = notificationServiceImpl.getNotificationsByTitle(bookname).get();
+		for(Notification stockRefillNotification : stockRefillNotifications) {
+			notificationServiceImpl.dispatchNotification(stockRefillNotification.getUser().getUsername(), "Refill stock", stockRefillNotification);
+			deleteNotificationByid(stockRefillNotification.getId());
+		}
 		return ResponseEntity.ok("refill done");
 	}
 	
 	@PostMapping(value = "/dispatchOrderStatusNotficationToSpecificUser")
 	public ResponseEntity<String> dispatchOrderStatusNotification(@RequestParam String bookname, @RequestParam String orderStatus)
 	{
-		Notification orderStatusNotification = notificationServiceImpl.getNotificationsByStatusAndUsernameAndTitle(orderStatus, SUBSCRIBED_USERNAME, bookname).get();
-		notificationServiceImpl.dispatchNotification(SUBSCRIBED_USERNAME, "Order Status Changed", orderStatusNotification);
-		notificationServiceImpl.deleteById(orderStatusNotification.getId());
+		List<Notification> orderStatusNotifications = notificationServiceImpl.getNotificationsByStatusAndTitle(orderStatus, bookname).get();
+		for(Notification orderStatusNotification : orderStatusNotifications) {
+			notificationServiceImpl.dispatchNotification(orderStatusNotification.getUser().getUsername(), "Order Status Changed", orderStatusNotification);
+			deleteNotificationByid(orderStatusNotification.getId());
+		}
+		
 		return ResponseEntity.ok("order delivered");
 	}
 }

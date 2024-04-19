@@ -20,6 +20,7 @@ function Profile() {
     const hist = await getHistory(user.name);
     setHistory(hist);
     }
+    
     get()
   },[])
 
@@ -32,7 +33,7 @@ function Profile() {
     };
     setIsOpen(false);
     try{
-      const res= await axios.put(`http://localhost:8080/api/auth/editUser/${user.name}`,body);
+      await axios.put(`http://localhost:8080/api/auth/editUser/${user.name}`,body);
       setAddress(addressInput);
       setPno(pnoInput);
 
@@ -42,20 +43,20 @@ function Profile() {
     }
 
   }
-  function handleDelete(id){
+  async function handleDelete(id){
     try{
-      axios.delete('http://localhost:8080/api/user/orderhistory/'+id);
       const newHistory = history.filter(item=>item.id!=id);
       setHistory(newHistory);
+      await axios.delete('http://localhost:8080/api/user/orderHistory/'+id);
     }
     catch(e){
       toast.error((e?.response?.data?.message) || (e.message));
     }
   }
-  function clearHistory(){
+  async function clearHistory(){
     try{
-      axios.delete('http://localhost:8080/api/user/orderhistory/delete/'+user.name);
       setHistory([])
+      await axios.delete('http://localhost:8080/api/user/orderHistory/delete/'+user.name);
     }
     catch(e){
       toast.error((e?.response?.data?.message) || (e.message));
