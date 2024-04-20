@@ -44,6 +44,11 @@ public class NotificationSubscriptionServiceImplementation {
 		return notificationSubscriptionRepository.findByStatusAndTitle(status, title);
 	}
 	
+	public Optional<List<NotficationSubscription>> getSubscriptionsByUsename(String username)
+	{
+		return notificationSubscriptionRepository.findByUsername(username);
+	}
+	
 	public SseEmitter initiateUserSubscription(String username)
 	{
 		SseEmitter sseEmitter = new SseEmitter(Long.MAX_VALUE);

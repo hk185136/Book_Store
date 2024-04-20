@@ -1,7 +1,7 @@
 package com.eBook.Backend.controller;
 
-import java.io.IOException;
 import java.util.HashMap;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -42,8 +42,15 @@ public class NotificationSubscriptionController {
 	@Autowired
 	private NotificationSubscriptionServiceImplementation notificationSubscriptionServiceImplementation;
 	
+	
+	@GetMapping("getSubscriptions/{username}")
+	public ResponseEntity<String> getSubscriptionsByUsername(@PathVariable String username){
+		notificationSubscriptionServiceImplementation.getSubscriptionsByUsename(username);
+		return ResponseEntity.status(200).body("Deleted subscription successfully");
+	}
+	
 	@DeleteMapping("deleteSubscription/{id}")
-	public ResponseEntity<String> deleteSubscriptionByid(@PathVariable String id){
+	public ResponseEntity<String> deleteSubscriptionById(@PathVariable String id){
 		notificationSubscriptionServiceImplementation.deleteSubscriptionById(id);
 		return ResponseEntity.status(200).body("Deleted subscription successfully");
 	}

@@ -16,7 +16,7 @@ public class UserBookImplementation {
 	private BookRepository bookRepository;
 	
 	public Book getBookById(String bookId) {
-		Optional<Book>optionalBook = bookRepository.findByid(bookId);
+		Optional<Book>optionalBook = bookRepository.findById(bookId);
 		return optionalBook.get();
 	}
 	
@@ -64,5 +64,10 @@ public class UserBookImplementation {
 		return Optional.of(books);
 	}
 	
+	
+	public Optional<List<Book>> getBooksByStock(int availableQuantity)
+	{
+		return bookRepository.findByAvailableQuantityGreaterThan(availableQuantity);
+	}
 	
 }

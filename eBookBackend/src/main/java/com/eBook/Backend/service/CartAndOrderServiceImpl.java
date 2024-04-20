@@ -19,6 +19,8 @@ import com.eBook.Backend.Repository.OrderHistoryRepository;
 import com.eBook.Backend.models.AuthUser;
 import com.eBook.Backend.models.Book;
 import com.eBook.Backend.models.Item;
+import com.eBook.Backend.models.NotficationSubscription;
+import com.eBook.Backend.models.Notification;
 import com.eBook.Backend.models.OrderHistory;
 
 @Service
@@ -27,6 +29,15 @@ public class CartAndOrderServiceImpl {
 	
 	@Autowired
 	private CartAndOrderRepository CartRepository;
+	
+	@Autowired
+	private NotificationSubscriptionServiceImplementation notificationSubscriptionServiceImplementation;
+	
+	@Autowired
+	private NotificationServiceImplementation notificationServiceImplementation;
+	
+	@Autowired
+	private OrderHistoryImplementation orderHistoryImplementation;
 	
 	// Saves an input item to database
 	public Item addItem(Item Item)
@@ -81,7 +92,6 @@ public class CartAndOrderServiceImpl {
 		Item storedItem  =  CartRepository.findById(item.getId()).get();
 		storedItem.setStatus(status);
 		CartRepository.save(storedItem);
-		System.out.println("status updated");
 		return storedItem;
 	}
 	
@@ -90,7 +100,6 @@ public class CartAndOrderServiceImpl {
 	{
 		TimerTask startTimer = new TimerTask() {
 	        public void run() {
-	        	System.out.println("Timer");
 	        	updateItemStatus(item, status);
 	        }
 	    };
@@ -100,6 +109,20 @@ public class CartAndOrderServiceImpl {
 	    Timer.schedule(startTimer, deliveryTime);
 	}
 	
+	
+	public void performOrderStep(Item item, String orderStatus, int time)
+	{
+		itemDeliveryTimer(item, orderStatus, time);		
+		updateItemOrderedDate(item);
+		OrderHistory history = orderHistoryImplementation.setItemToHistory(item);
+		orderHistoryImplementation.addtoHistory(history);
+		List<NotficationSubscription> statusSubscriptions = notificationSubscriptionServiceImplementation.getSubscriptionsByStatusAndTitle(orderStatus, item.getBook().getTitle()).get();
+		for(NotficationSubscription subscription : statusSubscriptions) {
+			Notification statusNotification = notificationServiceImplementation.addNotifcation(subscription.getUser().getUsername(), subscription.getItem().getBook().getTitle()+" is "+subscription.getItem().getStatus());
+			notificationServiceImplementation.dispatchNotification(notificationSubscriptionServiceImplementation.emitters,"Order status", statusNotification);
+			notificationSubscriptionServiceImplementation.deleteSubscriptionById(subscription.getId());
+		}
+	}
 	
 	
 	

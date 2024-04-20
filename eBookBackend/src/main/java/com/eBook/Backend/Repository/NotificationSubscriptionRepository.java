@@ -16,4 +16,7 @@ public interface NotificationSubscriptionRepository extends MongoRepository<Notf
 	@Query(value = "{'item.status': ?0, 'item.book.title': ?1}")
 	Optional<List<NotficationSubscription>> findByStatusAndTitle(String status, String title);
 	
+	@Query(value = "{'user.username': ?0}")
+	Optional<List<NotficationSubscription>> findByUsername(String username);
+		
 }

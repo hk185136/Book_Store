@@ -61,12 +61,7 @@ public class NotificationController {
 	@PostMapping(value = "/dispatchOrderStatusNotfications")
 	public ResponseEntity<String> dispatchOrderStatusNotification(@RequestParam String bookname, @RequestParam String orderStatus)
 	{
-		List<NotficationSubscription> statusSubscriptions = notificationSubscriptionServiceImplementation.getSubscriptionsByStatusAndTitle(orderStatus, bookname).get();
-		for(NotficationSubscription subscription : statusSubscriptions) {
-			Notification statusNotification = notificationServiceImplementation.addNotifcation(subscription.getUser().getUsername(), subscription.getItem().getBook().getTitle()+" is "+subscription.getItem().getStatus());
-			notificationServiceImplementation.dispatchNotification(notificationSubscriptionServiceImplementation.emitters,"Order status", statusNotification);
-			notificationSubscriptionServiceImplementation.deleteSubscriptionById(subscription.getId());
-		}
+		
 		
 		return ResponseEntity.ok(bookname+" is "+orderStatus);
 	}

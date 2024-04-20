@@ -35,7 +35,7 @@ public class CartAndOrderController {
 	
 	//Autowiring service and repository layer classes.
 	@Autowired
-	private CartAndOrderServiceImpl cartServiceImpl;
+	private CartAndOrderServiceImpl cartAndOrderServiceImpl;
 	@Autowired
 	private OrderHistoryImplementation OrderHistoryImplementation;
 	
@@ -46,25 +46,17 @@ public class CartAndOrderController {
 	public ResponseEntity<Item> addItemToCart(@RequestBody Item item)
 	{
 		item.setStatus("added to cart");
-		return ResponseEntity.ok(cartServiceImpl.addItem(item));
+		return ResponseEntity.ok(cartAndOrderServiceImpl.addItem(item));
 	}
 	
 	//Post request which accepts item data, automates the status of item, adds an entry to history, stores those in database and returns a response with that item data.
 	@PostMapping("/addToOrder")
 	public ResponseEntity<Item> addItemToOrders(@RequestBody Item item)
 	{
-		cartServiceImpl.addItem(item);
-
-		cartServiceImpl.updateItemStatus(item, "confirmed");
-		cartServiceImpl.updateItemOrderedDate(item);
-		
-		OrderHistory history = OrderHistoryImplementation.setItemToHistory(item);
-		OrderHistoryImplementation.addtoHistory(history);
-		
-
-		cartServiceImpl.itemDeliveryTimer(item, "On the way", 5000);
-		
-		cartServiceImpl.itemDeliveryTimer(item, "Delivered", 15000);
+		cartAndOrderServiceImpl.addItem(item);
+		cartAndOrderServiceImpl.performOrderStep(item, "Confirmed", 1000);
+		cartAndOrderServiceImpl.performOrderStep(item, "On the way", 5000);
+		cartAndOrderServiceImpl.performOrderStep(item, "Delivered", 10000);		
 		return ResponseEntity.ok(item);
 	}
 		
@@ -73,7 +65,7 @@ public class CartAndOrderController {
 	@PutMapping("/updateStatus/{status}")
 	public ResponseEntity<String> updateItemStatus(@RequestBody Item item, @PathVariable("status")String newStatus)
 	{
-		cartServiceImpl.updateItemStatus(item, newStatus);
+		cartAndOrderServiceImpl.updateItemStatus(item, newStatus);
 		OrderHistory history = OrderHistoryImplementation.setItemToHistory(item);
 		OrderHistoryImplementation.addtoHistory(history);
 		return ResponseEntity.ok("status updated");
@@ -83,17 +75,17 @@ public class CartAndOrderController {
 	@PutMapping("/searchByStatus/{status}")
 	public ResponseEntity<Set<Item>> searchByUserAndStatus(@RequestBody AuthUser user, @PathVariable("status") String status)
 	{
-		return ResponseEntity.ok(cartServiceImpl.findItemsByStatusAndUsername(status, user.getUsername()));
+		return ResponseEntity.ok(cartAndOrderServiceImpl.findItemsByStatusAndUsername(status, user.getUsername()));
 	}
 	
 	// Put request which accepts user data and returns all the items related to that user.
 	@PutMapping("/getOrders")
 	public ResponseEntity<Set<Item>> getOrders(@RequestBody AuthUser user)
 	{
-		Set<Item>orders = cartServiceImpl.findItemsByStatusAndUsername("pending",user.getUsername());
-		orders.addAll(cartServiceImpl.findItemsByStatusAndUsername("cancelled",user.getUsername()));
-		orders.addAll(cartServiceImpl.findItemsByStatusAndUsername("delivered",user.getUsername()));
-		orders.addAll(cartServiceImpl.findItemsByStatusAndUsername("confirmed",user.getUsername()));;
+		Set<Item>orders = cartAndOrderServiceImpl.findItemsByStatusAndUsername("pending",user.getUsername());
+		orders.addAll(cartAndOrderServiceImpl.findItemsByStatusAndUsername("cancelled",user.getUsername()));
+		orders.addAll(cartAndOrderServiceImpl.findItemsByStatusAndUsername("delivered",user.getUsername()));
+		orders.addAll(cartAndOrderServiceImpl.findItemsByStatusAndUsername("confirmed",user.getUsername()));;
 		return ResponseEntity.ok(orders);
 	}
 	
@@ -102,7 +94,7 @@ public class CartAndOrderController {
 	public ResponseEntity<Item> increaseItem(@RequestBody Item item, @PathVariable("id") String itemId)
 	{
 		item.setId(itemId);
-		return ResponseEntity.ok(cartServiceImpl.increaseItem(item));
+		return ResponseEntity.ok(cartAndOrderServiceImpl.increaseItem(item));
 	}
 	
 	// Put request which accepts item data, item id, decreases that item quantity by one.
@@ -110,14 +102,14 @@ public class CartAndOrderController {
 	public ResponseEntity<Item> decreaseItem(@RequestBody Item item, @PathVariable("id") String itemId)
 	{
 		item.setId(itemId);
-		return ResponseEntity.ok(cartServiceImpl.decreaseItem(item));
+		return ResponseEntity.ok(cartAndOrderServiceImpl.decreaseItem(item));
 	}
 	
 	// Delete request which accepts an item id, deletes the item with that id and returns a success message.
 	@DeleteMapping("{id}")
 	public ResponseEntity<String> deleteItemFromCart(@PathVariable("id") String itemId)
 	{
-		cartServiceImpl.deleteItem(itemId);
+		cartAndOrderServiceImpl.deleteItem(itemId);
 		return ResponseEntity.status(HttpStatus.OK).body("Deleted book succesfully");
 		
 	}

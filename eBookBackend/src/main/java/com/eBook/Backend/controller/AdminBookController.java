@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 //Class to implement rest APIS for admin side book store management
 public class AdminBookController {
 	@Autowired
-	//autowiring the service implementation layer class 
+	//Auto wiring the service implementation layer class 
 	private AdminBookImplementation adminBookImplementation;
 	
 	@PostMapping
@@ -44,10 +44,10 @@ public class AdminBookController {
 	}
 	
 	@DeleteMapping("{id}")
-	//Delete request whcih accepts book id, deletes a book with that id and returns a success message.
-	public ResponseEntity deleteBook(@PathVariable("id") String bookId)
+	//Delete request which accepts book id, deletes a book with that id and returns a success message.
+	public ResponseEntity<String> deleteBook(@PathVariable("id") String bookId)
 	{
-		adminBookImplementation.deleteBook(bookId);
-		return ResponseEntity.status(HttpStatus.OK).body("Book was deleted successfully");
+		String message = adminBookImplementation.deleteBook(bookId);
+		return ResponseEntity.status(HttpStatus.OK).body(message);
 	}
 }
