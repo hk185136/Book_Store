@@ -1,23 +1,23 @@
 version: "3"
 services:
-  mymongodb:
-   image: mongo:latest
-   container_name: "mymongodb"
+  EbookStore_database:
+   image: "mongo:latest"
+   container_name: "EbookStore_database"
    ports: 
    - 27017:27017
    
-  ebook.springapp:
-    image: "springboot-mongodb:1.0"
-    container_name: "springapp"
+  Ebook.SpringApp:
+    image: "Ebook:SpringApp"
+    container_name: "Ebook.SpringApp"
     ports:
     - 8080:8080
     
     
-  react_ebook:
-     image: "react-app:dev"  
-     container_name: "frontend"
+  Ebook.ReactApp:
+     image: "Ebook:ReactApp"  
+     container_name: "Ebook.ReactApp"
      ports:
      - 3000:3000  
      links:
-     - mymongodb 
-     - ebook.springapp
+     - Ebook.ReactApp 
+     - Ebook.SpringApp

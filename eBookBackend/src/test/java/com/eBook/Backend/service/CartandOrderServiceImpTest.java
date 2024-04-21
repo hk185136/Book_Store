@@ -1,29 +1,18 @@
 package com.eBook.Backend.service;
-
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.endsWith;
-import static org.mockito.ArgumentMatchers.intThat;
 import static org.mockito.Mockito.when;
-
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
-import org.aspectj.lang.annotation.Before;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.event.annotation.BeforeTestClass;
 
 import com.eBook.Backend.Repository.CartAndOrderRepository;
 import com.eBook.Backend.models.AuthUser;
@@ -31,7 +20,8 @@ import com.eBook.Backend.models.Book;
 import com.eBook.Backend.models.Item;
 
 @SpringBootTest
-public class CartAndOrderServiceImpTest {
+public class CartandOrderServiceImpTest 
+{
 	@Autowired
 	private CartAndOrderServiceImpl cartServiceImpl;
 	
@@ -59,10 +49,10 @@ public class CartAndOrderServiceImpTest {
 	Item invalidItem5 = new Item("5",book5,user1,30,"delivered","18-04-2024");
 
 
-	List<Item>items = new ArrayList<>() {{add(item1);add(item4);}};
-	List<Item>invalidItems = new ArrayList<>() {{add(item3);add(item5);}};
+	List<Item>items = new ArrayList<>(){{add(item1);add(item4);}};
+	List<Item>invalidItems = new ArrayList<>(){{add(item3);add(item5);}};
 	
-	
+	//Setting up of responses for various operations using Mockito
 	@BeforeEach
 	void setUp()
 	{
@@ -82,8 +72,10 @@ public class CartAndOrderServiceImpTest {
 		when(cartRepository.findByStatusAndUsername(item1.getStatus(), user1.getUsername())).thenReturn(items);
 	}
 	
+	
+	//Tests for adding a book into the cart successfully
 	@Test
-	public void addItemToCart()
+	public void addItemToCartSuccess()
 	{
 		Item itemActual = cartServiceImpl.addItem(item1);
 		assertAll(
@@ -93,9 +85,23 @@ public class CartAndOrderServiceImpTest {
 				);
 	}
 	
-
+	
+	//Test for the failure case of adding a book into the cart
 	@Test
-	public void addItemToOrders()
+	public void addItemToCartFailure()
+	{
+		Item itemActual = cartServiceImpl.addItem(invalidItem3);
+		assertAll(
+				()->assertEquals(invalidItem3.getBook().getTitle(),itemActual.getBook().getTitle()),
+				()->assertEquals(invalidItem3.getUser().getUsername(),itemActual.getUser().getUsername())
+				//()->assertTrue(invalidItem3.getQuantity()<=itemActual.getBook().getAvailableQuantity())			
+				);
+	}
+	
+	
+	//Test for adding a book to the orders list when user proceed to buy it.
+	@Test
+	public void addItemToOrdersSuccess()
 	{
 		Item itemActual = cartServiceImpl.addItem(item2);
 		assertAll(
@@ -106,8 +112,9 @@ public class CartAndOrderServiceImpTest {
 	}
 	
 
+	//Test for increasing the purchasing quantity of a book in the cart.
 	@Test
-	public void increaseItem()
+	public void increaseItemSuccess()
 	{
 		Item itemActual = cartServiceImpl.increaseItem(item3);
 		assertAll(
@@ -117,11 +124,10 @@ public class CartAndOrderServiceImpTest {
 				()->assertEquals(item3.getQuantity(), itemActual.getQuantity())
 				);
 	}
-	
 
-	
+	//Test for decreasing the purchasing quantity of a book in the cart.
 	@Test
-	public void decreaseItem()
+	public void decreaseItemSuccess()
 	{
 		Item itemActual = cartServiceImpl.decreaseItem(item3);
 		assertAll(
@@ -131,10 +137,10 @@ public class CartAndOrderServiceImpTest {
 				()->assertEquals(item3.getQuantity(), itemActual.getQuantity())
 				);
 	}
-	
-	
+
+	//Test for finding an order by its status and a user in the cart.
 	@Test
-	public void findByStatusAndUsername()
+	public void findByStatusAndUsernameSuccess()
 	{
 		Set<Item> temp = cartServiceImpl.findItemsByStatusAndUsername(item1.getStatus(), user1.getUsername());
 		List<Item> itemsActual= new ArrayList<>();
@@ -145,11 +151,22 @@ public class CartAndOrderServiceImpTest {
 		}
 	}
 	
-	
+
+	//Test for updating the status of an order
 	@Test
-	public void UpdateItemStatus()
+	public void UpdateItemStatusSuccess()
 	{
 		Item itemActual = cartServiceImpl.updateItemStatus(item4,"pending");
 		assertEquals(item4.getStatus(), itemActual.getStatus());
 	}
+
+	//Test for the failure case of updating the status of an order
+	@Test
+	public void UpdateItemStatusFailure()
+	{
+		Item itemActual = cartServiceImpl.updateItemStatus(item4,"pending");
+		assertNotEquals(item3.getStatus(), itemActual.getStatus());
+	}
+	
+	
 }

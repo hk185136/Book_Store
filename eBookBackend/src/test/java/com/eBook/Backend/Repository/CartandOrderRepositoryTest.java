@@ -1,11 +1,6 @@
 package com.eBook.Backend.Repository;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.AfterAll;
@@ -35,7 +30,8 @@ import com.eBook.Backend.models.Item;
 @DataMongoTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class CartAndOrderRepositoryTest {
+public class CartandOrderRepositoryTest 
+{
 	@Autowired
 	private CartAndOrderRepository cartRepository;
 	
@@ -45,7 +41,6 @@ public class CartAndOrderRepositoryTest {
 	@Autowired
 	private AuthUserRepository authUserRepository;
 	
-	private Item item;
 	
 	private Book book1,book2,book3,book4,book5;
 	private AuthUser user1,user2,user3;
@@ -71,6 +66,7 @@ public class CartAndOrderRepositoryTest {
 		item5 = new Item("5",book5,user1,9,"delivered","18-04-2024");		
 	}
 	
+	//Test for saving a book to cart
 	@Test
 	@Order(1)
 	public void saveItemTest()
@@ -94,10 +90,11 @@ public class CartAndOrderRepositoryTest {
 		
 		
 		List<Item> itemlist=cartRepository.findAll();
-		
 		assertThat(itemlist.size()).isGreaterThan(0);
 	}
 	
+	
+	//Test for getting all the books from the cart which are added by a particular user 
 	@Test
 	public void getItemsByUser()
 	{
@@ -106,6 +103,7 @@ public class CartAndOrderRepositoryTest {
 		assertThat(userItemsActual.size()).isGreaterThan(0);
 	}
 	
+	//Test for filtering and retrieving books based on status in the cart
 	@Test
 	public void getItemsByStatus()
 	{
@@ -114,6 +112,7 @@ public class CartAndOrderRepositoryTest {
 		assertThat(userItemsActual.size()).isGreaterThan(0);
 	}
 	
+	//Test for finding item in cart by status and a user
 	@Test
 	public void getItemsByStatusAndUsername()
 	{
@@ -122,6 +121,7 @@ public class CartAndOrderRepositoryTest {
 		assertThat(userItemsActual.size()).isGreaterThan(0);
 	}
 	
+	//Test for finding item in cart by book and status
 	@Test
 	public void getItemsByBookAndStatus()
 	{
@@ -130,6 +130,8 @@ public class CartAndOrderRepositoryTest {
 		assertThat(userItemsActual.size()).isGreaterThan(0);
 	}
 	
+	
+	//Flushing out the dummy data used for testing from the database
 	@AfterAll
 	public void reset() {
 		List<Item>itemsDel = new ArrayList<>();
