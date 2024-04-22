@@ -1,15 +1,10 @@
 package com.eBook.Backend.models;
 
 import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.security.core.userdetails.User;
 
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Data
 @Builder

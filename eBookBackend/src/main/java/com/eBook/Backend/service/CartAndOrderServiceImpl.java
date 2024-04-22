@@ -11,13 +11,11 @@ import java.util.TimerTask;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
+
 
 import com.eBook.Backend.Repository.CartAndOrderRepository;
 
-import com.eBook.Backend.Repository.OrderHistoryRepository;
-import com.eBook.Backend.models.AuthUser;
-import com.eBook.Backend.models.Book;
+
 import com.eBook.Backend.models.Item;
 import com.eBook.Backend.models.NotficationSubscription;
 import com.eBook.Backend.models.Notification;

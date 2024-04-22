@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
-import com.eBook.Backend.models.Book;
 import com.eBook.Backend.models.NotficationSubscription;
 
 public interface NotificationSubscriptionRepository extends MongoRepository<NotficationSubscription, String>{

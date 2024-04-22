@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import java.util.List;
 
-import com.eBook.Backend.models.Item;
 import com.eBook.Backend.models.OrderHistory;
 import com.eBook.Backend.service.OrderHistoryImplementation;
 import org.springframework.web.bind.annotation.PathVariable;

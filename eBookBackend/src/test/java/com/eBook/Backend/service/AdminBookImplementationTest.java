@@ -1,23 +1,14 @@
 package com.eBook.Backend.service;
-
-
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import java.util.Optional;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-
 import com.eBook.Backend.Repository.BookRepository;
 import com.eBook.Backend.models.Book;
-
 
 
 @SpringBootTest
@@ -43,11 +34,13 @@ public class AdminBookImplementationTest
 
 		Mockito.when(bookRepository.save(book3.get())).thenReturn(book3.get());
 
-		Mockito.when(bookRepository.findByid("3")).thenReturn(book3);
+		Mockito.when(bookRepository.findById("3")).thenReturn(book3);
 		
-		Mockito.when(bookRepository.findByid("4")).thenReturn(book4);
+		Mockito.when(bookRepository.findById("4")).thenReturn(book4);
 		
 	}
+	
+	//Tests for creating  a new book and adding it into the database
 	
 	@Test
 	void create_Success()
@@ -56,13 +49,15 @@ public class AdminBookImplementationTest
 		assertEquals( book1.getTitle(),bookActual.getTitle());
 	}
 	
-//	@Test
-//	void create_Failure()
-//	{
-//		Book bookActual= adminBookImplementation.createBook(book1);
-//		assertEquals( book2.getTitle(),bookActual.getTitle());
-//	}
+	@Test
+	void create_Failure()
+	{
+		Book bookActual= adminBookImplementation.createBook(book1);
+		assertNotEquals( book2.getTitle(),bookActual.getTitle());
+	}
 	
+	
+	//Tests for updating an existing book in the database
 	@Test
 	void update_Success()
 	{
@@ -70,11 +65,11 @@ public class AdminBookImplementationTest
 		assertEquals(newBook.getTitle(),bookActual.getTitle());
 	}
 	
-//	@Test
-//	void update_Failure()
-//	{
-//		Book bookActual =adminBookImplementation.updateBook(newBook);
-//		assertEquals( book6.getTitle(),bookActual.getTitle());
-//	}
+	@Test
+	void update_Failure()
+	{
+		Book bookActual =adminBookImplementation.updateBook(newBook);
+		assertNotEquals( book6.getTitle(),bookActual.getTitle());
+	}
 }
 

@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.eBook.Backend.Repository.CartAndOrderRepository;
 import com.eBook.Backend.Repository.OrderHistoryRepository;
 import com.eBook.Backend.models.Item;
 import com.eBook.Backend.models.OrderHistory;
