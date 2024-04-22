@@ -4,11 +4,8 @@ import io.jsonwebtoken.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
-
 import com.eBook.Backend.models.AuthUser;
-
 import java.util.Date;
-
 import java.util.concurrent.TimeUnit;
 
 @Component
