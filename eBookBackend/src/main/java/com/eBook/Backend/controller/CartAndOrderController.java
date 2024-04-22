@@ -7,7 +7,6 @@ import com.eBook.Backend.config.OrderStatusConfig;
 import com.eBook.Backend.models.AuthUser;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-
 import lombok.AllArgsConstructor;
 import com.eBook.Backend.service.CartAndOrderServiceImpl;
 import org.springframework.http.HttpStatus;
@@ -50,7 +49,7 @@ public class CartAndOrderController {
 	
 	// Get request to get an item of a particular id
 	@GetMapping("/getItem/{id}")
-	public ResponseEntity<Item> getItemById(String id)
+	public ResponseEntity<Item> getItemById(@PathVariable String id)
 	{
 		return ResponseEntity.ok(cartAndOrderServiceImpl.getItemById(id));
 	}

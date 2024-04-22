@@ -6,7 +6,7 @@ import com.eBook.Backend.models.Book;
 import java.util.List;
 
 
-// 
+// CRUD operations related to books.
 public interface BookRepository extends MongoRepository<Book, String>
 {
 	Optional<Book> findById(String id);
