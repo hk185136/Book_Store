@@ -20,7 +20,7 @@ import com.eBook.Backend.service.AuthUserImplementation;
 // Class to configure spring security.
 public class SecurityConfig {
 	
-	// Autowiring implementation layer class.
+	// Auto wiring implementation layer class.
 	@Autowired
 	private AuthUserImplementation userDetailsService;
 

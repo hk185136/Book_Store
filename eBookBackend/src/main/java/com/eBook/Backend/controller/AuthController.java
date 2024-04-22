@@ -4,6 +4,7 @@ import com.eBook.Backend.models.AuthUser;
 import com.eBook.Backend.Repository.AuthUserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
+import com.eBook.Backend.models.response.AuthUserRes;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.http.HttpStatus;
 import com.eBook.Backend.auth.JwtUtil;
 import java.util.List;
-import com.eBook.Backend.models.response.AuthUserRes;
 import lombok.NoArgsConstructor;
 import java.util.Optional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,7 +36,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 @CrossOrigin(origins = "*")
 // Class to implement rest APIs for user authentication and authorization.
 public class AuthController {
-	// Autowiring repository layer class, password encoding class, spring's authentication manage class and token generation class.
+	// Auto wiring repository layer class, password encoding class, spring's authentication manage class and token generation class.
 	@Autowired
 	private  AuthUserRepository userRepository;
 	

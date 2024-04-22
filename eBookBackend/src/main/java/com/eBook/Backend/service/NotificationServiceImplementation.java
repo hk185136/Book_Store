@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.eBook.Backend.Repository.NotificationRepository;
-import com.eBook.Backend.models.NotficationSubscription;
+import com.eBook.Backend.models.NotificationSubscription;
 import com.eBook.Backend.models.Notification;
 
 
@@ -41,7 +41,7 @@ public class NotificationServiceImplementation {
 		notificationRepository.deleteById(id);
 	}
 	
-	public void dispatchNotification(Map<String, SseEmitter>notificationEmitters, String eventName, Notification refillNotification,NotficationSubscription subscription)
+	public void dispatchNotification(Map<String, SseEmitter>notificationEmitters, String eventName, Notification refillNotification,NotificationSubscription subscription)
 	{
 		String eventFormatted = new JSONObject()
 				.put("message", refillNotification.getMessage())

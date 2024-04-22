@@ -12,12 +12,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.eBook.Backend.models.NotficationSubscription;
+import com.eBook.Backend.models.NotificationSubscription;
 import com.eBook.Backend.models.Notification;
 import com.eBook.Backend.service.NotificationServiceImplementation;
 import com.eBook.Backend.service.NotificationSubscriptionServiceImplementation;
-
 import lombok.AllArgsConstructor;
 
 
@@ -53,8 +51,8 @@ public class NotificationController {
 	@PostMapping("/dispatchBookStockRefillNotfications")
 	public ResponseEntity<String> dispatchBookStockRefillNotifications(@RequestParam String bookname)
 	{
-		List<NotficationSubscription>notifyMeSubscriptions = notificationSubscriptionServiceImplementation.getSubscriptionsByTitle(bookname).get();
-		for(NotficationSubscription subscription : notifyMeSubscriptions) {
+		List<NotificationSubscription>notifyMeSubscriptions = notificationSubscriptionServiceImplementation.getSubscriptionsByTitle(bookname).get();
+		for(NotificationSubscription subscription : notifyMeSubscriptions) {
 			Notification refillNotification = notificationServiceImplementation.addNotifcation(subscription.getUser().getUsername(), subscription.getBook().getTitle()+"is available now");
 			notificationServiceImplementation.dispatchNotification(notificationSubscriptionServiceImplementation.emitters,"Refill stock", refillNotification,subscription);
 			notificationSubscriptionServiceImplementation.deleteSubscriptionById(subscription.getId());

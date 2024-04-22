@@ -1,7 +1,6 @@
 package com.eBook.Backend.models;
 
 import org.springframework.data.mongodb.core.index.Indexed;
-
 import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Data;

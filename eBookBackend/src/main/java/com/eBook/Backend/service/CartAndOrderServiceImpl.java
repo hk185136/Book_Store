@@ -17,7 +17,7 @@ import com.eBook.Backend.Repository.CartAndOrderRepository;
 
 
 import com.eBook.Backend.models.Item;
-import com.eBook.Backend.models.NotficationSubscription;
+import com.eBook.Backend.models.NotificationSubscription;
 import com.eBook.Backend.models.Notification;
 import com.eBook.Backend.models.OrderHistory;
 
@@ -42,6 +42,12 @@ public class CartAndOrderServiceImpl {
 	{
 		Item itemAddedTocart = CartRepository.save(Item);
 		return itemAddedTocart;
+	}
+	
+	// Gets an item based on an id.
+	public Item getItemById(String id)
+	{
+		return CartRepository.findById(id).get();
 	}
 	
 	//Increases item quantity count by one.
@@ -98,12 +104,10 @@ public class CartAndOrderServiceImpl {
 	{
 		TimerTask startTimer = new TimerTask() {
 	        public void run() {
-	        	updateItemStatus(item, status);
-	        	performOrderStep1(item,status,deliveryTime);
 	        	Item storedItem  =  CartRepository.findById(item.getId()).get();
 	    		if((storedItem.getStatus()==null) || !storedItem.getStatus().equals("Cancelled")) {
 		        	updateItemStatus(item, status);
-		        	performOrderStep1(item,status,deliveryTime);
+		        	startOrderStep(item,status,deliveryTime);
 	    		}
 	        }
 	    };
@@ -114,25 +118,24 @@ public class CartAndOrderServiceImpl {
 	}
 	
 	
+	// Accepts item, order status, delivery time, calls the scheduler function.
 	public void performOrderStep(Item item, String orderStatus, int time)
 	{
-		
-			System.out.println(item.getStatus());
-			item.setStatus(orderStatus);
 			itemDeliveryTimer(item, orderStatus, time);	
-		
-			
 	}
 	
-	public void performOrderStep1(Item item, String orderStatus, long time)
+	
+	// Accepts item, order status, delivery time , updates the item's status, adds that item to the order history, sends a notification displaying the current status of that item.
+	public void startOrderStep(Item item, String orderStatus, long time)
 	{
-		updateItemOrderedDate(item);
-		OrderHistory history = orderHistoryImplementation.setItemToHistory(item);
+		Item storedItem = updateItemStatus(item, orderStatus);
+		updateItemOrderedDate(storedItem);
+		OrderHistory history = orderHistoryImplementation.setItemToHistory(storedItem);
 		orderHistoryImplementation.addtoHistory(history);
-		Notification statusNotification = notificationServiceImplementation.addNotifcation(item.getUser().getUsername(), item.getBook().getTitle()+" is "+orderStatus);
-		NotficationSubscription subscription = new NotficationSubscription();
-		subscription.setItem(item);
-		subscription.setBook(item.getBook());
+		Notification statusNotification = notificationServiceImplementation.addNotifcation(storedItem.getUser().getUsername(), storedItem.getBook().getTitle()+" is "+orderStatus);
+		NotificationSubscription subscription = new NotificationSubscription();
+		subscription.setItem(storedItem);
+		subscription.setBook(storedItem.getBook());
 		notificationServiceImplementation.dispatchNotification(notificationSubscriptionServiceImplementation.emitters,"Order status", statusNotification,subscription);
 	}
 	

@@ -8,7 +8,6 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import jakarta.persistence.Id;
 
 
-
 @Data
 @Builder
 //Class representing a Item.

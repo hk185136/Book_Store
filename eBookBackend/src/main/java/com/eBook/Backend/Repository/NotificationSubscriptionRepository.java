@@ -2,20 +2,18 @@ package com.eBook.Backend.Repository;
 
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
+import com.eBook.Backend.models.NotificationSubscription;
 
-import com.eBook.Backend.models.NotficationSubscription;
-
-public interface NotificationSubscriptionRepository extends MongoRepository<NotficationSubscription, String>{
+// Helps in CRUD operations related to subscriptions for notifications.
+public interface NotificationSubscriptionRepository extends MongoRepository<NotificationSubscription, String>{
+	// Fetches subscriptions for book re-stock based on book title.
 	@Query(value = "{'book.title': ?0}")
-	Optional<List<NotficationSubscription>> findByTitle(String title);
-	
-	@Query(value = "{'item.status': ?0, 'item.book.title': ?1}")
-	Optional<List<NotficationSubscription>> findByStatusAndTitle(String status, String title);
-	
+	Optional<List<NotificationSubscription>> findByTitle(String title);
+
+	// Fetches subscriptions for book re-stock for a user.
 	@Query(value = "{'user.username': ?0}")
-	Optional<List<NotficationSubscription>> findByUsername(String username);
+	Optional<List<NotificationSubscription>> findByUsername(String username);
 		
 }

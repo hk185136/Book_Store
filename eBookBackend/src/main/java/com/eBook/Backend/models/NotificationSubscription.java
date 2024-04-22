@@ -1,15 +1,16 @@
 package com.eBook.Backend.models;
 
 import org.springframework.data.mongodb.core.index.Indexed;
-
 import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-public class NotficationSubscription {
+// Entity class which represents a subscriptions
+public class NotificationSubscription {
 
+	// Below are the fields which shows what a subscription consists of.
 	@Id
 	@Indexed
     private String id;
@@ -18,7 +19,8 @@ public class NotficationSubscription {
 	private Item item;
 	
 
-	public NotficationSubscription(String id, AuthUser user, Book book, Item item, String notifcationTitle, String description) {
+	// All args constructor.
+	public NotificationSubscription(String id, AuthUser user, Book book, Item item, String notifcationTitle, String description) {
 		super();
 		this.id = id;
 		this.user = user;
@@ -26,11 +28,12 @@ public class NotficationSubscription {
 		this.item = item;
 	}
 	
-	
-	public NotficationSubscription() {
+	// No args constructor.	
+	public NotificationSubscription() {
 		super();
 	}
 
+	// Getters and setters for the above fields.
 	public String getId() {
 		return id;
 	}

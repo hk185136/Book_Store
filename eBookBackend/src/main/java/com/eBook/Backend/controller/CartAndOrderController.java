@@ -2,13 +2,13 @@ package com.eBook.Backend.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-
-import com.eBook.Backend.Repository.CartAndOrderRepository;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import com.eBook.Backend.models.AuthUser;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+
 import lombok.AllArgsConstructor;
 import com.eBook.Backend.service.CartAndOrderServiceImpl;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.http.HttpStatus;
 import com.eBook.Backend.models.Item;
 import com.eBook.Backend.models.OrderHistory;
@@ -27,12 +27,12 @@ import java.util.Set;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/item/")
+@RequestMapping("/api/item")
 @CrossOrigin(origins = "*")
 // Class to implement Rest APIs for managing orders.
 public class CartAndOrderController {
 	
-	//Autowiring service and repository layer classes.
+	//Auto wiring service and repository layer classes.
 	@Autowired
 	private CartAndOrderServiceImpl cartAndOrderServiceImpl;
 	@Autowired
@@ -45,6 +45,13 @@ public class CartAndOrderController {
 	{
 		item.setStatus("added to cart");
 		return ResponseEntity.ok(cartAndOrderServiceImpl.addItem(item));
+	}
+	
+	// Get request to get an item of a particular id
+	@GetMapping("/getItem/{id}")
+	public ResponseEntity<Item> getItemById(String id)
+	{
+		return ResponseEntity.ok(cartAndOrderServiceImpl.getItemById(id));
 	}
 	
 	//Post request which accepts item data, automates the status of item, adds an entry to history, stores those in database and returns a response with that item data.

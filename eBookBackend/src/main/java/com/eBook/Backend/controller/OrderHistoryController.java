@@ -7,7 +7,6 @@ import java.util.Date;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import java.util.List;
-
 import com.eBook.Backend.models.OrderHistory;
 import com.eBook.Backend.service.OrderHistoryImplementation;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.text.SimpleDateFormat;
 
-
-
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/user/orderHistory/")
@@ -27,7 +24,7 @@ import java.text.SimpleDateFormat;
 // Class to implement the Rest APIs for order history.
 public class OrderHistoryController 
 {
-	//Autowiring service layer class
+	//Auto wiring service layer class
 	@Autowired
      OrderHistoryImplementation OrderHistoryImpl;
 	
@@ -64,9 +61,6 @@ public class OrderHistoryController
 		OrderHistoryImpl.deleteAll(username);
 		return ResponseEntity.ok("deleted succesfully");
 	}
-	
-	
- 
 
 }
 
