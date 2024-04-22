@@ -11,12 +11,11 @@ import "react-step-progress-bar/styles.css";
 import { GrDeliver } from "react-icons/gr";
 import { TbHomeCheck } from "react-icons/tb";
 import { LuPackageCheck } from "react-icons/lu";
+import { urls } from '../../api';
 
 function Order({order,removeOrder}) {
-  console.log(order.status);
   const user = useSelector(state=>state);
   const [status,setStatus] = useState(order.status);
-  console.log(status);
   const [isLoading,setIsLoading] = useState(false);
   const statusProgressMapping = {
     Confirmed : 10,
@@ -41,18 +40,18 @@ function Order({order,removeOrder}) {
     try{
       // Update status of item.
       setIsLoading(true);
-      const res = await axios.put(`http://localhost:8080/api/item/updateStatus/${Cancelled}`,order);
+      const res = await axios.put(urls.order.cancelOrder,order);
       setIsLoading(false);
       if(res.status === 200){
         toast.success("Order cancelled")
         setStatus(Cancelled);
         // Get the existing copy of book.
-        const res = await axios.get(`http://localhost:8080/api/user/books/${order.book.id}`);
+        const res = await axios.get(urls.book.get+ order.book.id);
         if(res.status == 200 && res.data){
           const book = order.book;
           book.availableQuantity = res.data.availableQuantity+order.quantity;
           // As order is cancelled, increase the available quantity of the ordered book.
-          await axios.put(`http://localhost:8080/api/admin/books/${book.id}`,book)
+          await axios.put(urls.book.updateBook + book.id,book)
         }
       }
     }

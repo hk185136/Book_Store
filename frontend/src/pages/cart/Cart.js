@@ -6,6 +6,7 @@ import Modal from '../../components/modal/Modal';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import LoadingComponent from '../../components/Loading/LoadingComponent';
+import { urls } from '../../api';
 
 function Cart({cartItems,setCartItems}) {
   const user = useSelector(state=>state);
@@ -25,13 +26,14 @@ function Cart({cartItems,setCartItems}) {
     setIsOpen(false);
     setIsLoading(true);
     e.preventDefault();
-    
+    // For each book in the cart.
     for(let cartItem of cartItems){
       try{
-        const book_res = await axios.get(`http://localhost:8080/api/user/books/${cartItem.book.id}`)
+        // If book has no copies remove it from cart
+        const book_res = await axios.get(urls.book.get+cartItem.book.id);
         const book = book_res.data;
         if(book.availableQuantity===0){
-          await axios.delete(`http://localhost:8080/api/item/${cartItem.id}`)
+          await axios.delete(urls.cart.removeFromCart + cartItem.id);
           setCartItems(prev => prev.filter((cartItem1) => cartItem1.id!==cartItem.id));
           continue;
         }
@@ -45,12 +47,14 @@ function Cart({cartItems,setCartItems}) {
           },
           quantity : qty
         }
-        const res = await axios.post('http://localhost:8080/api/item/addToOrder',body);
+        // Add to orders.
+        const res = await axios.post(urls.order.addOrder,body);
         if(res.status === 200){
           const newBook = book;
           newBook.availableQuantity = newBook.availableQuantity - qty;
-          axios.put(`http://localhost:8080/api/admin/books/${book.id}`,newBook)
-          const res = await axios.delete(`http://localhost:8080/api/item/${cartItem.id}`);
+          axios.put(urls.book.updateBook+book.id,newBook)
+          //Remove from cart.
+          const res = await axios.delete(urls.cart.removeFromCart + cartItem.id);
           setCartItems(prev => prev.filter((cartItem1) => cartItem1.id!==cartItem.id));
         }
       }

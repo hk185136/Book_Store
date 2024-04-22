@@ -4,25 +4,26 @@ import { useSelector } from 'react-redux';
 import './Notifications.css';
 import Notification from '../../components/Notification/Notification';
 import {Button} from '@mui/material'
+import { urls } from '../../api';
 function Notifications() {
     const [messages,setMessages] = useState([]);
     const user = useSelector(state=>state);
     useEffect(()=>{
         async function getMessages(){
-            const res = await axios.get('http://localhost:8080/api/user/notification/getNotfications/'+user.name);
+            const res = await axios.get(urls.notification.getNotificationsByUser+user.name);
             setMessages(res.data);
         }
         getMessages();
     },[])
     function handleDelete(id){
-        axios.delete('http://localhost:8080/api/user/notification/deleteNotification/'+id);
+        axios.delete(urls.notification.deleteNotification+id);
         setMessages(prev=>{
             return prev.filter((msg)=>{return msg.id!=id});
         })
     }
     function handleClear(){
         setMessages([]);
-        axios.delete('http://localhost:8080/api/user/notification/deleteNotifications/'+user.name);
+        axios.delete(urls.notification.deleteNotificationsByUser+user.name);
     }
   return (
     <div className='notifications'>

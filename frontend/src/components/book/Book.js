@@ -6,6 +6,7 @@ import axios from 'axios';
 import OrderForm from '../OrderForm/OrderForm';
 import { toast } from 'react-toastify';
 import {Button,Stack,TextField} from '@mui/material';
+import { urls } from '../../api';
 
 function Book({isInCart,cartId,book,deleteBook,editBook,cartItems,setCartItems,prevIsSubscribed}) {
     const [isSubscribed,setIsSubscribed] = useState(prevIsSubscribed);
@@ -50,7 +51,7 @@ function Book({isInCart,cartId,book,deleteBook,editBook,cartItems,setCartItems,p
       notificationTitle : 'Restock alert',
       description : `${book.title} is now available.`
     }
-    const res = await axios.post('http://localhost:8080/api/user/subscription/addSubscription',notificationBody);
+    const res = await axios.post(urls.subscription.addSubscription,notificationBody);
   }
   async function handleEdit(){
     try{
@@ -105,7 +106,7 @@ function Book({isInCart,cartId,book,deleteBook,editBook,cartItems,setCartItems,p
   }
   async function handleAddToCart(){
     // Push the book to the cart of the current user.
-    const res = await axios.post('http://localhost:8080/api/item/addToCart',{
+    const res = await axios.post(urls.cart.addToCart,{
       book : book,
       user : {username : user.name},
       quantity : quantity
@@ -120,7 +121,7 @@ function Book({isInCart,cartId,book,deleteBook,editBook,cartItems,setCartItems,p
   async function handleRemoveFromCart(){
     try{
       // Remove book from the cart of the current user.
-      const res = await axios.delete('http://localhost:8080/api/item/' + cartId);
+      const res = await axios.delete(urls.cart.removeFromCart + cartId);
       const newCartItems = cartItems.filter((item)=>item.id!==cartId);
       setCartItems(newCartItems);
       if(res.status == 200){

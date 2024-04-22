@@ -6,6 +6,7 @@ import HIstoryItem from '../../components/HistoryItem/HIstoryItem';
 import { getHistory } from '../../HIstory';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { urls } from '../../api';
 function Profile() {
   const user=useSelector(state=>state);
   const [pno,setPno] = useState(user.pno || '');
@@ -18,7 +19,6 @@ function Profile() {
   useEffect(()=>{
     async function get(){
     const hist = await getHistory(user.name);
-    console.log(hist)
     setHistory(hist);
     }
     
@@ -34,7 +34,7 @@ function Profile() {
     };
     setIsOpen(false);
     try{
-      await axios.put(`http://localhost:8080/api/auth/editUser/${user.name}`,body);
+      await axios.put(urls.user.editUser+user.name,body);
       setAddress(addressInput);
       setPno(pnoInput);
 
@@ -48,7 +48,7 @@ function Profile() {
     try{
       const newHistory = history.filter(item=>item.id!=id);
       setHistory(newHistory);
-      await axios.delete('http://localhost:8080/api/user/orderHistory/'+id);
+      await axios.delete(urls.history.deleteHistory+id);
     }
     catch(e){
       toast.error((e?.response?.data?.message) || (e.message));
@@ -57,7 +57,7 @@ function Profile() {
   async function clearHistory(){
     try{
       setHistory([])
-      await axios.delete('http://localhost:8080/api/user/orderHistory/delete/'+user.name);
+      await axios.delete(urls.history.emptyHistory+user.name);
     }
     catch(e){
       toast.error((e?.response?.data?.message) || (e.message));

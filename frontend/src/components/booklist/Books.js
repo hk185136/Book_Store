@@ -6,6 +6,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import LoadingComponent from '../Loading/LoadingComponent';
 import { useSelector } from 'react-redux';
+import { urls } from '../../api';
 
 function Books({books,setBooks,cartItems,setCartItems}) {
   const user = useSelector(state=>state);
@@ -23,7 +24,7 @@ function Books({books,setBooks,cartItems,setCartItems}) {
         if(genre==''){
           setIsLoading(true);
           // Get all the books.
-          const booksResponse = await axios.get(`http://localhost:8080/api/user/books/`);
+          const booksResponse = await axios.get(urls.book.get);
 
           if(booksResponse.status==200){
             //Get all the books whose price is in the selected range.
@@ -46,7 +47,7 @@ function Books({books,setBooks,cartItems,setCartItems}) {
         else{
           setIsLoading(true);
           // When genre is selected get the books specific to that genre.
-          const genreResponse = await axios.get(`http://localhost:8080/api/user/books/genre/${genre}`);
+          const genreResponse = await axios.get(urls.book.getByGenre+genre);
 
           if(genreResponse.status==200){
             // Get all the books whose price is in the selected range.
@@ -76,7 +77,7 @@ function Books({books,setBooks,cartItems,setCartItems}) {
 
   useEffect(()=>{
     async function getSubscriptions(){
-      const res = await axios.get('http://localhost:8080/api/user/subscription/getSubscriptions/'+user.name);
+      const res = await axios.get(urls.subscription.getSubscriptionsByUser+user.name);
       setSubscribedBooks(res.data)
     }
     getSubscriptions();
@@ -108,7 +109,7 @@ function Books({books,setBooks,cartItems,setCartItems}) {
   }
   async function deleteBook(book1){
     try{
-      const url = 'http://localhost:8080/api/admin/books/' + book1.id;
+      const url = urls.book.deleteBook + book1.id;
       const res = await axios.delete(url);
       if(res.status == 200){
         const newBooks = books.filter((book)=>book1.id!=book.id);
@@ -121,10 +122,10 @@ function Books({books,setBooks,cartItems,setCartItems}) {
   }
   async function editBook(id,book1,shouldSendNotification){
     try{
-      const url = 'http://localhost:8080/api/admin/books/' + id;
+      const url = urls.book.updateBook + id;
       const res = await axios.put(url,book1);
       if(shouldSendNotification){
-        const res = await axios.post('http://localhost:8080/api/user/notification/dispatchBookStockRefillNotfications',
+        const res = await axios.post(urls.notification.dispatchStockRefill,
         null,
         {params : {bookname : book1.title}});
       }
