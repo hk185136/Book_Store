@@ -194,7 +194,7 @@ function Book({isInCart,cartId,book,deleteBook,editBook,cartItems,setCartItems,p
               (user.role === 'customer') && book.availableQuantity===0 && 
               <>
                 <p style={{marginTop:20}}>No copies available</p>
-                {isSubscribed===false?<Button onClick={handleNotify} variant='contained'>Notify me</Button>: <p style={{marginTop:20}}>Subscribed for restock alerts.</p>}
+                {isSubscribed===false?<Button onClick={handleNotify} color='secondary' variant='contained' style={{marginTop : '10px'}}>Notify me</Button>: <p style={{marginTop:20}}>Subscribed for restock alerts.</p>}
               </>
             }
             {(showPopup)&& (

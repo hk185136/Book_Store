@@ -98,8 +98,11 @@ public class CartAndOrderServiceImpl {
 	{
 		TimerTask startTimer = new TimerTask() {
 	        public void run() {
-	        	updateItemStatus(item, status);
-	        	performOrderStep1(item,status,deliveryTime);
+	        	Item storedItem  =  CartRepository.findById(item.getId()).get();
+	    		if((storedItem.getStatus()==null) || !storedItem.getStatus().equals("Cancelled")) {
+		        	updateItemStatus(item, status);
+		        	performOrderStep1(item,status,deliveryTime);
+	    		}
 	        }
 	    };
 	    
@@ -111,14 +114,15 @@ public class CartAndOrderServiceImpl {
 	
 	public void performOrderStep(Item item, String orderStatus, int time)
 	{
-		if((item.getStatus()==null) || !item.getStatus().equals("Cancelled")) {
+		
+			System.out.println(item.getStatus());
+			item.setStatus(orderStatus);
 			itemDeliveryTimer(item, orderStatus, time);	
-		}
+		
 			
 	}
 	public void performOrderStep1(Item item, String orderStatus, long time)
 	{
-		item.setStatus(orderStatus);
 		updateItemOrderedDate(item);
 		OrderHistory history = orderHistoryImplementation.setItemToHistory(item);
 		orderHistoryImplementation.addtoHistory(history);
