@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 
-import com.eBook.Backend.models.NotficationSubscription;
+import com.eBook.Backend.models.NotificationSubscription;
 import com.eBook.Backend.service.NotificationSubscriptionServiceImplementation;
 
 
@@ -34,7 +34,7 @@ public class NotificationSubscriptionController {
 	
 	
 	@GetMapping("getSubscriptions/{username}")
-	public List<NotficationSubscription> getSubscriptionsByUsername(@PathVariable String username){
+	public List<NotificationSubscription> getSubscriptionsByUsername(@PathVariable String username){
 		return notificationSubscriptionServiceImplementation.getSubscriptionsByUsename(username).get();
 	}
 	
@@ -45,7 +45,7 @@ public class NotificationSubscriptionController {
 	}
 	
 	@PostMapping("addSubscription")
-	public ResponseEntity<NotficationSubscription> addSubscription(@RequestBody NotficationSubscription notificationSubscription)
+	public ResponseEntity<NotificationSubscription> addSubscription(@RequestBody NotificationSubscription notificationSubscription)
 	{
 		return ResponseEntity.status(200).body(notificationSubscriptionServiceImplementation.addtoSubscriptions(notificationSubscription));
 	}

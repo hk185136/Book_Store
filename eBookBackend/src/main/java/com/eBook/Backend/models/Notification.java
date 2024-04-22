@@ -8,13 +8,18 @@ import lombok.Data;
 
 @Data
 @Builder
-public class Notification {
+public class Notification 
+{
+	
+	//Storing the following variables in the collection
 	@Id
 	@Indexed
 	private String id;
 	private String date;
 	private String message;
 	private String username;
+	
+	//All args constructor
 	public Notification(String id,String date, String message,String username) {
 		super();
 		this.id=id;
@@ -22,10 +27,14 @@ public class Notification {
 		this.message = message;
 		this.username = username;
 	}
+	
+	//No args constructor 
 	public Notification() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	
+	//Getters and Setters
 	public String getUsername() {
 		return username;
 	}

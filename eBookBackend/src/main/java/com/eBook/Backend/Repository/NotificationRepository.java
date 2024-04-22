@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Optional;
 
 
-public interface NotificationRepository extends MongoRepository<Notification, String>{
+public interface NotificationRepository extends MongoRepository<Notification, String>
+{
+	//Fetches notification by username
 	Optional<List<Notification>> findByUsername(String username);
 	
 }

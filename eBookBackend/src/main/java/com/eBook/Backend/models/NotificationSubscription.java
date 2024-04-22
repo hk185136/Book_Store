@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class NotficationSubscription {
+public class NotificationSubscription {
 
 	@Id
 	@Indexed
@@ -17,8 +17,8 @@ public class NotficationSubscription {
 	private Book book;
 	private Item item;
 	
-
-	public NotficationSubscription(String id, AuthUser user, Book book, Item item, String notifcationTitle, String description) {
+    //All args constructor
+	public NotificationSubscription(String id, AuthUser user, Book book, Item item, String notifcationTitle, String description) {
 		super();
 		this.id = id;
 		this.user = user;
@@ -26,11 +26,13 @@ public class NotficationSubscription {
 		this.item = item;
 	}
 	
-	
-	public NotficationSubscription() {
+	//No args constructor
+	public NotificationSubscription() {
 		super();
 	}
 
+	
+	//Getters and setters
 	public String getId() {
 		return id;
 	}

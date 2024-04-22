@@ -14,10 +14,9 @@ import org.springframework.stereotype.Service;
 
 
 import com.eBook.Backend.Repository.CartAndOrderRepository;
-
-
+import com.eBook.Backend.config.OrderStatusConfig;
 import com.eBook.Backend.models.Item;
-import com.eBook.Backend.models.NotficationSubscription;
+import com.eBook.Backend.models.NotificationSubscription;
 import com.eBook.Backend.models.Notification;
 import com.eBook.Backend.models.OrderHistory;
 
@@ -99,7 +98,7 @@ public class CartAndOrderServiceImpl {
 		TimerTask startTimer = new TimerTask() {
 	        public void run() {
 	        	Item storedItem  =  CartRepository.findById(item.getId()).get();
-	    		if((storedItem.getStatus()==null) || !storedItem.getStatus().equals("Cancelled")) {
+	    		if((storedItem.getStatus()==null) || !storedItem.getStatus().equals(OrderStatusConfig.cancelled)) {
 		        	updateItemStatus(item, status);
 		        	performOrderStep1(item,status,deliveryTime);
 	    		}
@@ -127,7 +126,7 @@ public class CartAndOrderServiceImpl {
 		OrderHistory history = orderHistoryImplementation.setItemToHistory(item);
 		orderHistoryImplementation.addtoHistory(history);
 		Notification statusNotification = notificationServiceImplementation.addNotifcation(item.getUser().getUsername(), item.getBook().getTitle()+" is "+orderStatus);
-		NotficationSubscription subscription = new NotficationSubscription();
+		NotificationSubscription subscription = new NotificationSubscription();
 		subscription.setItem(item);
 		subscription.setBook(item.getBook());
 		notificationServiceImplementation.dispatchNotification(notificationSubscriptionServiceImplementation.emitters,"Order status", statusNotification,subscription);

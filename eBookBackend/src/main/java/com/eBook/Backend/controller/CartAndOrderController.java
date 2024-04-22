@@ -43,7 +43,7 @@ public class CartAndOrderController {
 	@PostMapping("/addToCart")
 	public ResponseEntity<Item> addItemToCart(@RequestBody Item item)
 	{
-		item.setStatus("added to cart");
+		item.setStatus(OrderStatusConfig.addToCart);
 		return ResponseEntity.ok(cartAndOrderServiceImpl.addItem(item));
 	}
 	

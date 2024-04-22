@@ -11,7 +11,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.eBook.Backend.Repository.NotificationSubscriptionRepository;
 
-import com.eBook.Backend.models.NotficationSubscription;
+import com.eBook.Backend.models.NotificationSubscription;
 
 @Service
 public class NotificationSubscriptionServiceImplementation {
@@ -20,7 +20,7 @@ public class NotificationSubscriptionServiceImplementation {
 
 	public Map<String, SseEmitter> emitters = new HashMap<>();
 	
-	public NotficationSubscription addtoSubscriptions(NotficationSubscription notificationSubscription) {
+	public NotificationSubscription addtoSubscriptions(NotificationSubscription notificationSubscription) {
 		return notificationSubscriptionRepository.save(notificationSubscription);
 	}	
 	
@@ -29,17 +29,17 @@ public class NotificationSubscriptionServiceImplementation {
 	}
 	
 	
-	public Optional<List<NotficationSubscription>> getSubscriptionsByTitle(String title)
+	public Optional<List<NotificationSubscription>> getSubscriptionsByTitle(String title)
 	{
 		return notificationSubscriptionRepository.findByTitle(title);
 	}
 	
-	public Optional<List<NotficationSubscription>> getSubscriptionsByStatusAndTitle(String status, String title)
+	public Optional<List<NotificationSubscription>> getSubscriptionsByStatusAndTitle(String status, String title)
 	{
 		return notificationSubscriptionRepository.findByStatusAndTitle(status, title);
 	}
 	
-	public Optional<List<NotficationSubscription>> getSubscriptionsByUsename(String username)
+	public Optional<List<NotificationSubscription>> getSubscriptionsByUsename(String username)
 	{
 		return notificationSubscriptionRepository.findByUsername(username);
 	}

@@ -9,6 +9,7 @@ public class OrderStatusConfig
 	public static String delivered="Delivered";
 	public static String onTheWay="On the Way";
 	public static String cancelled="Cancelled";
+	public static String addToCart="added to cart";
 	
 
 }
