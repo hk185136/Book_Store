@@ -3,12 +3,13 @@ import CartBook from '../cartBook/CartBook'
 import './CartBooks.css';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { urls } from '../../api';
 function CartBooks({cartItems,setCartItems,setTotal}) {
   
   async function deleteItem(id){
     try{
       // Remove the book from the cart.
-      await axios.delete('http://localhost:8080/api/item/' + id);
+      await axios.delete(urls.cart.removeFromCart + id);
       const newCartItems = cartItems.filter((item)=>item.id!==id);
       setCartItems(newCartItems);
     }
@@ -16,7 +17,6 @@ function CartBooks({cartItems,setCartItems,setTotal}) {
       toast.error((e?.response?.data?.message) || (e.message));
     }
   }
-
   return (
     <div className='card-grid'>
       {
@@ -26,6 +26,7 @@ function CartBooks({cartItems,setCartItems,setTotal}) {
           cartItem = {cartItem} 
           deleteItem = {deleteItem} 
           setTotal = {setTotal}
+          setCartItems = {setCartItems}
           />
         )
       }

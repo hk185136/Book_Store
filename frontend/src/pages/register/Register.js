@@ -6,6 +6,7 @@ import './Register.css';
 import { toast } from 'react-toastify';
 import {GetCity,GetCountries,GetState} from 'react-country-state-city'
 import {Button, FormControl,Paper,Stack,TextField,Select,MenuItem, InputLabel} from '@mui/material'
+import { urls } from '../../api';
 
 function Register() {
     const navigate = useNavigate();
@@ -132,7 +133,7 @@ function Register() {
           address : country+' ,'+state+' ,'+city,
           pno : '+'+phone_code+' - '+phno
         }
-        const response = await axios.post('http://localhost:8080/api/auth/signup',body);
+        const response = await axios.post(urls.auth.signup,body);
         if(response.status===200){
           navigate('/',{state : {role : role}});
         }

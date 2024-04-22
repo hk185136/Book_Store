@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import {Button,Stack,TextField} from '@mui/material';
 import { IoIosNotifications } from "react-icons/io";
+import { urls } from '../../api';
 
 function Nav({books,setBooks}) {    
     const [searchBy,setSearchBy] = useState('book');
@@ -90,7 +91,7 @@ function Nav({books,setBooks}) {
             e.preventDefault();
             setNewBook(initialState);
             // Adding the book.
-            const res = await axios.post('http://localhost:8080/api/admin/books/',newBook);
+            const res = await axios.post(urls.book.addBook,newBook);
             setBooks([...books,res.data]);
             setIsOpen(false)
         }
@@ -105,14 +106,14 @@ function Nav({books,setBooks}) {
 
                 if(searchBy=='book'){
                     // Get books based on the book name.
-                    const res = await axios.get(`http://localhost:8080/api/user/books/title/${search}`);
+                    const res = await axios.get(urls.book.getByTitle+search);
                     if(res.status == 200){
                         setBooks(res.data)
                     }
                 }
                 else{
                     // Get book based on the author name.
-                    const res = await axios.get(`http://localhost:8080/api/user/books/author/${search}`);
+                    const res = await axios.get(urls.book.getByAuthor+search);
                     if(res.status == 200){
                         setBooks(res.data)
                     }
@@ -121,7 +122,7 @@ function Nav({books,setBooks}) {
             else if(curSearch.length>0){}
             else{
                 // Get all the books.
-                const res = await axios.get('http://localhost:8080/api/user/books/');
+                const res = await axios.get(urls.book.get);
                 setBooks(res.data);
             }
             

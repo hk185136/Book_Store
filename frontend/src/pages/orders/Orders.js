@@ -6,6 +6,7 @@ import { useLocation } from 'react-router';
 import { Confirmed,OnTheWay,Delivered,Cancelled } from '../../OrderStatus';
 import { toast } from 'react-toastify';
 import LoadingComponent from '../../components/Loading/LoadingComponent';
+import { urls } from '../../api';
 
 function Orders({username,reload}) {
   const [orders,setOrders] = useState([]);
@@ -18,7 +19,7 @@ function Orders({username,reload}) {
   useEffect(()=>{async function get(){
     try{
       setIsLoading(true);
-      const res = await axios.put('http://localhost:8080/api/item/getOrders',{username : username||username1})
+      const res = await axios.put(urls.order.getOrdersByUser,{username : username||username1})
       setOrders(res.data);
       setFilteredOrders(res.data);
       setIsLoading(false);
@@ -30,38 +31,11 @@ function Orders({username,reload}) {
   get()
 },[username])
 
-// useEffect(()=>{
-//   async function subscribe(){
-//   // Subscribe user to the notifications
-//     const eventSource = new EventSource("http://localhost:8080/api/user/subscription/enableSubscription/"+username1);
-//     eventSource.addEventListener("Order status",async (event)=>{
-//       try{
-//         console.log("event captured")
-//         const res = await axios.put('http://localhost:8080/api/item/getOrders',{username : username||username1})
-//         setOrders(res.data);
-//         setFilteredOrders(res.data);
-//       }
-//       catch(e){
-//         toast.error((e?.response?.data?.message) || (e.message));
-//       }
-//     })
-//     eventSource.onerror = (event) => {
-//       console.log(event.target.readyState)
-//       if (event.target.readyState === EventSource.CLOSED) {
-//         console.log('eventsource closed (' + event.target.readyState + ')')
-//       }
-//       eventSource.close();
-//     }
-//   }
-//     subscribe();
-  
-// },[])
 useEffect(()=>{
   async function get(){
     try{
       setIsLoading(true);
-      const res = await axios.put('http://localhost:8080/api/item/getOrders',{username : username||username1})
-      console.log(res);
+      const res = await axios.put(urls.order.getOrdersByUser,{username : username||username1})
       setOrders(res.data);
       setFilteredOrders(res.data);
       setIsLoading(false);
@@ -94,7 +68,7 @@ function resetFilters(){
 }
 async function removeOrder(id){
   try{
-    const url = `http://localhost:8080/api/item/${id}`
+    const url = urls.order.removeOrder+id;
     const res = await axios.delete(url);
     if(res.status === 200){
       const newOrders = orders.filter((order)=>order.id!==id);

@@ -2,12 +2,13 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import './Users.css'
 import Orders from '../orders/Orders';
+import { urls } from '../../api';
 function Users() {
     const [users,setUsers] = useState([]);
     const [username,setUsername] = useState('');
     useEffect(()=>{
         async function getUsers(){
-            const res = await axios.get('http://localhost:8080/api/auth/getAllUsers');
+            const res = await axios.get(urls.user.getAllUsers);
             if(res.status === 200){
                 setUsers(res.data);
                 setUsername(res.data[0].username);

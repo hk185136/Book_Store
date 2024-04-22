@@ -6,6 +6,7 @@ import { useDispatch} from 'react-redux';
 import { toast } from 'react-toastify';
 import {Button, FormControl,Paper,Stack,TextField} from '@mui/material';
 import LoadingComponent from '../../components/Loading/LoadingComponent';
+import { urls } from '../../api';
 
 function Login() {
     const navigate = useNavigate();
@@ -51,7 +52,7 @@ function Login() {
             password : password
           }
           setIsLoading(true);
-          const response = await axios.post('http://localhost:8080/api/auth/signin/'+role,body);
+          const response = await axios.post(urls.auth.signin+role,body);
           setIsLoading(false);
           if(response.status===200){
             toast.success("Logged in as "+response.data.role,{autoClose:1000});

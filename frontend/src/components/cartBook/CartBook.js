@@ -2,14 +2,15 @@ import React, { useEffect, useState } from 'react'
 import './CartBook.css';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-function CartBook({cartItem,deleteItem,setTotal}) {
+import { urls } from '../../api';
+function CartBook({cartItem,deleteItem,setTotal,setCartItems}) {
     const [qty,setQty] = useState(cartItem.quantity);
     const [availableQuantity,setAvailableQuantity] = useState();
     useEffect(()=>{
         async function getBook(){
             try{
                 // Get the latest copy of the book that is in the cart.
-                const res = await axios.get(`http://localhost:8080/api/user/books/${cartItem.book.id}`);
+                const res = await axios.get(urls.book.get+cartItem.book.id);
                 if(res.status == 200){
                     setAvailableQuantity(res.data.availableQuantity);
                 }
@@ -26,12 +27,20 @@ function CartBook({cartItem,deleteItem,setTotal}) {
         }
         getBook();
     },[])
+    useEffect(()=>{
+        async function setQuantity(){
+            // get latest quantity of cart item.
+            const res = await axios.get(urls.cart.get+cartItem.id);
+            setQty(res.data.quantity);
+        }
+        setQuantity();
+    },[])
     async function increment(){
          setQty(prev=>prev+1)
          setTotal(prev=>prev+cartItem.book.price)
         try{
             // Increase the quantity in the cart.
-            await axios.put(`http://localhost:8080/api/item/${cartItem.id}/increase`,cartItem)
+            await axios.put(urls.cart.ChangeQty+cartItem.id+'/increase',cartItem)
         }
         catch(e){
             toast.error((e?.response?.data?.message) || (e.message));
@@ -43,7 +52,7 @@ function CartBook({cartItem,deleteItem,setTotal}) {
         setTotal(prev=>prev-cartItem.book.price)
         try{
             // Decrease the quantity in the cart.
-            await axios.put(`http://localhost:8080/api/item/${cartItem.id}/decrease`,cartItem)
+            await axios.put(urls.cart.ChangeQty+cartItem.id+'/decrease',cartItem)
         }
         catch(e){
             toast.error((e?.response?.data?.message) || (e.message));

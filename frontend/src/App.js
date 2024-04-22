@@ -13,6 +13,7 @@ import Users from './pages/OrderManagement/Users';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import Notifications from './pages/notifications/Notifications';
+import { urls } from './api';
 
 function App() {
   const [books,setBooks] = useState([]);
@@ -23,7 +24,7 @@ function App() {
     async function getAllBooks(){
       try{
         // Getting all books.
-        const res = await axios.get('http://localhost:8080/api/user/books/');
+        const res = await axios.get(urls.book.get);
         setBooks(res.data);
       }
       catch(e){
@@ -33,7 +34,7 @@ function App() {
     async function getCartItems(){
       try{
         // Getting books that are in cart of the current user.
-        const res = await axios.put('http://localhost:8080/api/item/searchByStatus/added to cart',{username : user.name});
+        const res = await axios.put(urls.cart.getCartItemsByUser,{username : user.name});
         if(res.status==200){
           setCartItems(res.data);
         }
@@ -53,11 +54,11 @@ function App() {
   useEffect(()=>{
     async function subscribe(){
     // Subscribe user to the notifications
-      const eventSource = new EventSource("http://localhost:8080/api/user/subscription/enableSubscription/"+user.name);
+      const eventSource = new EventSource(urls.subscription.enableSubscription+user.name);
       eventSource.addEventListener("Refill stock",async (event)=>{
         const data = JSON.parse(event.data);
         toast.success(data.message);
-        const res = await axios.get('http://localhost:8080/api/user/books/'+data.bookid);
+        const res = await axios.get(urls.book.get+data.bookid);
         const currentBook = res.data;
         setBooks(prev=>{
           let newBooks = [...prev];
