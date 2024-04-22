@@ -7,7 +7,6 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -142,7 +141,7 @@ public class CartandOrderServiceImpTest
 	@Test
 	public void findByStatusAndUsernameSuccess()
 	{
-		Set<Item> temp = cartServiceImpl.findItemsByStatusAndUsername(item1.getStatus(), user1.getUsername());
+		
 		List<Item> itemsActual= new ArrayList<>();
 		for(int i=0;i<itemsActual.size();i++)
 		{

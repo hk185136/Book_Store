@@ -122,7 +122,6 @@ public class CartAndOrderServiceImpl {
 		updateItemOrderedDate(item);
 		OrderHistory history = orderHistoryImplementation.setItemToHistory(item);
 		orderHistoryImplementation.addtoHistory(history);
-		List<NotficationSubscription> statusSubscriptions = notificationSubscriptionServiceImplementation.getSubscriptionsByStatusAndTitle(orderStatus, item.getBook().getTitle()).get();
 		Notification statusNotification = notificationServiceImplementation.addNotifcation(item.getUser().getUsername(), item.getBook().getTitle()+" is "+orderStatus);
 		NotficationSubscription subscription = new NotficationSubscription();
 		subscription.setItem(item);

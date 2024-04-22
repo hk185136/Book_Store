@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.Flow.Subscription;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.eBook.Backend.Repository.NotificationRepository;
+import com.eBook.Backend.models.NotficationSubscription;
 import com.eBook.Backend.models.Notification;
 
 
