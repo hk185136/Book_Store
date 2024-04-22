@@ -37,8 +37,7 @@ public class CartAndOrderController {
 	private CartAndOrderServiceImpl cartAndOrderServiceImpl;
 	@Autowired
 	private OrderHistoryImplementation OrderHistoryImplementation;
-	@Autowired
-	private CartAndOrderRepository cartAndOrderRepository;
+
 	
 	//Post request which accepts item data, sets the item status added to cart, stores it in database and returns a response with that item data.
 	@PostMapping("/addToCart")

@@ -99,7 +99,7 @@ public class CartAndOrderServiceImpl {
 		TimerTask startTimer = new TimerTask() {
 	        public void run() {
 	        	updateItemStatus(item, status);
-	        	performOrderStep1(item,status,deliveryTime);
+	        	startOrderStep(item,status,deliveryTime);
 	        }
 	    };
 	    
@@ -116,13 +116,12 @@ public class CartAndOrderServiceImpl {
 		}
 			
 	}
-	public void performOrderStep1(Item item, String orderStatus, long time)
+	
+	public void startOrderStep(Item item, String orderStatus, long time)
 	{
-		item.setStatus(orderStatus);
 		updateItemOrderedDate(item);
 		OrderHistory history = orderHistoryImplementation.setItemToHistory(item);
 		orderHistoryImplementation.addtoHistory(history);
-		List<NotficationSubscription> statusSubscriptions = notificationSubscriptionServiceImplementation.getSubscriptionsByStatusAndTitle(orderStatus, item.getBook().getTitle()).get();
 		Notification statusNotification = notificationServiceImplementation.addNotifcation(item.getUser().getUsername(), item.getBook().getTitle()+" is "+orderStatus);
 		NotficationSubscription subscription = new NotficationSubscription();
 		subscription.setItem(item);

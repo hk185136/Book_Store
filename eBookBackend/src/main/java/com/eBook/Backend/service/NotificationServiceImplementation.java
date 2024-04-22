@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.eBook.Backend.Repository.NotificationRepository;
+import com.eBook.Backend.models.NotficationSubscription;
 import com.eBook.Backend.models.Notification;
 
 
@@ -46,13 +47,10 @@ public class NotificationServiceImplementation {
 				.put("message", refillNotification.getMessage())
 				.put("bookid",subscription.getBook().getId())
 				.put("date", refillNotification.getDate()).toString();
-		System.out.println(notificationEmitters);
-		System.out.println(refillNotification.getUsername());
 		SseEmitter sseEmitter = notificationEmitters.get(refillNotification.getUsername());
-		System.out.println("out of if");
 		if(sseEmitter !=null) {
 			try {
-				System.out.println("entered if");
+
 				sseEmitter.send(SseEmitter.event().name(eventName).data(eventFormatted));
 			}catch (IOException e) {
 				e.printStackTrace();
