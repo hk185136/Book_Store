@@ -57,12 +57,4 @@ public class NotificationController {
 		}
 		return ResponseEntity.ok(bookname+"is in stock");
 	}
-	
-	@PostMapping(value = "/dispatchOrderStatusNotfications")
-	public ResponseEntity<String> dispatchOrderStatusNotification(@RequestParam String bookname, @RequestParam String orderStatus)
-	{
-		
-		
-		return ResponseEntity.ok(bookname+" is "+orderStatus);
-	}
 }
