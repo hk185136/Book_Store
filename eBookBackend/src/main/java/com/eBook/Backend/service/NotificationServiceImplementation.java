@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.eBook.Backend.Repository.NotificationRepository;
+import com.eBook.Backend.models.NotficationSubscription;
 import com.eBook.Backend.models.Notification;
 
 
@@ -58,5 +59,10 @@ public class NotificationServiceImplementation {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public void deleteNotificationByUsername(String username) {
+		// TODO Auto-generated method stub
+		notificationRepository.deleteAll(notificationRepository.findByUsername(username).get());
 	}
 }
