@@ -33,11 +33,10 @@ export const urls = {
         removeOrder : 'http://localhost:8080/api/item/'
     },
     notification : {
-        getNotificationsByUser : 'http://localhost:8080/api/user/notification/',
+        getNotificationsByUser : 'http://localhost:8080/api/user/notification/getNotifications/',
         deleteNotification : 'http://localhost:8080/api/user/notification/deleteNotification/',
         deleteNotificationsByUser : 'http://localhost:8080/api/user/notification/deleteNotifications/',
-        dispatchStockRefill : 'http://localhost:8080/api/user/notification/dispatchBookStockRefillNotfications',
-        dispatchStatusUpdate : 'http://localhost:8080/api/user/notification/dispatchOrderStatusNotfications'
+        dispatchStockRefill : 'http://localhost:8080/api/user/notification/dispatchBookStockRefillNotfications'
     },
     subscription : {
         enableSubscription : 'http://localhost:8080/api/user/subscription/enableSubscription/',
