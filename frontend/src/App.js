@@ -18,6 +18,7 @@ function App() {
   const [books,setBooks] = useState([]);
   const user = useSelector(state=>state);
   const [cartItems,setCartItems] = useState([]);
+  const [reload,setReload] = useState(0);
   useEffect(()=>{
     async function getAllBooks(){
       try{
@@ -52,12 +53,27 @@ function App() {
   useEffect(()=>{
     async function subscribe(){
     // Subscribe user to the notifications
-      const eventSource = new EventSource("http://localhost:8080/api/user/notifications/subscribe/"+user.name);
-      eventSource.addEventListener("Refill stock",(event)=>{
-        toast.success(event.data);
-        console.log(event);
+      const eventSource = new EventSource("http://localhost:8080/api/user/subscription/enableSubscription/"+user.name);
+      eventSource.addEventListener("Refill stock",async (event)=>{
+        const data = JSON.parse(event.data);
+        toast.success(data.message);
+        const res = await axios.get('http://localhost:8080/api/user/books/'+data.bookid);
+        const currentBook = res.data;
+        setBooks(prev=>{
+          let newBooks = [...prev];
+          newBooks = newBooks.map((book)=>{
+            if(book.id === currentBook.id) return currentBook;
+            else return book;
+          })
+          return newBooks;
+        });
       })
-      eventSource.onopen = (event) => {
+      eventSource.addEventListener("Order status",async (event)=>{
+        const data = JSON.parse(event.data);
+        setReload(prev=>prev+1);
+        toast.success(data.message);
+      })
+      eventSource.onopen = () => {
         console.log("connection opened")
       }
       eventSource.onerror = (event) => {
@@ -68,7 +84,6 @@ function App() {
         eventSource.close();
       }
     }
-    console.log(user);
     if(user && user.role==='customer'){
       subscribe()
     }
@@ -100,7 +115,7 @@ function App() {
                 }/>
                 
                 <Route path="/home/profile" element={<Profile/>}/>
-                <Route path='/home/orders' element={<Orders/>}/>
+                <Route path='/home/orders' element={<Orders reload = {reload}/>}/>
                 <Route path='/home/users' element={<Users/>}/>
                 <Route path='/home/notifications' element = {<Notifications/>}/>
               </Route>

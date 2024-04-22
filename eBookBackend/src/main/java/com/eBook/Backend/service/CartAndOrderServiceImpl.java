@@ -101,6 +101,7 @@ public class CartAndOrderServiceImpl {
 		TimerTask startTimer = new TimerTask() {
 	        public void run() {
 	        	updateItemStatus(item, status);
+	        	performOrderStep1(item,status,deliveryTime);
 	        }
 	    };
 	    
@@ -112,18 +113,24 @@ public class CartAndOrderServiceImpl {
 	
 	public void performOrderStep(Item item, String orderStatus, int time)
 	{
-		itemDeliveryTimer(item, orderStatus, time);		
+		if((item.getStatus()==null) || !item.getStatus().equals("Cancelled")) {
+			itemDeliveryTimer(item, orderStatus, time);	
+		}
+			
+	}
+	public void performOrderStep1(Item item, String orderStatus, long time)
+	{
+		item.setStatus(orderStatus);
 		updateItemOrderedDate(item);
 		OrderHistory history = orderHistoryImplementation.setItemToHistory(item);
 		orderHistoryImplementation.addtoHistory(history);
 		List<NotficationSubscription> statusSubscriptions = notificationSubscriptionServiceImplementation.getSubscriptionsByStatusAndTitle(orderStatus, item.getBook().getTitle()).get();
-		for(NotficationSubscription subscription : statusSubscriptions) {
-			Notification statusNotification = notificationServiceImplementation.addNotifcation(subscription.getUser().getUsername(), subscription.getItem().getBook().getTitle()+" is "+subscription.getItem().getStatus());
-			notificationServiceImplementation.dispatchNotification(notificationSubscriptionServiceImplementation.emitters,"Order status", statusNotification);
-			notificationSubscriptionServiceImplementation.deleteSubscriptionById(subscription.getId());
-		}
+		Notification statusNotification = notificationServiceImplementation.addNotifcation(item.getUser().getUsername(), item.getBook().getTitle()+" is "+orderStatus);
+		NotficationSubscription subscription = new NotficationSubscription();
+		subscription.setItem(item);
+		subscription.setBook(item.getBook());
+		notificationServiceImplementation.dispatchNotification(notificationSubscriptionServiceImplementation.emitters,"Order status", statusNotification,subscription);
 	}
-	
 	
 	
 }

@@ -5,15 +5,18 @@ import Sidebar from '../sidebar/Sidebar';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import LoadingComponent from '../Loading/LoadingComponent';
+import { useSelector } from 'react-redux';
 
 function Books({books,setBooks,cartItems,setCartItems}) {
+  const user = useSelector(state=>state);
   const [genre,setGenre] = useState('');
+  const [subscribedBooks,setSubscribedBooks] = useState();
+  const [availability,setAvailability] = useState();
   const [priceRange,setPriceRange] = useState({
     min:0,
     max:20000
   })
   const [isLoading,setIsLoading] = useState(false);
-
   useEffect(()=>{
     async function filter(){
       try{
@@ -28,11 +31,14 @@ function Books({books,setBooks,cartItems,setCartItems}) {
             const allBooks = booksResponse.data;
             const booksInPriceRange = priceRangeResponse.data;
             // Find the intersection of all books and the books in price range.
-            const newBooks = allBooks.filter(book1=>{
+            let newBooks = allBooks.filter(book1=>{
               return booksInPriceRange.some(book2=>{
                 return book1.id==book2.id;
               })
             })
+            if(availability===true){
+              newBooks = newBooks.filter((book)=>book.availableQuantity>0);
+            }
             setBooks(newBooks);
             setIsLoading(false);
           }
@@ -48,11 +54,14 @@ function Books({books,setBooks,cartItems,setCartItems}) {
             const genreBooks = genreResponse.data;
             const booksInPriceRange = priceRangeResponse.data;
             // Find the intersection of genre specific books and the books in price range.
-            const newBooks = genreBooks.filter(book1=>{
+            let newBooks = genreBooks.filter(book1=>{
               return booksInPriceRange.some(book2=>{
                 return book1.id==book2.id;
               })
             })
+            if(availability===true){
+              newBooks = newBooks.filter((book)=>book.availableQuantity>0);
+            }
             setBooks(newBooks);
             setIsLoading(false);
           }
@@ -63,8 +72,24 @@ function Books({books,setBooks,cartItems,setCartItems}) {
       }
     }
     filter();
-  },[genre,priceRange])
+  },[genre,priceRange,availability])
 
+  useEffect(()=>{
+    async function getSubscriptions(){
+      const res = await axios.get('http://localhost:8080/api/user/subscription/getSubscriptions/'+user.name);
+      setSubscribedBooks(res.data)
+    }
+    getSubscriptions();
+  },[])
+
+  function isSubscribed(id){
+    const book = subscribedBooks.find((subscribedBook)=>{
+        return subscribedBook.book.id==id;
+    }
+    );
+    if(book) return true;
+    return false;
+  }
   function isInCart(id) {
     for(let cartItem of cartItems){
       if(cartItem.book.id == id){
@@ -94,10 +119,15 @@ function Books({books,setBooks,cartItems,setCartItems}) {
       toast.error((e?.response?.data?.message) || (e.message));
     }
   }
-  async function editBook(id,book1){
+  async function editBook(id,book1,shouldSendNotification){
     try{
       const url = 'http://localhost:8080/api/admin/books/' + id;
       const res = await axios.put(url,book1);
+      if(shouldSendNotification){
+        const res = await axios.post('http://localhost:8080/api/user/notification/dispatchBookStockRefillNotfications',
+        null,
+        {params : {bookname : book1.title}});
+      }
       if(res.status == 200){
         const newBooks = books.map((book)=>(book.id===id)?book1:book);
         setBooks(newBooks)
@@ -110,16 +140,18 @@ function Books({books,setBooks,cartItems,setCartItems}) {
 
   return (
     <>
-      <Sidebar setGenre = {setGenre} setPriceRange = {setPriceRange}/>
+      <Sidebar setGenre = {setGenre} setPriceRange = {setPriceRange} setAvailability = {setAvailability}/>
 
       (<div className='books'>
         <LoadingComponent isLoading={isLoading}/>
         {books.length>0?(
           <>
             <div className='books-grid'>
-              {
-                books.map((book)=>
-                  <Book 
+              {subscribedBooks &&
+                books.map((book)=>{
+                  // Finding whether the book is already marked for notification.
+                  const issubscribed = isSubscribed(book.id);
+                  return <Book 
                     key={book.id} 
                     isInCart = {isInCart(book.id)} 
                     cartId = {findInCart(book.id)} 
@@ -128,7 +160,10 @@ function Books({books,setBooks,cartItems,setCartItems}) {
                     editBook = {editBook} 
                     cartItems = {cartItems} 
                     setCartItems = {setCartItems}
+                    prevIsSubscribed = {issubscribed}
                   />
+                }
+                
                 )
               }
             </div>

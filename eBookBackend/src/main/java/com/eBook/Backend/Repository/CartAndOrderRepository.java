@@ -22,4 +22,7 @@ public interface CartAndOrderRepository extends MongoRepository<Item, String>{
 	
 	@Query(value = "{'book.title': ?0}")	
 	List<Item> findByBookname(String bookname);
+	
+	@Query(value = "{'book.title': ?0, 'status' : ?1}")
+	List<Item> findByBooknameAndStatus(String bookname,String status);
 }

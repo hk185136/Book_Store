@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { IoClose } from "react-icons/io5";
 import './Order.css'
 import { Cancelled,Delivered } from '../../OrderStatus';
@@ -13,9 +13,21 @@ import { TbHomeCheck } from "react-icons/tb";
 import { LuPackageCheck } from "react-icons/lu";
 
 function Order({order,removeOrder}) {
+  console.log(order.status);
   const user = useSelector(state=>state);
   const [status,setStatus] = useState(order.status);
+  console.log(status);
   const [isLoading,setIsLoading] = useState(false);
+  const statusProgressMapping = {
+    Confirmed : 10,
+    'On the way' : 50,
+    'Delivered' : 100
+  }
+  useEffect(()=>{
+    if(status!=='Cancelled'){
+      setStatus(order.status)
+    }
+  })
   const total = order.quantity*order.book.price;
   function asignStyleToProgress(isAccomplished){
     if(isAccomplished) return {
@@ -26,7 +38,6 @@ function Order({order,removeOrder}) {
     }
   }
   async function cancelOrder(){
-    console.log('canceling')
     try{
       // Update status of item.
       setIsLoading(true);
@@ -107,7 +118,7 @@ function Order({order,removeOrder}) {
       </div>
       {status !== Cancelled && 
       <div style={{padding : '20px 20px'}}>
-        <ProgressBar percent = {50} height = {'5px'}>
+        <ProgressBar percent = {statusProgressMapping[status]} height = {'5px'}>
           <Step>
             {({ accomplished }) => (
               <div className='status-step' style={asignStyleToProgress(accomplished)}>

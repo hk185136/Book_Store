@@ -27,6 +27,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import com.eBook.Backend.models.AuthUser;
 import com.eBook.Backend.models.Book;
 import com.eBook.Backend.models.NotficationSubscription;
+import com.eBook.Backend.models.Notification;
 import com.eBook.Backend.service.CartAndOrderServiceImpl;
 import com.eBook.Backend.service.NotificationSubscriptionServiceImplementation;
 import com.eBook.Backend.service.UserBookImplementation;
@@ -44,9 +45,8 @@ public class NotificationSubscriptionController {
 	
 	
 	@GetMapping("getSubscriptions/{username}")
-	public ResponseEntity<String> getSubscriptionsByUsername(@PathVariable String username){
-		notificationSubscriptionServiceImplementation.getSubscriptionsByUsename(username);
-		return ResponseEntity.status(200).body("Deleted subscription successfully");
+	public List<NotficationSubscription> getSubscriptionsByUsername(@PathVariable String username){
+		return notificationSubscriptionServiceImplementation.getSubscriptionsByUsename(username).get();
 	}
 	
 	@DeleteMapping("deleteSubscription/{id}")
