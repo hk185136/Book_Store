@@ -30,7 +30,7 @@ public class NotificationController
 	private NotificationSubscriptionServiceImplementation notificationSubscriptionServiceImplementation;
 	
 	//Get request for getting notifications by username.
-	@GetMapping("getNotfications/{username}")
+	@GetMapping("getNotifications/{username}")
 	public ResponseEntity<List<Notification>> getNotficationsByUsername(@PathVariable String username){
 		return ResponseEntity.ok(notificationServiceImplementation.getNotificationByUsername(username).get());
 	}
