@@ -13,7 +13,8 @@ import { toast } from 'react-toastify';
 import {Button,Stack,TextField} from '@mui/material';
 import { IoIosNotifications } from "react-icons/io";
 
-function Nav({books,setBooks}) {    const [searchBy,setSearchBy] = useState('book');
+function Nav({books,setBooks}) {    
+    const [searchBy,setSearchBy] = useState('book');
     const [isOpen,setIsOpen] = useState(false);
     const [search,setSearch] = useState('');
     const [bookNameError,setBookNameError] = useState(false);
@@ -99,23 +100,25 @@ function Nav({books,setBooks}) {    const [searchBy,setSearchBy] = useState('boo
     }
     async function handleSearch(curSearch){
         try{
-            if(curSearch.length>0){
+            const search = curSearch.trim();
+            if(search.length>0){
 
                 if(searchBy=='book'){
                     // Get books based on the book name.
-                    const res = await axios.get(`http://localhost:8080/api/user/books/title/${curSearch}`);
+                    const res = await axios.get(`http://localhost:8080/api/user/books/title/${search}`);
                     if(res.status == 200){
                         setBooks(res.data)
                     }
                 }
                 else{
                     // Get book based on the author name.
-                    const res = await axios.get(`http://localhost:8080/api/user/books/author/${curSearch}`);
+                    const res = await axios.get(`http://localhost:8080/api/user/books/author/${search}`);
                     if(res.status == 200){
                         setBooks(res.data)
                     }
                 }
             }
+            else if(curSearch.length>0){}
             else{
                 // Get all the books.
                 const res = await axios.get('http://localhost:8080/api/user/books/');

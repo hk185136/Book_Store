@@ -7,7 +7,8 @@ import OrderForm from '../OrderForm/OrderForm';
 import { toast } from 'react-toastify';
 import {Button,Stack,TextField} from '@mui/material';
 
-function Book({isInCart,cartId,book,deleteBook,editBook,cartItems,setCartItems}) {
+function Book({isInCart,cartId,book,deleteBook,editBook,cartItems,setCartItems,prevIsSubscribed}) {
+    const [isSubscribed,setIsSubscribed] = useState(prevIsSubscribed);
     const [isAdded,setIsAdded] = useState(isInCart);
     const user = useSelector(state=>state)
     const [isOpen,setIsOpen] = useState(false);
@@ -39,6 +40,7 @@ function Book({isInCart,cartId,book,deleteBook,editBook,cartItems,setCartItems})
   },[isOpen])
 
   async function handleNotify(){
+    setIsSubscribed(true);
     const notificationBody = {
       user : {
         username : user.name
@@ -48,23 +50,13 @@ function Book({isInCart,cartId,book,deleteBook,editBook,cartItems,setCartItems})
       notificationTitle : 'Restock alert',
       description : `${book.title} is now available.`
     }
-    const res = await axios.post('http://localhost:8080/api/user/notifications/addNotification',notificationBody);
-    console.log(res);
+    const res = await axios.post('http://localhost:8080/api/user/subscription/addSubscription',notificationBody);
   }
   async function handleEdit(){
     try{
       if(!validateBook(newBook)) return;
-      console.log(book.availableQuantity,newBook.availableQuantity);
-      if(book.availableQuantity == 0 && newBook.availableQuantity>0){
-        console.log("hello")
-        const res = await axios.post('http://localhost:8080/api/user/notifications/dispatchStockRefillNotficationToSpecificUser',
-        null,
-        {params : {bookname : book.title}});
-        console.log(res);
-      }
-      
-      
-      editBook(book.id,newBook);
+      const shouldSendNotification = book.availableQuantity == 0 && newBook.availableQuantity>0;
+      editBook(book.id,newBook,shouldSendNotification);
       setIsOpen(false);
     }
     catch(e){
@@ -202,7 +194,7 @@ function Book({isInCart,cartId,book,deleteBook,editBook,cartItems,setCartItems})
               (user.role === 'customer') && book.availableQuantity===0 && 
               <>
                 <p style={{marginTop:20}}>No copies available</p>
-                <Button onClick={handleNotify} variant='contained'>Notify me</Button>
+                {isSubscribed===false?<Button onClick={handleNotify} variant='contained'>Notify me</Button>: <p style={{marginTop:20}}>Subscribed for restock alerts.</p>}
               </>
             }
             {(showPopup)&& (

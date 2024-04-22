@@ -1,13 +1,10 @@
 package com.eBook.Backend.service;
-
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.intThat;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.Mockito.when;
-
 import java.util.ArrayList;
-import java.util.List;
-
+import java.util.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Sort;
 
-import com.eBook.Backend.Repository.CartAndOrderRepository;
 import com.eBook.Backend.Repository.OrderHistoryRepository;
 import com.eBook.Backend.models.AuthUser;
 import com.eBook.Backend.models.Book;
@@ -23,13 +19,13 @@ import com.eBook.Backend.models.Item;
 import com.eBook.Backend.models.OrderHistory;
 
 @SpringBootTest
-public class OrderHistoryImplTest {
-
+public class OrderHistoryImplTest 
+{
 	@Autowired
-	private OrderHistoryImplementation OrderHistoryImplementation;
+	private OrderHistoryImplementation orderhistoryImplementation;
 	
 	@MockBean
-	private OrderHistoryRepository OrderHistoryRepository;
+	private OrderHistoryRepository orderhistoryRepository;
 	
 	Book book1=new Book("1", "url1","Those Eyes", "james","horror", 500,20);
 	Book book2= new Book("2","url2","The Great Gatsby", "Scott", "Romance",700, 20);
@@ -52,41 +48,56 @@ public class OrderHistoryImplTest {
 	Item invalidItem5 = new Item("5",book5,user1,30,"delivered","18-04-2024");
 	
 	
-	OrderHistory OrderHistory1 = new OrderHistory("1",item1,"05-04-2024 15:30:10");
-	OrderHistory OrderHistory2 = new OrderHistory("2",item2,"10-04-2024 20:10:05");
-	OrderHistory OrderHistory3 = new OrderHistory("3",item3,"13-04-2024 20:10:00");
+	OrderHistory orderhistory1 = new OrderHistory("1",item1,"05-04-2024 15:30:10");
+	OrderHistory orderhistory2 = new OrderHistory("2",item2,"10-04-2024 20:10:05");
+	OrderHistory orderhistory3 = new OrderHistory("3",item3,"13-04-2024 20:10:00");
 	Sort sort= Sort.by(Sort.Direction.DESC,"date");
 	
-	List<OrderHistory>OrderHistoryList = new ArrayList<>() {{add(OrderHistory2);add(OrderHistory3);}};
-	List<OrderHistory>OrderHistoryList1 = new ArrayList<>() {{add(OrderHistory1);add(OrderHistory3);}};
+	List<OrderHistory>orderhistoryList = new ArrayList<>() {{add(orderhistory2);add(orderhistory3);}};
+	List<OrderHistory>orderhistoryList1 = new ArrayList<>() {{add(orderhistory1);add(orderhistory3);}};
 	
 	
+	//Setting up of responses for various operations using Mockito
 	@BeforeEach
-	public void setUp() {
-		when(OrderHistoryRepository.save(OrderHistory1)).thenReturn(OrderHistory1);
+	public void setUp() 
+	{
+		when(orderhistoryRepository.save(orderhistory1)).thenReturn(orderhistory1);
 		
-		when(OrderHistoryRepository.findByUsername(user3.getUsername(), sort)).thenReturn(OrderHistoryList);
+		when(orderhistoryRepository.findByUsername(user3.getUsername(), sort)).thenReturn(orderhistoryList);
 	}
 	
+	//Test for pushing an order to history and recording the purchasing activity
 	@Test
-	public void addToHistory()
+	public void addToHistorySuccess()
 	{
-		OrderHistory OrderHistoryActual = OrderHistoryImplementation.addtoHistory(OrderHistory1);
+		OrderHistory orderhistoryActual = orderhistoryImplementation.addtoHistory(orderhistory1);
 		assertAll(
-				()->assertEquals(OrderHistory1.getDate(), OrderHistoryActual.getDate()),
-				()->assertEquals(OrderHistory1.getItem().getUser().getUsername(), OrderHistoryActual.getItem().getUser().getUsername()),
-				()->assertEquals(OrderHistory1.getItem().getBook().getTitle(), OrderHistoryActual.getItem().getBook().getTitle())				
+				()->assertEquals(orderhistory1.getDate(), orderhistoryActual.getDate()),
+				()->assertEquals(orderhistory1.getItem().getUser().getUsername(), orderhistoryActual.getItem().getUser().getUsername()),
+				()->assertEquals(orderhistory1.getItem().getBook().getTitle(), orderhistoryActual.getItem().getBook().getTitle())				
 				);
 	}
 	
-	
+	//Test for the failure case of pushing an order to history
 	@Test
-	public void findOrderHistoryByUsername()
+	public void addToHistoryFailure()
 	{
-		List<OrderHistory> OrderHistoryActual = OrderHistoryImplementation.findOrderHistoryByUsername(user3.getUsername());
-		for(int i=0;i<OrderHistoryActual.size();i++)
+		OrderHistory orderhistoryActual = orderhistoryImplementation.addtoHistory(orderhistory1);
+		assertAll(
+				()->assertNotEquals(orderhistory2.getDate(), orderhistoryActual.getDate()),
+				()->assertNotEquals(orderhistory2.getItem().getUser().getUsername(), orderhistoryActual.getItem().getUser().getUsername()),
+				()->assertNotEquals(orderhistory2.getItem().getBook().getTitle(), orderhistoryActual.getItem().getBook().getTitle())				
+				);
+	}
+	
+	//Test for finding order history of a user
+	@Test
+	public void findOrderHistoryByUsernameSuccess()
+	{
+		List<OrderHistory> orderhistoryActual = orderhistoryImplementation.findOrderHistoryByUsername(user3.getUsername());
+		for(int i=0;i<orderhistoryActual.size();i++)
 		{
-			assertEquals(OrderHistoryList.get(i).getItem().getUser().getUsername(), OrderHistoryActual.get(i).getItem().getUser().getUsername());
+			assertEquals(orderhistoryList.get(i).getItem().getUser().getUsername(), orderhistoryActual.get(i).getItem().getUser().getUsername());
 		}
 
 	}

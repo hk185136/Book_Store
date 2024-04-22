@@ -1,6 +1,7 @@
 package com.eBook.Backend.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
@@ -33,10 +34,19 @@ public class AuthUserImplementationTest {
 		when(userRepository.findByusername("ranjan")).thenReturn(Optional.of(user1));
 	}
 	
+	
+	//Tests for loading user details by their username
 	@Test
-	public void loadUserByUsername()
+	public void loadUserByUsernameSuccess()
 	{
 		UserDetails userActual = authUserImplementation.loadUserByUsername("ranjan");
 		assertEquals(user1.getUsername(),userActual.getUsername());
+	}
+	
+	@Test
+	public void loadUserByUsernameFailure()
+	{
+		UserDetails userActual = authUserImplementation.loadUserByUsername("ranjan");
+		assertNotEquals(user2.getUsername(),userActual.getUsername());
 	}
 }

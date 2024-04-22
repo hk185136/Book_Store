@@ -1,21 +1,16 @@
 package com.eBook.Backend.service;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.eBook.Backend.Repository.NotificationSubscriptionRepository;
-import com.eBook.Backend.models.Book;
-import com.eBook.Backend.models.Notification;
+
 import com.eBook.Backend.models.NotficationSubscription;
 
 @Service

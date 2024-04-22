@@ -1,14 +1,9 @@
 package com.eBook.Backend.Repository;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.intThat;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
@@ -18,7 +13,6 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-
 import com.eBook.Backend.models.Book;
 
 @DataMongoTest
@@ -45,6 +39,7 @@ class BookRepositoryTest
   	Optional<List<Book>> actualRes = Optional.of(booklist);
 	
 	
+  	//Test for saving the book in to the database
 	@Test
 	@Order(1)
 	public void saveBookTest()
@@ -60,16 +55,19 @@ class BookRepositoryTest
 		assertThat(booklist.size()).isGreaterThan(0);
 	}
 	
+	
+	//Test for finding a book by its id
 	@Test
 	   public void test_FindBookbyId()
 	   {
-		  Book resbook= bookRepository.findByid("1").get();
+		  Book resbook= bookRepository.findById("6616598d9b1be65d61ff8f69").get();
 		   
-		   assertThat(resbook.getTitle()).isEqualTo("Those Eyes");
+		   assertThat(resbook.getTitle()).isEqualTo("Hanging House");
 		   
 	   }
 	
-	@Test
+  //Test for finding a book by its title 
+  @Test
   public void test_findBookByTitle_StartsWithIgnoreCase()
   {
   	 
@@ -79,14 +77,17 @@ class BookRepositoryTest
   }
 	
 	
+	//Test for finding a book by author
 	 @Test
    public void test_findByAuthor_ignoreCase()
    {
    
-   	Optional<List<Book>> res=bookRepository.findByAuthorStartsWithIgnoreCase("ford");
-   	assertThat(res.get().get(0).getTitle()).isEqualTo("Mystery Book");  
+   	Optional<List<Book>> res=bookRepository.findByAuthorStartsWithIgnoreCase("jk rowling");
+   	assertThat(res.get().get(0).getTitle()).isEqualTo("Harry potter");  
    }
    
+	 
+   //Test for finding a book by a particular price.
    @Test
    public void test_findByPrice()
    {
@@ -95,14 +96,16 @@ class BookRepositoryTest
    	assertThat(res.get().get(0).getTitle()).isEqualTo("Harry potter");
    }
    
+   //Test for finding a book that is within the price provided
    @Test
    public void test_findByprice_LessOrEqual()
    {
+   	
    	Optional<List<Book>> res=bookRepository.findByPriceLessThanEqual(500);
-   	assertThat(res.get().size()).isGreaterThan(0);
+   	assertThat(res.get().get(0).getTitle()).isEqualTo("Those Eyes");
    }
    
-   
+   //Test for finding books within the price range provided
    @Test
    public void test_findByPriceBetween()
    {
@@ -112,6 +115,7 @@ class BookRepositoryTest
    }
    
 
+   //Flushing out the dummy data that has been inserted for testing from the database 
 	@AfterAll
 	public void reset() 
 	{
@@ -124,6 +128,5 @@ class BookRepositoryTest
 		
 		bookRepository.deleteAll(deleteBooks);
 	}
-	
 	
 }

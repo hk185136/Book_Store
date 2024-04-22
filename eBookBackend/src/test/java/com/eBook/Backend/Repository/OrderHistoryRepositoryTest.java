@@ -1,34 +1,17 @@
 package com.eBook.Backend.Repository;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.ClassOrderer.OrderAnnotation;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Sort;
-import org.springframework.test.context.event.annotation.AfterTestClass;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-
 import com.eBook.Backend.models.AuthUser;
 import com.eBook.Backend.models.Book;
 import com.eBook.Backend.models.Item;
@@ -37,9 +20,10 @@ import com.eBook.Backend.models.OrderHistory;
 @DataMongoTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class OrderHistoryRepositoryTest {
+public class OrderHistoryRepositoryTest 
+{
 	@Autowired
-	private OrderHistoryRepository OrderHistoryRepository;
+	private OrderHistoryRepository orderhistoryRepository;
 	
 	@Autowired
 	private BookRepository bookRepository;
@@ -54,10 +38,10 @@ public class OrderHistoryRepositoryTest {
 	private Book book1,book2,book3,book4,book5;
 	private AuthUser user1,user2,user3;
 	private Item item1,item2,item3,item4,item5;
-	private OrderHistory OrderHistory1,OrderHistory2,OrderHistory3;
+	private OrderHistory orderhistory1,orderhistory2,orderhistory3;
 	private Sort sort= Sort.by(Sort.Direction.DESC,"date");
 
-	List<OrderHistory>OrderHistoryList ;
+	List<OrderHistory>orderhistoryList ;
 	@BeforeAll
 	public void setUp()
 	{
@@ -78,12 +62,13 @@ public class OrderHistoryRepositoryTest {
 		item4 = new Item("4",book4,user1,12,"added to cart","13-04-2024");
 		item5 = new Item("5",book5,user1,9,"delivered","18-04-2024");	
 		
-		OrderHistory1 = new OrderHistory("1",item1,"05-04-2024 15:30:10");
-		OrderHistory2 = new OrderHistory("2",item2,"10-04-2024 20:10:05");
-		OrderHistory3 = new OrderHistory("3",item3,"13-04-2024 20:10:00");
+		orderhistory1 = new OrderHistory("1",item1,"05-04-2024 15:30:10");
+		orderhistory2 = new OrderHistory("2",item2,"10-04-2024 20:10:05");
+		orderhistory3 = new OrderHistory("3",item3,"13-04-2024 20:10:00");
 		
 	}
 	
+	//Test for saving an order into order history database
 	@Test
 	@Order(1)
 	public void saveItemTest()
@@ -105,25 +90,28 @@ public class OrderHistoryRepositoryTest {
 		bookRepository.save(book4);
 		bookRepository.save(book5);	
 		
-		OrderHistoryRepository.save(OrderHistory1);
-		OrderHistoryRepository.save(OrderHistory2);
-		OrderHistoryRepository.save(OrderHistory3);
+		orderhistoryRepository.save(orderhistory1);
+		orderhistoryRepository.save(orderhistory2);
+		orderhistoryRepository.save(orderhistory3);
 		
 		
-		List<OrderHistory> OrderHistoryList=OrderHistoryRepository.findAll();
+		List<OrderHistory> orderHistoryList=orderhistoryRepository.findAll();
 		
-		assertThat(OrderHistoryList.size()).isGreaterThan(0);
+		assertThat(orderHistoryList.size()).isGreaterThan(0);
 	}
 	
+	//Test for retrieving order history by username
 	@Test
 	public void getHistoryByUsername()
 	{
-		List<OrderHistory> userHistoryActual = OrderHistoryRepository.findByUsername("ranjan",sort);
+		List<OrderHistory> userHistoryActual = orderhistoryRepository.findByUsername("ranjan",sort);
 		
 		assertThat(userHistoryActual.size()).isGreaterThan(0);
 	}
 	
 	
+	
+	//Flushing out the dummy data used for testing from the database
 	@AfterAll
 	public void reset() {
 		List<Item>itemsDel = new ArrayList<>();
@@ -152,11 +140,11 @@ public class OrderHistoryRepositoryTest {
 		
 		
 		List<OrderHistory>historyDel = new ArrayList<>();
-		historyDel.add(OrderHistory1);
-		historyDel.add(OrderHistory2);
-		historyDel.add(OrderHistory3);
+		historyDel.add(orderhistory1);
+		historyDel.add(orderhistory2);
+		historyDel.add(orderhistory3);
 		
-		OrderHistoryRepository.deleteAll(historyDel);
+		orderhistoryRepository.deleteAll(historyDel);
 		
 		
 	}

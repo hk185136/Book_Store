@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.Flow.Subscription;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.eBook.Backend.Repository.NotificationRepository;
 import com.eBook.Backend.models.Notification;
-import com.eBook.Backend.models.NotficationSubscription;
+
 
 @Service
 public class NotificationServiceImplementation {
@@ -39,14 +40,19 @@ public class NotificationServiceImplementation {
 		notificationRepository.deleteById(id);
 	}
 	
-	public void dispatchNotification(Map<String, SseEmitter>notificationEmitters, String eventName, Notification refillNotification)
+	public void dispatchNotification(Map<String, SseEmitter>notificationEmitters, String eventName, Notification refillNotification,NotficationSubscription subscription)
 	{
 		String eventFormatted = new JSONObject()
 				.put("message", refillNotification.getMessage())
+				.put("bookid",subscription.getBook().getId())
 				.put("date", refillNotification.getDate()).toString();
+		System.out.println(notificationEmitters);
+		System.out.println(refillNotification.getUsername());
 		SseEmitter sseEmitter = notificationEmitters.get(refillNotification.getUsername());
+		System.out.println("out of if");
 		if(sseEmitter !=null) {
 			try {
+				System.out.println("entered if");
 				sseEmitter.send(SseEmitter.event().name(eventName).data(eventFormatted));
 			}catch (IOException e) {
 				e.printStackTrace();

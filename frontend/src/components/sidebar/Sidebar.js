@@ -1,6 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './Sidebar.css';
-function Sidebar({setGenre,setPriceRange}) {
+function Sidebar({setGenre,setPriceRange,setAvailability}) {
+  const [isChecked,setIsChecked] = useState(false);
+  function handleAvailabilityChange(){
+    setIsChecked(prev=>!prev);
+    setAvailability(prev=>!prev);
+  }
     return (
     <div className='sidebar'>
         <h2 className='heading-filter'>Genre</h2>
@@ -48,6 +53,11 @@ function Sidebar({setGenre,setPriceRange}) {
             setPriceRange({min : 5000,max:20000});
           }}/>
 
+        </div>
+        <h2 className='heading-filter'>Stock</h2>
+        <div className='grid-filter'>
+          <label htmlFor="">In stock only</label>
+          <input type="checkbox" checked = {isChecked} onChange={handleAvailabilityChange}/>
         </div>
 
     </div>

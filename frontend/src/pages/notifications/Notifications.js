@@ -8,17 +8,24 @@ function Notifications() {
     const user = useSelector(state=>state);
     useEffect(()=>{
         async function getMessages(){
-            console.log(user.name)
-            const res = await axios.get('http://localhost:8080/api/user/messages/getMessages/'+user.name);
-            console.log(res);
+            const res = await axios.get('http://localhost:8080/api/user/notification/getNotfications/'+user.name);
             setMessages(res.data);
         }
         getMessages();
     },[])
+    function handleDelete(id){
+        axios.delete('http://localhost:8080/api/user/notification/deleteNotification/'+id);
+        setMessages(prev=>{
+            return prev.filter((msg)=>{return msg.id!=id});
+        })
+    }
   return (
     <div className='notifications'>
         {messages.length>0 && 
-            messages.map((message)=><Notification description = {message.message}/>)
+            <table>
+                {messages.map((notification)=><tr><Notification notification = {notification} handleDelete = {handleDelete}/></tr>)}              
+            </table>
+            
         }
     </div>
   )

@@ -1,20 +1,11 @@
 package com.eBook.Backend.controller;
-
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.HashSet;
-import java.util.Set;
-
-import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
@@ -22,7 +13,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-
 import com.eBook.Backend.models.AuthUser;
 import com.eBook.Backend.models.Book;
 import com.eBook.Backend.models.Item;
@@ -30,11 +20,8 @@ import com.eBook.Backend.service.CartAndOrderServiceImpl;
 import com.eBook.Backend.service.OrderHistoryImplementation;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import ch.qos.logback.core.net.ObjectWriter;
-
-
 @WebMvcTest(controllers = CartAndOrderController.class, excludeAutoConfiguration = {SecurityAutoConfiguration.class})
-class CartAndOrderControllerTest
+class CartControllerTest
 {
     
 	@MockBean
@@ -46,6 +33,7 @@ class CartAndOrderControllerTest
 	@Autowired
 	MockMvc mockMvc;
 	
+	//Testing the controller which adds an item to the cart
 	@Test
 	public void test_AddItemToCart() throws Exception
 	{
@@ -61,7 +49,7 @@ class CartAndOrderControllerTest
 		
 	}
 	
-	
+	//Testing the controller which adds an item to orders when user proceed to buy from the cart
 	@Test
 	public void test_addItemToOrder() throws Exception
 	{
@@ -77,7 +65,7 @@ class CartAndOrderControllerTest
 		
 	}
 	
-	
+	//Testing the controller for updating an item status in the cart
 	@Test
 	public void test_updateItemStatus() throws Exception
 	{
@@ -93,6 +81,7 @@ class CartAndOrderControllerTest
 		
 	}
 	
+	//Testing the controller for increasing item's purchasing quantity in the cart
 	@Test
 	public void test_increaseItem() throws Exception
 	{
@@ -108,7 +97,7 @@ class CartAndOrderControllerTest
 		
 	}
 	
-	
+	//Testing the controller for decreasing the item's purchasing quantity in the cart
 	@Test
 	public void test_decreaseItem() throws Exception
 	{
@@ -124,6 +113,7 @@ class CartAndOrderControllerTest
 		
 	}
 	
+	//Testing the controller for removing an item from the cart
 	@Test
 	public void test_deleteItemFromCart() throws Exception
 	{

@@ -8,7 +8,7 @@ import com.eBook.Backend.models.Book;
 import com.eBook.Backend.models.Item;
 
 import java.util.List;
-import java.util.Optional;
+
 
 
 public interface CartAndOrderRepository extends MongoRepository<Item, String>{
@@ -22,4 +22,7 @@ public interface CartAndOrderRepository extends MongoRepository<Item, String>{
 	
 	@Query(value = "{'book.title': ?0}")	
 	List<Item> findByBookname(String bookname);
+	
+	@Query(value = "{'book.title': ?0, 'status' : ?1}")
+	List<Item> findByBooknameAndStatus(String bookname,String status);
 }

@@ -1,6 +1,5 @@
 package com.eBook.Backend.service;
 
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,6 +35,11 @@ public class AdminBookImplementation {
 	
 	public String deleteBook(String bookId) {
 		String bookName = bookRepository.findById(bookId).get().getTitle();
-		return cartAndOrderRepository.findByBookname(bookName).size()!=0?"Book cannnot be deleted":"Book deleted succesfully";
+		System.out.println(cartAndOrderRepository.findByBooknameAndStatus(bookName,"Confirmed").size());
+		if(cartAndOrderRepository.findByBooknameAndStatus(bookName,"Confirmed").size()!=0) {
+			throw new Error("Book cannnot be deleted");
+		}
+		bookRepository.deleteById(bookId);
+		return "Book deleted succesfully";
 	}
 }

@@ -8,8 +8,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.eBook.Backend.models.AuthUser;
-import com.eBook.Backend.models.Item;
 import com.eBook.Backend.models.OrderHistory;
 
 

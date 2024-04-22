@@ -18,6 +18,7 @@ function Profile() {
   useEffect(()=>{
     async function get(){
     const hist = await getHistory(user.name);
+    console.log(hist)
     setHistory(hist);
     }
     
