@@ -44,6 +44,11 @@ public class NotificationController {
 		notificationServiceImplementation.deleteNotificationById(id);
 		return ResponseEntity.status(200).body("Deleted successfully");
 	}
+	@DeleteMapping("deleteNotifications/{username}")
+	public ResponseEntity<String> deleteNotificationsByUsername(@PathVariable String username){
+		notificationServiceImplementation.deleteNotificationByUsername(username);
+		return ResponseEntity.status(200).body("Deleted successfully");
+	}
 	
 	@PostMapping("/dispatchBookStockRefillNotfications")
 	public ResponseEntity<String> dispatchBookStockRefillNotifications(@RequestParam String bookname)

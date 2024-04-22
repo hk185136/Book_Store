@@ -57,4 +57,9 @@ public class NotificationServiceImplementation {
 			}
 		}
 	}
+
+	public void deleteNotificationByUsername(String username) {
+		// TODO Auto-generated method stub
+		notificationRepository.deleteAll(notificationRepository.findByUsername(username).get());
+	}
 }
