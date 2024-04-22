@@ -36,13 +36,6 @@ public class NotificationSubscriptionController {
 		return notificationSubscriptionServiceImplementation.getSubscriptionsByUsename(username).get();
 	}
 	
-	// Delete request which takes an id, deletes a subscription with that id and returns a success message.
-	@DeleteMapping("deleteSubscription/{id}")
-	public ResponseEntity<String> deleteSubscriptionById(@PathVariable String id){
-		notificationSubscriptionServiceImplementation.deleteSubscriptionById(id);
-		return ResponseEntity.status(200).body("Deleted subscription successfully");
-	}
-	
 	// Post request which takes a subscription, adds that to database.
 	@PostMapping("addSubscription")
 	public ResponseEntity<NotificationSubscription> addSubscription(@RequestBody NotificationSubscription notificationSubscription)

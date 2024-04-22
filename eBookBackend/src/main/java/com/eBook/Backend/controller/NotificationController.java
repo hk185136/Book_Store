@@ -61,14 +61,4 @@ public class NotificationController
 		}
 		return ResponseEntity.ok(bookname+"is in stock");
 	}
-
-	
-	//post request for sending the notification of status updates to the user about their order.
-	@PostMapping(value = "/dispatchOrderStatusNotfications")
-	public ResponseEntity<String> dispatchOrderStatusNotification(@RequestParam String bookname, @RequestParam String orderStatus)
-	{
-		
-		
-		return ResponseEntity.ok(bookname+" is "+orderStatus);
-	}
 }
