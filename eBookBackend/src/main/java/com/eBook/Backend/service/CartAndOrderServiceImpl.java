@@ -14,8 +14,7 @@ import org.springframework.stereotype.Service;
 
 
 import com.eBook.Backend.Repository.CartAndOrderRepository;
-
-
+import com.eBook.Backend.config.OrderStatusConfig;
 import com.eBook.Backend.models.Item;
 import com.eBook.Backend.models.NotificationSubscription;
 import com.eBook.Backend.models.Notification;
@@ -105,7 +104,7 @@ public class CartAndOrderServiceImpl {
 		TimerTask startTimer = new TimerTask() {
 	        public void run() {
 	        	Item storedItem  =  CartRepository.findById(item.getId()).get();
-	    		if((storedItem.getStatus()==null) || !storedItem.getStatus().equals("Cancelled")) {
+	    		if((storedItem.getStatus()==null) || !storedItem.getStatus().equals(OrderStatusConfig.cancelled)) {
 		        	updateItemStatus(item, status);
 		        	startOrderStep(item,status,deliveryTime);
 	    		}
@@ -136,6 +135,7 @@ public class CartAndOrderServiceImpl {
 		NotificationSubscription subscription = new NotificationSubscription();
 		subscription.setItem(storedItem);
 		subscription.setBook(storedItem.getBook());
+
 		notificationServiceImplementation.dispatchNotification(notificationSubscriptionServiceImplementation.emitters,"Order status", statusNotification,subscription);
 	}
 	

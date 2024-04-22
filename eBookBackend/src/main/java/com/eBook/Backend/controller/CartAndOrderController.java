@@ -3,6 +3,7 @@ package com.eBook.Backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import com.eBook.Backend.config.OrderStatusConfig;
 import com.eBook.Backend.models.AuthUser;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,7 +44,7 @@ public class CartAndOrderController {
 	@PostMapping("/addToCart")
 	public ResponseEntity<Item> addItemToCart(@RequestBody Item item)
 	{
-		item.setStatus("added to cart");
+		item.setStatus(OrderStatusConfig.addToCart);
 		return ResponseEntity.ok(cartAndOrderServiceImpl.addItem(item));
 	}
 	
@@ -59,9 +60,9 @@ public class CartAndOrderController {
 	public ResponseEntity<Item> addItemToOrders(@RequestBody Item item)
 	{
 		cartAndOrderServiceImpl.addItem(item);
-		cartAndOrderServiceImpl.performOrderStep(item, "Confirmed", 1000);
-		cartAndOrderServiceImpl.performOrderStep(item, "On the way", 15000);
-		cartAndOrderServiceImpl.performOrderStep(item, "Delivered", 25000);		
+		cartAndOrderServiceImpl.performOrderStep(item, OrderStatusConfig.confirmed, 1000);
+		cartAndOrderServiceImpl.performOrderStep(item, OrderStatusConfig.onTheWay, 15000);
+		cartAndOrderServiceImpl.performOrderStep(item, OrderStatusConfig.delivered, 25000);		
 		return ResponseEntity.ok(item);
 	}
 		
@@ -87,10 +88,10 @@ public class CartAndOrderController {
 	@PutMapping("/getOrders")
 	public ResponseEntity<Set<Item>> getOrders(@RequestBody AuthUser user)
 	{
-		Set<Item>orders = cartAndOrderServiceImpl.findItemsByStatusAndUsername("On the way",user.getUsername());
-		orders.addAll(cartAndOrderServiceImpl.findItemsByStatusAndUsername("Cancelled",user.getUsername()));
-		orders.addAll(cartAndOrderServiceImpl.findItemsByStatusAndUsername("Delivered",user.getUsername()));
-		orders.addAll(cartAndOrderServiceImpl.findItemsByStatusAndUsername("Confirmed",user.getUsername()));;
+		Set<Item>orders = cartAndOrderServiceImpl.findItemsByStatusAndUsername(OrderStatusConfig.onTheWay,user.getUsername());
+		orders.addAll(cartAndOrderServiceImpl.findItemsByStatusAndUsername(OrderStatusConfig.cancelled,user.getUsername()));
+		orders.addAll(cartAndOrderServiceImpl.findItemsByStatusAndUsername(OrderStatusConfig.delivered,user.getUsername()));
+		orders.addAll(cartAndOrderServiceImpl.findItemsByStatusAndUsername(OrderStatusConfig.confirmed,user.getUsername()));;
 		return ResponseEntity.ok(orders);
 	}
 	

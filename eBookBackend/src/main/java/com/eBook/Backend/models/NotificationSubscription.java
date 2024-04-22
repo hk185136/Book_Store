@@ -18,7 +18,6 @@ public class NotificationSubscription {
 	private Book book;
 	private Item item;
 	
-
 	// All args constructor.
 	public NotificationSubscription(String id, AuthUser user, Book book, Item item, String notifcationTitle, String description) {
 		super();
@@ -33,7 +32,7 @@ public class NotificationSubscription {
 		super();
 	}
 
-	// Getters and setters for the above fields.
+	// Getters and setters for the above fields.	
 	public String getId() {
 		return id;
 	}
