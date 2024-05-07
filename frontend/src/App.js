@@ -88,7 +88,7 @@ function App() {
     if(user && user.role==='customer'){
       subscribe()
       // !nocommit
-      console.log("Its working");
+      console.log("Its working now");
     }
     
   },[user])
