@@ -55,7 +55,7 @@ public class NotificationController
 	{
 		List<NotificationSubscription>notifyMeSubscriptions = notificationSubscriptionServiceImplementation.getSubscriptionsByTitle(bookname).get();
 		for(NotificationSubscription subscription : notifyMeSubscriptions) {
-			Notification refillNotification = notificationServiceImplementation.addNotifcation(subscription.getUser().getUsername(), subscription.getBook().getTitle()+"is available now");
+			Notification refillNotification = notificationServiceImplementation.addNotifcation(subscription.getUser().getUsername(), subscription.getBook().getTitle()+" is available now");
 			notificationServiceImplementation.dispatchNotification(notificationSubscriptionServiceImplementation.emitters,"Refill stock", refillNotification,subscription);
 			notificationSubscriptionServiceImplementation.deleteSubscriptionById(subscription.getId());
 		}
