@@ -17,7 +17,7 @@ export const urls = {
     },
     user : {
         editUser : 'http://localhost:8080/api/auth/editUser/',
-        getAllUsers : 'http://localhost:8080/api/getAllUsers'
+        getAllUsers : 'http://localhost:8080/api/auth/getAllUsers'
     },
     cart : {
         get : 'http://localhost:8080/api/item/getItem/',
